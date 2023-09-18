@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    group:
+      release:
+        - redis-release
+      develop:
+        - redis-dev
+
+    active: develop

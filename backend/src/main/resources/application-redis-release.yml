@@ -1,0 +1,11 @@
+spring:
+  config:
+    activate:
+      on-profile: "redis-release"
+
+  redis:
+    host: ?.?.?.?
+    port: 6379
+    password: ??
+    ttls:
+      user-info: 3_600_000
