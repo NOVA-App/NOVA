@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,14 +22,14 @@ public class InstallmentSavings extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "INSTALLMENT_SAVINGS_ID")
+    @Column(name = "INSTALLMENT_SAVING_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GAME_ID")
     private Game game;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "INS_INTEREST_ID")
     private InsInterest interest;
 

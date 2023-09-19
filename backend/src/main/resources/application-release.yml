@@ -7,9 +7,9 @@ spring:
     enable: false
 
   datasource:
-    url: jdbc:mariadb://?.?.?.?:3306/nova?characterEncoding=UTF-8&serverTimezone=UTC
-    username: root
-    password: ??
+    url: jdbc:mariadb://nohoo.site:3306/nova?characterEncoding=UTF-8&serverTimezone=UTC
+    username: ssafy
+    password: zhelddldksehlaus!!
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
