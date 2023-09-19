@@ -22,7 +22,8 @@ public class StockNews extends News {
     private Stock stock;
 
     @Builder
-    public StockNews(Stock stock) {
+    public StockNews(Long id, String content, Stock stock) {
+        super(id, content);
         this.stock = stock;
     }
 }

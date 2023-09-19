@@ -22,7 +22,8 @@ public class RealtyNews extends News {
     private Realty realty;
 
     @Builder
-    public RealtyNews(Realty realty) {
+    public RealtyNews(Long id, String content, Realty realty) {
+        super(id, content);
         this.realty = realty;
     }
 }
