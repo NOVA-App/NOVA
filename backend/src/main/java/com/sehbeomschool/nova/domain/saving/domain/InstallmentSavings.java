@@ -23,7 +23,7 @@ public class InstallmentSavings extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "INSTALLMENT_SAVINGS_ID")
+    @Column(name = "INSTALLMENT_SAVING_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
