@@ -1,6 +1,4 @@
 import { StyleSheet, Text, View } from 'react-native';
-import OneButtonSmallModal from './src/components/modals/OneButtonSmallModal';
-import StyledModalOpenButton from './src/components/btn';
 import { useState } from 'react';
 
 export default function App() {
