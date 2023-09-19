@@ -1,6 +1,8 @@
 package com.sehbeomschool.nova.global.filter;
 
 import com.sehbeomschool.nova.domain.user.service.UserService;
+import com.sehbeomschool.nova.global.util.*;
+import io.jsonwebtoken.*;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.FilterChain;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,7 +24,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserService userService;
-    private final String secretKey;
+    @Value("${jwt.secretKey}")
+    private String secretKey;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -42,10 +47,21 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authorization.split(" ")[1];
 
+        String token = authorization.split(" ")[1];
+        String userId;
+        try {
+            userId = jwtUtil.getSubject(token);
+        }catch (ExpiredJwtException e){
+            log.error("토큰 만료 됨.");
+            filterChain.doFilter(request, response);
+            return;
+        }catch (Exception e){
+            filterChain.doFilter(request, response);
+            return;
+        }
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            "", null, List.of(new SimpleGrantedAuthority("USER")));
+            userId, null, List.of(new SimpleGrantedAuthority("USER")));
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
