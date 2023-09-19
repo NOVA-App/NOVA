@@ -20,7 +20,7 @@ public class JwtUtil {
     @Value("${jwt.expmin}")
     private int expireMin;
 
-    @Value("${jwt.key}")
+    @Value("${jwt.secretKey}")
     private String SECRET_KEY;
 
     public String createRefreshToken(Long userNo) {
