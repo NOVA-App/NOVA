@@ -1,8 +1,8 @@
 package com.sehbeomschool.nova.global.filter;
 
 import com.sehbeomschool.nova.domain.user.service.UserService;
-import com.sehbeomschool.nova.global.util.*;
-import io.jsonwebtoken.*;
+import com.sehbeomschool.nova.global.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.FilterChain;
@@ -47,16 +47,15 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-
         String token = authorization.split(" ")[1];
         Long userId;
         try {
             userId = jwtUtil.getUserId(token);
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             log.error("토큰 만료 됨.");
             filterChain.doFilter(request, response);
             return;
-        }catch (Exception e){
+        } catch (Exception e) {
             filterChain.doFilter(request, response);
             return;
         }
