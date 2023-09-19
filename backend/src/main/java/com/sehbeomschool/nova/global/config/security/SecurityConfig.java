@@ -2,7 +2,8 @@ package com.sehbeomschool.nova.global.config.security;
 
 import com.sehbeomschool.nova.domain.user.service.UserService;
 import com.sehbeomschool.nova.global.filter.JwtFilter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.*;
 
 @Configuration
 @EnableWebSecurity
@@ -18,7 +20,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final UserService userService;
-    private final String secretKey;
+    @Value("${jwt.secretKey}")
+    private String secretKey;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
