@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.game.domain;
 
 import com.sehbeomschool.nova.domain.game.constant.Gender;
+import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,7 +30,9 @@ public class Game extends BaseEntity {
     @Column(name = "GAME_ID")
     private Long id;
 
-    // TODO: User Entity ManyToOne 연결
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANALYSIS_COMMENT_ID")
