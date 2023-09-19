@@ -4,6 +4,8 @@ import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,5 +31,7 @@ public abstract class News extends BaseEntity {
 
     private String content;
 
+    @Enumerated(value = EnumType.STRING)
+    private Prediction prediction;
 
 }

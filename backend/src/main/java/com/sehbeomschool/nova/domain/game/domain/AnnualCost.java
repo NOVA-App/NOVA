@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.game.domain;
 
+import com.sehbeomschool.nova.global.constant.FixedValues;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +15,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MonthlyCost extends BaseEntity {
+public class AnnualCost extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MONTHLY_COST_ID")
+    @Column(name = "ANNUAL_COST_ID")
     private Long id;
 
     private Integer livingCost;
@@ -34,7 +35,7 @@ public class MonthlyCost extends BaseEntity {
     private Integer installmentSavingCost;
 
     @Builder
-    public MonthlyCost(Long id, Integer livingCost, Integer monthlyRentCost, Integer IRPCost,
+    public AnnualCost(Long id, Integer livingCost, Integer monthlyRentCost, Integer IRPCost,
         Integer childCost, Integer loansCost, Integer installmentSavingCost) {
         this.id = id;
         this.livingCost = livingCost;
@@ -43,5 +44,28 @@ public class MonthlyCost extends BaseEntity {
         this.childCost = childCost;
         this.loansCost = loansCost;
         this.installmentSavingCost = installmentSavingCost;
+    }
+
+    public static AnnualCost createStartAnnualCost() {
+        return AnnualCost.builder()
+            .livingCost(FixedValues.LIVING_COST_MIN.getValue().intValue())
+            .monthlyRentCost(FixedValues.MONTHLY_RENT_COST.getValue().intValue())
+            .IRPCost(0)
+            .childCost(0)
+            .loansCost(0)
+            .installmentSavingCost(0)
+            .build();
+    }
+
+    public Long sumOfAnnualCost() {
+        Long sum = 0L;
+        sum += this.livingCost;
+        sum += this.monthlyRentCost;
+        sum += this.IRPCost;
+        sum += this.installmentSavingCost;
+        sum += this.loansCost;
+        sum += this.childCost;
+
+        return sum;
     }
 }
