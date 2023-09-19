@@ -1,9 +1,10 @@
-package com.sehbeomschool.nova.domain.stock.domain;
+package com.sehbeomschool.nova.domain.saving.domain;
 
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,15 +13,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Stock extends BaseEntity {
+public class InsInterest extends BaseEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "STOCK_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "INS_INTEREST_ID")
     private Long id;
 
-    private String name;
-
-    private Long startPrice;
+    private int period;
+    private int interest;
 
 }

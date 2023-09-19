@@ -4,8 +4,8 @@ spring:
       on-profile: "redis-release"
 
   redis:
-    host: ?.?.?.?
+    host: nohoo.site
     port: 6379
-    password: ??
+    password: zhelddldksehlaus!!
     ttls:
       user-info: 3_600_000
