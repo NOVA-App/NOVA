@@ -20,43 +20,33 @@ public class JwtUtil {
     @Value("${jwt.expmin}")
     private int expireMin;
 
+    @Value("${jwt.refresh-expmin}")
+    private int refreshExpireMin;
+
     @Value("${jwt.secretKey}")
     private String SECRET_KEY;
 
     public String createRefreshToken(Long userNo) {
-        String refreshToken = create(String.valueOf(userNo), expireMin * 1000 * 60);
-        redisUtil.set(String.valueOf(userNo), refreshToken, expireMin * 5);
+        String refreshToken = create(userNo, refreshExpireMin);
+        redisUtil.set(String.valueOf(userNo), refreshToken, refreshExpireMin);
         return refreshToken;
     }
 
-    public String createJwtToken(String subject) {
-        return create(String.valueOf(subject), expireMin * 1000 * 60);
+    public String createJwtToken(Long subject) {
+        return create(subject, expireMin);
     }
 
     public void logout(Long userNo, String accessToken) {
         accessToken = accessToken.substring(7);
-        if (isValidToken(accessToken)) {
-            redisUtil.delete(String.valueOf(userNo));
+        try {
+            getUserId(accessToken);
             redisUtil.setExcludeList(accessToken, "accessToken");
+        } catch (Exception e) {
+            throw new RuntimeException("유효하지 않은 토큰");
         }
     }
 
-    private boolean isValidToken(String token) {
-        String key = getSubject(token);
-
-        return redisUtil.hasKey(key) && redisUtil.get(key).equals(token);
-    }
-
-    public String reCreateJwtToken(String refreshToken) {
-        String key = getSubject(refreshToken);
-
-        if (isValidToken(refreshToken)) {
-            return createJwtToken(key);
-        }
-        return null;
-    }
-
-    public String create(String subject, int expTime) {
+    public String create(Long userId, int expTime) {
         if (expTime <= 0) {
             throw new RuntimeException("만료시간은 0이상");
         }
@@ -65,14 +55,16 @@ public class JwtUtil {
         byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
         Key signingKey = new SecretKeySpec(secretKeyBytes, signatureAlgorithm.getJcaName());
 
+        Claims claims = Jwts.claims();
+        claims.put("userId", userId);
         return Jwts.builder()
-            .setSubject(subject)
+            .setClaims(claims)
             .signWith(signingKey, signatureAlgorithm)
             .setExpiration(new Date(System.currentTimeMillis() + expTime))
             .compact();
     }
 
-    public String getSubject(String token) {
+    public Long getUserId(String token) {
         token = token.substring(7);
         if (redisUtil.hasKeyExcludeList(token)) {
             throw new RuntimeException("이미 로그아웃하였습니다");
@@ -82,7 +74,7 @@ public class JwtUtil {
             .build()
             .parseClaimsJws(token)
             .getBody();
-        return claims.getSubject();
+        return (Long) claims.get("userId");
     }
 }
 
