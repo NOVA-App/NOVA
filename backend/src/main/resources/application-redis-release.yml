@@ -6,6 +6,6 @@ spring:
   redis:
     host: nohoo.site
     port: 6379
-    password: ssafy_a310_redis
+    password: zhelddldksehlaus!!
     ttls:
       user-info: 3_600_000
