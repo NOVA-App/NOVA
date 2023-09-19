@@ -2,7 +2,8 @@ package com.sehbeomschool.nova.global.config.security;
 
 import com.sehbeomschool.nova.domain.user.service.UserService;
 import com.sehbeomschool.nova.global.filter.JwtFilter;
-import lombok.*;
+import com.sehbeomschool.nova.global.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.*;
 
 @Configuration
 @EnableWebSecurity
@@ -20,12 +20,16 @@ import org.springframework.stereotype.*;
 public class SecurityConfig {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
     @Value("${jwt.secretKey}")
     private String secretKey;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
             .httpBasic().disable()
             .csrf().disable()
             .cors().and()
@@ -33,10 +37,7 @@ public class SecurityConfig {
             .antMatchers("/api/user/oauth/kakao").permitAll()
             .antMatchers(HttpMethod.POST, "/api/**").authenticated()
             .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .addFilterBefore(new JwtFilter(userService, secretKey),
+            .addFilterBefore(new JwtFilter(userService, jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
             .build();
     }
