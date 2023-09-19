@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.news.domain;
 
+import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "NEWS_TYPE")
-public abstract class News {
+public abstract class News extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "NEWS_ID")
