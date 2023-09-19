@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.stock.domain;
 
+import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Stock {
+public class Stock extends BaseEntity {
 
     @Id
     @GeneratedValue

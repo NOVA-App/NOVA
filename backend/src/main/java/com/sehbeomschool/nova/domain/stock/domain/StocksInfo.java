@@ -1,5 +1,7 @@
 package com.sehbeomschool.nova.domain.stock.domain;
 
+import com.sehbeomschool.nova.domain.game.domain.Ages;
+import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StocksInfo {
+public class StocksInfo extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -23,8 +25,7 @@ public class StocksInfo {
 
     @ManyToOne
     @JoinColumn(name = "AGE_ID")
-    // TODO: Age 추가 시 import문 최신화 필요  
-    private Age age;
+    private Ages age;
 
     @ManyToOne
     @JoinColumn(name = "STOCK_ID")
@@ -37,7 +38,7 @@ public class StocksInfo {
     private Long nextPrice;
 
     @Builder
-    public StocksInfo(Long id, Age age, Stock stock, Long currentPrice, Long prevPrice,
+    public StocksInfo(Long id, Ages age, Stock stock, Long currentPrice, Long prevPrice,
         Long nextPrice) {
         this.id = id;
         this.age = age;
