@@ -23,16 +23,11 @@ public class Loan extends BaseEntity {
     @Column(name = "LONA_ID")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REALTY_ID")
-    private Realty realty;
-
     private Long principal;
 
     @Builder
-    public Loan(Long id, Realty realty, Long principal) {
+    public Loan(Long id, Long principal) {
         this.id = id;
-        this.realty = realty;
         this.principal = principal;
     }
 }
