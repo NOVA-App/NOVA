@@ -45,4 +45,27 @@ public class AnnualCost extends BaseEntity {
         this.loansCost = loansCost;
         this.installmentSavingCost = installmentSavingCost;
     }
+
+    public static AnnualCost createStartAnnualCost() {
+        return AnnualCost.builder()
+            .livingCost(FixedValues.LIVING_COST_MIN.getValue())
+            .monthlyRentCost(FixedValues.MONTHLY_RENT_COST.getValue())
+            .IRPCost(0)
+            .childCost(0)
+            .loansCost(0)
+            .installmentSavingCost(0)
+            .build();
+    }
+
+    public Long sumOfAnnualCost() {
+        Long sum = 0L;
+        sum += this.livingCost;
+        sum += this.monthlyRentCost;
+        sum += this.IRPCost;
+        sum += this.installmentSavingCost;
+        sum += this.loansCost;
+        sum += this.childCost;
+
+        return sum;
+    }
 }
