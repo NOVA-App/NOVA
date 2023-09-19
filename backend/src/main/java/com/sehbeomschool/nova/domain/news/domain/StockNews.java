@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("STOCK")
-public class StockNews extends News{
+public class StockNews extends News {
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "NEWS_ID")
-    // TODO: Stock import 추가
     private Stock stock;
 
     @Builder

@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("REALTY")
 public class RealtyNews extends News {
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REALTY_ID")
-    // TODO: Realty import 추가
     private Realty realty;
 
     @Builder
