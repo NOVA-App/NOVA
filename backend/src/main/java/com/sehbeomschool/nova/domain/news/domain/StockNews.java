@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class StockNews extends News {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "NEWS_ID")
+    @JoinColumn(name = "STOCK_ID")
     private Stock stock;
 
     @Builder
