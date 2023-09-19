@@ -6,7 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@DiscriminatorValue("Realty")
+@DiscriminatorValue("REALTY")
 public class RealtyNews extends News {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REALTY_ID")

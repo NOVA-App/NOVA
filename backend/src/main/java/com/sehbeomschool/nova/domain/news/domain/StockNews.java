@@ -5,7 +5,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@DiscriminatorValue("Stock")
+@DiscriminatorValue("STOCK")
 public class StockNews extends News{
     @ManyToOne
     @JoinColumn(name = "NEWS_ID")
