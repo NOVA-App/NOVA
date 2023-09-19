@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Modal2 from './src/components/modal2';
+import OneButtonSmallModal from './src/components/modals/OneButtonSmallModal';
 import StyledModalOpenButton from './src/components/btn';
 import { useState } from 'react';
 
@@ -11,8 +10,11 @@ export default function App() {
   };
   return (
     <View style={styles.container}>
-      <Modal2 isVisible={isModalVisible} onClose={onModalClose}>
-      </Modal2>
+      <OneButtonSmallModal 
+        isVisible={isModalVisible}
+        onClose={onModalClose}
+        >
+      </OneButtonSmallModal>
       
       <StyledModalOpenButton
         onPress={() => {
