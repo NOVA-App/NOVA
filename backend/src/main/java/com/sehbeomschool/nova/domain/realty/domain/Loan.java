@@ -20,7 +20,7 @@ public class Loan extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "LONA_ID")
+    @Column(name = "LOAN_ID")
     private Long id;
 
     private Long principal;
