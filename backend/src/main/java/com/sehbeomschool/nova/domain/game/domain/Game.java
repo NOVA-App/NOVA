@@ -1,7 +1,10 @@
 package com.sehbeomschool.nova.domain.game.domain;
 
 import com.sehbeomschool.nova.domain.game.constant.Gender;
+import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,7 +33,9 @@ public class Game extends BaseEntity {
     @Column(name = "GAME_ID")
     private Long id;
 
-    // TODO: User Entity ManyToOne 연결
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANALYSIS_COMMENT_ID")
@@ -44,8 +50,8 @@ public class Game extends BaseEntity {
     private OldAgeMonthlyAssets oldAgeMonthlyAssets;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "MONTHLY_COST_ID")
-    private MonthlyCost monthlyCost;
+    @JoinColumn(name = "ANNUAL_COST_ID")
+    private AnnualCost annualCost;
 
     private Integer startSalary;
 
@@ -56,18 +62,26 @@ public class Game extends BaseEntity {
 
     private Integer currentAge;
 
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ages> ages = new ArrayList<>();
+
     @Builder
     public Game(Long id, AnalysisComment analysisComment, MyAssets myAssets,
-        OldAgeMonthlyAssets oldAgeMonthlyAssets, MonthlyCost monthlyCost, Integer startSalary,
+        OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualCost annualCost, Integer startSalary,
         Gender gender, Long resultAssets, Integer currentAge) {
         this.id = id;
         this.analysisComment = analysisComment;
         this.myAssets = myAssets;
         this.oldAgeMonthlyAssets = oldAgeMonthlyAssets;
-        this.monthlyCost = monthlyCost;
+        this.annualCost = annualCost;
         this.startSalary = startSalary;
         this.gender = gender;
         this.resultAssets = resultAssets;
         this.currentAge = currentAge;
+    }
+
+    public void addAgeAndSetThis(Ages age) {
+        this.ages.add(age);
+        age.setGame(this);
     }
 }
