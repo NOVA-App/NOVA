@@ -3,8 +3,11 @@ package com.sehbeomschool.nova.domain.realty.domain;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,24 +16,18 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Realty extends BaseEntity {
+public class Loan extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "REALTY_ID")
+    @Column(name = "LOAN_ID")
     private Long id;
 
-    private Long startPrice;
-
-    private String realtyImg;
-
-    private String region;
+    private Long principal;
 
     @Builder
-    public Realty(Long id, Long startPrice, String realtyImg, String region) {
+    public Loan(Long id, Long principal) {
         this.id = id;
-        this.startPrice = startPrice;
-        this.realtyImg = realtyImg;
-        this.region = region;
+        this.principal = principal;
     }
 }
