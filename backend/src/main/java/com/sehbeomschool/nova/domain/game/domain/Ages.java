@@ -17,32 +17,26 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Game extends BaseEntity {
+public class Ages extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "GAME_ID")
+    @Column(name = "AGE_ID")
     private Long id;
 
-    // TODO: User Entity ManyToOne 연결
-
-    // TODO: Gender Enum 추가
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ANALYSIS_COMMENT_ID")
-    private AnalysisComment analysisComment;
+    @JoinColumn(name = "GAME_ID")
+    private Game game;
 
-    private Integer startSalary;
-    private Long resultAssets;
-    private Integer currentAge;
+    private Long totalAsset;
+
+    private Integer age;
 
     @Builder
-    public Game(Long id, AnalysisComment analysisComment, Integer startSalary, Long resultAssets,
-        Integer currentAge) {
+    public Ages(Long id, Game game, Long totalAsset, Integer age) {
         this.id = id;
-        this.analysisComment = analysisComment;
-        this.startSalary = startSalary;
-        this.resultAssets = resultAssets;
-        this.currentAge = currentAge;
+        this.game = game;
+        this.totalAsset = totalAsset;
+        this.age = age;
     }
 }
