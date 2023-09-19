@@ -3,12 +3,9 @@ package com.sehbeomschool.nova.domain.game.domain;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,10 +20,6 @@ public class MyAssets extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MY_ASSET_ID")
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "GAME_ID")
-    private Game game;
 
     private Long totalAsset;
 
@@ -46,11 +39,10 @@ public class MyAssets extends BaseEntity {
     private Long totalTax;
 
     @Builder
-    public MyAssets(Long id, Game game, Long totalAsset, Long usableAsset, Long IRPAsset,
+    public MyAssets(Long id, Long totalAsset, Long usableAsset, Long IRPAsset,
         Long installmentSavingAsset, Long stockAsset, Long realtyAsset, Long loanAsset,
         Long totalTax) {
         this.id = id;
-        this.game = game;
         this.totalAsset = totalAsset;
         this.usableAsset = usableAsset;
         this.IRPAsset = IRPAsset;
