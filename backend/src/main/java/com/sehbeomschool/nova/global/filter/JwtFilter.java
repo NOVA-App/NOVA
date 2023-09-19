@@ -49,9 +49,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
         String token = authorization.split(" ")[1];
-        String userId;
+        Long userId;
         try {
-            userId = jwtUtil.getSubject(token);
+            userId = jwtUtil.getUserId(token);
         }catch (ExpiredJwtException e){
             log.error("토큰 만료 됨.");
             filterChain.doFilter(request, response);
