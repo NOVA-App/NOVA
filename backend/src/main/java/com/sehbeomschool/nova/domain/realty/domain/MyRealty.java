@@ -43,10 +43,12 @@ public class MyRealty extends BaseEntity {
     private Long rentIncome;
 
     @Builder
-    public MyRealty(Long id, Game game, Realty realty, Long investAmount, Long rentIncome) {
+    public MyRealty(Long id, Game game, Realty realty, Loan loan, Long investAmount,
+        Long rentIncome) {
         this.id = id;
         this.game = game;
         this.realty = realty;
+        this.loan = loan;
         this.investAmount = investAmount;
         this.rentIncome = rentIncome;
     }
