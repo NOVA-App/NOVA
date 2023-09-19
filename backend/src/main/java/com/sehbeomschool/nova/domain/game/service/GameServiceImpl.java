@@ -39,7 +39,7 @@ public class GameServiceImpl implements GameService {
             .annualCost(annualCost)
             .startSalary(gameStartRequestDto.getStartSalary())
             .gender(gameStartRequestDto.getGender())
-            .currentAge(FixedValues.START_AGE.getValue())
+            .currentAge(FixedValues.START_AGE.getValue().intValue())
             .build();
 
         game.addAgeAndSetThis(Ages.createStartAge(gameStartRequestDto.getStartSalary()));

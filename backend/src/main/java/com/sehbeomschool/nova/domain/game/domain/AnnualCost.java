@@ -48,8 +48,8 @@ public class AnnualCost extends BaseEntity {
 
     public static AnnualCost createStartAnnualCost() {
         return AnnualCost.builder()
-            .livingCost(FixedValues.LIVING_COST_MIN.getValue())
-            .monthlyRentCost(FixedValues.MONTHLY_RENT_COST.getValue())
+            .livingCost(FixedValues.LIVING_COST_MIN.getValue().intValue())
+            .monthlyRentCost(FixedValues.MONTHLY_RENT_COST.getValue().intValue())
             .IRPCost(0)
             .childCost(0)
             .loansCost(0)

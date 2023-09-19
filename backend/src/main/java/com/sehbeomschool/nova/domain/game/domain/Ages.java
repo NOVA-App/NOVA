@@ -44,7 +44,7 @@ public class Ages extends BaseEntity {
     public static Ages createStartAge(Integer startSalary) {
         return Ages.builder()
             .totalAsset(Long.valueOf(startSalary))
-            .age(FixedValues.START_AGE.getValue())
+            .age(FixedValues.START_AGE.getValue().intValue())
             .build();
     }
 
