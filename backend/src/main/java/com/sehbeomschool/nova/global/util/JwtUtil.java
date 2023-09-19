@@ -74,7 +74,7 @@ public class JwtUtil {
             .build()
             .parseClaimsJws(token)
             .getBody();
-        return (Long) claims.get("userId");
+        return claims.get("userId", Long.class);
     }
 }
 
