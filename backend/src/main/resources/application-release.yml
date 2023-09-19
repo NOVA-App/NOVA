@@ -35,3 +35,7 @@ server:
 
 security:
   require-ssl: true
+
+jwt:
+  expmin: 60
+  secretKey: "aalejfiwljfjalefwfawjeijfwofjlscjiejojf34owj93jo92j1o2jeisnfsleijfsl"

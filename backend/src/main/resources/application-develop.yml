@@ -26,3 +26,7 @@ logging.level:
   com.sehbeomschool.nova: debug
   org.hibernate.SQL: debug
   org.hibernate.type: trace
+
+jwt:
+  expmin: 60
+  secretKey: aleaijfewlfijlweijfliwjelijeiljfwilejfo2wifjlwejdlaiejgflighlidjwldawj
