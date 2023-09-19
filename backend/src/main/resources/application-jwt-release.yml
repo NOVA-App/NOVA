@@ -1,0 +1,8 @@
+spring:
+  config:
+    activate:
+      on-profile: "jwt-dev"
+
+jwt:
+  expmin: 60
+  secretKey: "aalejfiwljfjalefwfawjeijfwofjlscjiejojf34owj93jo92j1o2jeisnfsleijfsl"
