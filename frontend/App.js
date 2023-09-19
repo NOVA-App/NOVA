@@ -4,26 +4,17 @@ import StyledModalOpenButton from './src/components/btn';
 import { useState } from 'react';
 
 export default function App() {
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const onModalClose = () => {
-    setIsModalVisible(false);
-  };
+  // const [isModalVisible, setIsModalVisible] = useState(false);
+  // const onModalClose = () => {
+  //   setIsModalVisible(false);
   return (
     <View style={styles.container}>
-      <OneButtonSmallModal 
-        isVisible={isModalVisible}
-        onClose={onModalClose}
-        >
-      </OneButtonSmallModal>
-      
-      <StyledModalOpenButton
-        onPress={() => {
-          setIsModalVisible(true);
-        }}
-      />
+      <Text>Open up App.js to start working on your app!</Text>
+      <StatusBar style="auto" />
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
