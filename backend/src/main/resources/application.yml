@@ -4,8 +4,10 @@ spring:
       release:
         - redis-release
         - jwt-release
+        - kakao-release
       develop:
         - redis-dev
         - jwt-dev
+        - kakao-dev
 
-    active: release
+    active: develop
