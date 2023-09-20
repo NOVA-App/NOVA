@@ -52,4 +52,17 @@ public class MyAssets extends BaseEntity {
         this.loanAsset = loanAsset;
         this.totalTax = totalTax;
     }
+
+    public static MyAssets createStartMyAsset(Integer startSalary, AnnualCost annualCost) {
+        return MyAssets.builder()
+            .totalAsset(Long.valueOf(startSalary))
+            .usableAsset(startSalary - annualCost.sumOfAnnualCost())
+            .IRPAsset(0L)
+            .installmentSavingAsset(0L)
+            .stockAsset(0L)
+            .realtyAsset(0L)
+            .loanAsset(0L)
+            .totalTax(0L)
+            .build();
+    }
 }
