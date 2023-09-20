@@ -5,5 +5,4 @@ export const ImgContainer = styled.Image`
   height: ${props => props.width * 0.15}px;
   border: 0.5px;
   border-radius: 10px;
-  
 `;
