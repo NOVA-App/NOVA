@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.game.domain;
 
+import com.sehbeomschool.nova.global.constant.FixedValues;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,5 +39,16 @@ public class Ages extends BaseEntity {
         this.game = game;
         this.totalAsset = totalAsset;
         this.age = age;
+    }
+
+    public static Ages createStartAge(Integer startSalary) {
+        return Ages.builder()
+            .totalAsset(Long.valueOf(startSalary))
+            .age(FixedValues.START_AGE.getValue().intValue())
+            .build();
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

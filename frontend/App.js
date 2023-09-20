@@ -1,15 +1,18 @@
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import StackNavigator from './src/navigation/Stack'; // import 수정
+
+// import { useState } from 'react';
 
 export default function App() {
   // const [isModalVisible, setIsModalVisible] = useState(false);
   // const onModalClose = () => {
   //   setIsModalVisible(false);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+        <StackNavigator />
+    </NavigationContainer>
   );
 }
 
