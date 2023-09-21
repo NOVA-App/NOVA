@@ -8,5 +8,5 @@ export const ButtonContainer = styled.TouchableOpacity`
   height: ${props => props.height*(0.04)};
   border-radius: 5px;
   background-color: ${props => props.bgColor ? props.bgColor : "#07CB89"};
-  width: 25%;
+  width: ${props => props.width*(0.3)};
 `;
