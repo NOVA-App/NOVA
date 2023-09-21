@@ -7,7 +7,7 @@ const { width, height } = Dimensions.get('window');
 
 const Budget = props => {
     return (
-      <View style={styles.upper}>
+      <View style={styles.upper} >
         <View style={{flex: 1}}>
           <Image style={{resizeMode: "contain", width: '100%', alignItems:'flex-start'}} source={Logo} />
         </View>
@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     // justifyContent: 'center',
-    // backgroundColor: 'red'
+    backgroundColor: 'white',
+    padding: 10,
   },
 });
 export default Budget;
