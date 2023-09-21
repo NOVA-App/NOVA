@@ -44,5 +44,10 @@ public class KakaoApiController {
                     .build()));
     }
 
+    @GetMapping("/callback")
+    public ResponseEntity<ResponseDto> kakaoLoginError(@RequestParam String error) {
 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ResponseDto.create(UserResponseMessage.LOGIN_FAIL.getMessage() + " " + error));
+    }
 }
