@@ -10,3 +10,4 @@ export const ButtonContainer = styled.TouchableOpacity`
   background-color: ${(props) => (props.bgColor ? props.bgColor : "#07CB89")};
   width: ${(props) => props.width * 0.3};
 `;
+
