@@ -23,7 +23,7 @@ public class StockApiController {
 
     @GetMapping("/list/{gameId}")
     public ResponseEntity<ResponseDto<List<readStocksListResponseDto>>> readStocksList(
-        @PathVariable Long gameId) {
+        @PathVariable(value = "gameId") Long gameId) {
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(
                 StockResponseMessage.READ_STOCKS_LIST.getMessage(),
@@ -32,7 +32,7 @@ public class StockApiController {
         );
     }
 
-    @GetMapping("/detail/{gameId}/{stockId}")
+    @GetMapping("/{gameId}/{stockId}")
     public ResponseEntity<ResponseDto<readStockDetailResponseDto>> readStockDetail(
         @PathVariable(value = "gameId") Long gameId,
         @PathVariable(value = "stockId") Long stockId) {
