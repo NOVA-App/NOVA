@@ -4,6 +4,7 @@ import * as S from "./style";
 
 const { width, height } = Dimensions.get("window");
 
+
 // 버튼 이름, 눌릴 때 함수, 배경 넣기
 const Button = (props) => {
   return (
