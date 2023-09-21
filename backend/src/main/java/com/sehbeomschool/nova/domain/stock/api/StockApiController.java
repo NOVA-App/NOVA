@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.stock.api;
 
 import com.sehbeomschool.nova.domain.stock.constant.StockResponseMessage;
+import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readMyStocksResponseDto;
 import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readStockDetailResponseDto;
 import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readStocksListResponseDto;
 import com.sehbeomschool.nova.domain.stock.service.StockService;
@@ -20,6 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class StockApiController {
 
     private final StockService stockService;
+
+    @GetMapping("/mine/{gameId}")
+    public ResponseEntity<ResponseDto<readMyStocksResponseDto>> readMyStocks(
+        @PathVariable(value = "gameId") Long gameId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(
+                StockResponseMessage.READ_MY_STOCKS.getMessage(),
+                stockService.readMyStocks(gameId)
+            )
+        );
+    }
+
 
     @GetMapping("/list/{gameId}")
     public ResponseEntity<ResponseDto<List<readStocksListResponseDto>>> readStocksList(
