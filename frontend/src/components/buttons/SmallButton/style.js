@@ -1,12 +1,13 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const ButtonContainer = styled.TouchableOpacity`
   border-width: 0.5px;
-  border-color: ${props => props.bgColor ? props.bgColor : "#07CB89"};
-  align-items:center;
-  justify-content:center;
-  height: ${props => props.height*(0.04)};
+  border-color: ${(props) => (props.bgColor ? props.bgColor : "#07CB89")};
+  align-items: center;
+  justify-content: center;
+  height: ${(props) => props.height * 0.05};
   border-radius: 5px;
-  background-color: ${props => props.bgColor ? props.bgColor : "#07CB89"};
-  width: ${props => props.width*(0.3)};
+  background-color: ${(props) => (props.bgColor ? props.bgColor : "#07CB89")};
+  width: ${(props) => props.width * 0.3};
 `;
+
