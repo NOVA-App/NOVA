@@ -10,6 +10,11 @@ public class UserResponseDto {
     public static class LoginResponseDto{
         private String accessToken;
         private String refreshToken;
+    }
 
+    @Builder
+    public static class UserInfoResponseDto{
+        private String name;
+        private String profileImg;
     }
 }
