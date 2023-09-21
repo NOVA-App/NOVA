@@ -1,0 +1,19 @@
+package com.sehbeomschool.nova.domain.user.dto;
+
+import java.util.Map;
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class KakaoUserInfoDto {
+    private Long id;
+    private String name;
+    private String profileImg;
+
+    public KakaoUserInfoDto(Map info){
+        this.id = (Long) info.get("id");
+        this.name = String.valueOf(((Map)info.get("properties")).get("nickname"));
+        this.profileImg = String.valueOf(info.get("profile_image_url"));
+    }
+}
