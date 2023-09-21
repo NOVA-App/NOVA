@@ -3,7 +3,10 @@ package com.sehbeomschool.nova.domain.stock.service;
 import com.sehbeomschool.nova.domain.stock.dao.MyStocksRepository;
 import com.sehbeomschool.nova.domain.stock.dao.StockRepository;
 import com.sehbeomschool.nova.domain.stock.dao.StocksInfoRepository;
+import com.sehbeomschool.nova.domain.stock.domain.MyStocks;
 import com.sehbeomschool.nova.domain.stock.domain.StocksInfo;
+import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.MyStockResponseDto;
+import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readMyStocksResponseDto;
 import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readStockDetailResponseDto;
 import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readStocksListResponseDto;
 import java.util.ArrayList;
@@ -25,12 +28,12 @@ public class StockServiceImpl implements StockService {
 
         List<readStocksListResponseDto> readStocksListResponseDtoList = new ArrayList<>();
 
-        for(StocksInfo si : list){
+        for (StocksInfo si : list) {
             readStocksListResponseDto dto = readStocksListResponseDto.builder()
                 .stockId(si.getStock().getId())
                 .stockName(si.getStock().getName())
                 .evaluationAmount(si.getPrevPrice())
-                .evaluationAmount(si.getCurrentPrice()-si.getPrevPrice())
+                .evaluationAmount(si.getCurrentPrice() - si.getPrevPrice())
                 .build();
 
             readStocksListResponseDtoList.add(dto);
@@ -41,11 +44,13 @@ public class StockServiceImpl implements StockService {
 
     @Override
     public readStockDetailResponseDto readStockDetail(Long gameId, Long stockId) {
-        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(gameId, stockId);
-        List<Long> priceList = stocksInfoRepository.findCurrentPricesByGameIdAndStockId(gameId, stockId);
+        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(gameId,
+            stockId);
+        List<Long> priceList = stocksInfoRepository.findCurrentPricesByGameIdAndStockId(gameId,
+            stockId);
         Long myQuantity = myStocksRepository.findQuantityByGameIdAndStockId(gameId, stockId);
 
-        if(stocksInfo == null) {
+        if (stocksInfo == null) {
             return null;
         }
 
@@ -56,6 +61,56 @@ public class StockServiceImpl implements StockService {
             .myQuantity(myQuantity)
             .graphValue(priceList)
             .build();
+        return dto;
+    }
+
+    @Override
+    public readMyStocksResponseDto readMyStocks(Long gameId) {
+        Long investAmounts = 0L;
+        Long evaluationAmounts = 0L;
+        Long depreciation = 0L;
+        Long depreciationPercent = 0L;
+
+        List<MyStockResponseDto> list = new ArrayList<>();
+
+        List<MyStocks> myStocks = myStocksRepository.findMyStocksByGameId(gameId);
+
+        if(myStocks.size() == 0){
+            return null;
+        }
+
+        for (MyStocks myStock : myStocks) {
+            StocksInfo myStockInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(gameId,
+                myStock.getId());
+
+            investAmounts += myStock.getInvestAmount();
+            evaluationAmounts += myStockInfo.getCurrentPrice() * myStock.getQuantity();
+            Long fluctuation = myStockInfo.getCurrentPrice() - myStockInfo.getPrevPrice();
+
+            MyStockResponseDto myStockResponseDto = MyStockResponseDto.builder()
+                .stockId(myStock.getId())
+                .stockName(myStock.getStock().getName())
+                .evaluationAmount(myStockInfo.getCurrentPrice() * myStock.getQuantity())
+                .fluctuations(fluctuation * myStock.getQuantity())
+                .fluctuationsPercent(
+                    fluctuation * myStock.getQuantity() / myStock.getInvestAmount() * 100)
+                .build();
+
+            list.add(myStockResponseDto);
+
+        }
+
+        depreciation = evaluationAmounts - investAmounts;
+        depreciationPercent = depreciation / investAmounts * 100;
+
+        readMyStocksResponseDto dto = readMyStocksResponseDto.builder()
+            .investAmounts(investAmounts)
+            .evaluationAmounts(evaluationAmounts)
+            .depreciation(depreciation)
+            .depreciationPercent(depreciationPercent)
+            .myStocks(list)
+            .build();
+
         return dto;
     }
 }
