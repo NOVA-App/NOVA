@@ -26,14 +26,14 @@ public class JwtUtil {
     @Value("${jwt.secretKey}")
     private String SECRET_KEY;
 
-    public String createRefreshToken(Long userNo) {
-        String refreshToken = create(userNo, refreshExpireMin);
-        redisUtil.set(String.valueOf(userNo), refreshToken, refreshExpireMin);
+    public String createRefreshToken(Long userId) {
+        String refreshToken = create(userId, refreshExpireMin);
+        redisUtil.set(String.valueOf(userId), refreshToken, refreshExpireMin);
         return refreshToken;
     }
 
-    public String createJwtToken(Long subject) {
-        return create(subject, expireMin);
+    public String createJwtToken(Long userId) {
+        return create(userId, expireMin);
     }
 
     public void logout(Long userNo, String accessToken) {
