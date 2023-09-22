@@ -24,7 +24,7 @@ public class JwtUtil {
     private int refreshExpireMin;
 
     @Value("${jwt.secretKey}")
-    private String SECRET_KEY;
+    private String secretKey;
 
     public String createRefreshToken(Long userNo) {
         String refreshToken = create(userNo, refreshExpireMin);
@@ -52,7 +52,7 @@ public class JwtUtil {
         }
 
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-        byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(SECRET_KEY);
+        byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(secretKey);
         Key signingKey = new SecretKeySpec(secretKeyBytes, signatureAlgorithm.getJcaName());
 
         Claims claims = Jwts.claims();
@@ -70,11 +70,20 @@ public class JwtUtil {
             throw new RuntimeException("이미 로그아웃하였습니다");
         }
         Claims claims = Jwts.parserBuilder()
-            .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+            .setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))
             .build()
             .parseClaimsJws(token)
             .getBody();
         return claims.get("userId", Long.class);
+    }
+
+    public boolean isValidToken(String token) {
+        boolean isExpired = Jwts.parserBuilder().setSigningKey(secretKey).build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getExpiration().before(new Date());
+        boolean isLogout = redisUtil.hasKeyExcludeList(token);
+        return !isExpired && !isLogout;
     }
 }
 
