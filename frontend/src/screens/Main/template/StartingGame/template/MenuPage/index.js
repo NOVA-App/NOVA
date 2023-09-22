@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import ImgBox from '../../components/ImgBox';
-import XXLargeButton from '../../components/buttons/XXLargeButton'
+import ImgBox from '../../../../../../components/ImgBox';
+import XXLargeButton from '../../../../../../components/buttons/XXLargeButton'
 import * as S from './style'
 
 const MenuPage = () => {

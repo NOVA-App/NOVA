@@ -1,5 +1,8 @@
 package com.sehbeomschool.nova.domain.user.service;
 
-public class UserServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserServiceImpl implements UserService {
 
 }

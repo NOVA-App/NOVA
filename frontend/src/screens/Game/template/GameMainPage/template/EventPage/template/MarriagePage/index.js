@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View, StatusBar, Dimensions, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
-import Budget from '../../components/budget/index'
-import Button from '../../components/buttons/SmallButton';
-import Marriage from '../../assets/Marriage.png'
+import Budget from '../../../../../../../../components/budget/index'
+import Button from '../../../../../../../../components/buttons/SmallButton';
+import Marriage from '../../../../../../../../assets/Marriage.png'
 
 
 export default function MarriagePage() {
