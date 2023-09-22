@@ -37,7 +37,7 @@ public class SecurityConfig {
             .antMatchers("/api/user/oauth/kakao").permitAll()
             .antMatchers(HttpMethod.POST, "/api/**").authenticated()
             .and()
-            .addFilterBefore(new JwtFilter(userService, jwtUtil),
+            .addFilterBefore(new JwtFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
             .build();
     }
