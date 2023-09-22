@@ -68,4 +68,8 @@ public class AnnualCost extends BaseEntity {
 
         return sum;
     }
+
+    public void addChildCost() {
+        this.childCost += FixedValues.CHILD_COST.getValue().intValue();
+    }
 }

@@ -65,4 +65,21 @@ public class MyAssets extends BaseEntity {
             .totalTax(0L)
             .build();
     }
+
+    public void recalculateTotalAsset() {
+        Long newTotalAsset = 0L;
+        newTotalAsset += this.usableAsset;
+        newTotalAsset += this.IRPAsset;
+        newTotalAsset += this.installmentSavingAsset;
+        newTotalAsset += this.stockAsset;
+        newTotalAsset += this.realtyAsset;
+        newTotalAsset -= this.loanAsset;
+
+        this.totalAsset = newTotalAsset;
+    }
+
+    public void useUsableAsset(Long cost) {
+        this.usableAsset -= cost;
+        recalculateTotalAsset();
+    }
 }
