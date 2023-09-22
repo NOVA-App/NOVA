@@ -8,6 +8,7 @@ import com.sehbeomschool.nova.domain.realty.domain.RealtyInfo;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.MyRealtyResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyDetailResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyResponseDto;
+import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadRealtyResponseDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,7 @@ public class RealtyServiceImpl implements RealtyService {
         RealtyInfo realtyInfo = realtyInfoRepository.findRealtyInfoByGameIdAndRealtyId(gameId,
             realtyId);
 
-        if(myRealty == null || realtyInfo == null){
+        if (myRealty == null || realtyInfo == null) {
             return null;
         }
 
@@ -87,5 +88,31 @@ public class RealtyServiceImpl implements RealtyService {
             .build();
 
         return dto;
+    }
+
+    @Override
+    public List<ReadRealtyResponseDto> readRealtyList(Long gameId) {
+        List<RealtyInfo> realtyInfoList = realtyInfoRepository.findRealtyInfosByGameIdAndNotinMyRealty(
+            gameId);
+
+        List<ReadRealtyResponseDto> list = new ArrayList<>();
+
+        for (RealtyInfo ri : realtyInfoList) {
+            Long depreciationPercent = (ri.getCurrentPrice() - ri.getPrevPrice()) / ri.getPrevPrice();
+
+            ReadRealtyResponseDto dto = ReadRealtyResponseDto.builder()
+                .realtyId(ri.getRealty().getId())
+                .realtyName(ri.getRealty().getName())
+                .realtyImg(ri.getRealty().getRealtyImg())
+                .region(ri.getRealty().getRegion())
+                .depreciationPercent(depreciationPercent)
+                .evaluationAmount(ri.getCurrentPrice())
+                .predictedRentIncome(ri.getPredictedRentIncome())
+                .build();
+
+            list.add(dto);
+        }
+
+        return list;
     }
 }

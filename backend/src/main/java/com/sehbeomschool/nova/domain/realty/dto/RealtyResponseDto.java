@@ -75,4 +75,28 @@ public class RealtyResponseDto {
         }
     }
 
+    @Getter
+    public static class ReadRealtyResponseDto {
+        private Long realtyId;
+        private String realtyName;
+        private String realtyImg;
+        private String region;
+        private Long depreciationPercent;
+        private Long evaluationAmount;
+        private Long predictedRentIncome;
+
+        @Builder
+        public ReadRealtyResponseDto(Long realtyId, String realtyName, String realtyImg,
+            String region,
+            Long depreciationPercent, Long evaluationAmount, Long predictedRentIncome) {
+            this.realtyId = realtyId;
+            this.realtyName = realtyName;
+            this.realtyImg = realtyImg;
+            this.region = region;
+            this.depreciationPercent = depreciationPercent;
+            this.evaluationAmount = evaluationAmount;
+            this.predictedRentIncome = predictedRentIncome;
+        }
+    }
+
 }
