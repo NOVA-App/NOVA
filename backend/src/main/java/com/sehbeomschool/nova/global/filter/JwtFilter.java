@@ -23,7 +23,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
     @Value("${jwt.secretKey}")
     private String secretKey;
     private final JwtUtil jwtUtil;
