@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserService userService;
     private final JwtUtil jwtUtil;
     @Value("${jwt.secretKey}")
     private String secretKey;
@@ -34,10 +33,11 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-            .antMatchers("/api/user/oauth/kakao").permitAll()
-            .antMatchers("/api/**").authenticated()
+            .anyRequest().permitAll()
+//            .antMatchers("/api/user/oauth/kakao").permitAll()
+//            .antMatchers(HttpMethod.POST, "/api/**").authenticated()
             .and()
-            .addFilterBefore(new JwtFilter(userService, jwtUtil),
+            .addFilterBefore(new JwtFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
             .build();
     }
