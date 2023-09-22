@@ -53,6 +53,9 @@ public class Game extends BaseEntity {
     @JoinColumn(name = "ANNUAL_COST_ID")
     private AnnualCost annualCost;
 
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Event> events = new ArrayList<>();
+
     private Integer startSalary;
 
     @Enumerated(value = EnumType.STRING)
