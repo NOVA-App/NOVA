@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long createUser(KakaoUserInfoDto user) {
-        User saved = userRepository.save(new User(user));
+        User saved = userRepository.save(user.toEntity());
         return saved.getId();
     }
 
