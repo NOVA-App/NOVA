@@ -1,7 +1,7 @@
 import React from "react";
 import { Dimensions, View, Text, ScrollView } from "react-native";
-import Budget from "../../../components/budget";
-import HouseCard from "../../../components/realestatepage/HouseCard";
+import Budget from "../../../../components/budget";
+import HouseCard from "../../../../components/realestatepage/HouseCard";
 import * as S from "./style";
 
 const { height } = Dimensions.get("window");
