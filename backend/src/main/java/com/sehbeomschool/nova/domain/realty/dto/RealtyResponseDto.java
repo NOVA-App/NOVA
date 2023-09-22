@@ -99,4 +99,33 @@ public class RealtyResponseDto {
         }
     }
 
+    @Getter
+    public static class ReadRealtyDetailResponseDto {
+        private Long realtyId;
+        private String realtyName;
+        private String realtyImg;
+        private Long depreciationPercent;
+        private String region;
+        private Long predictedRentIncome;
+        private Long totalPrice;
+        private Long evaluationAmount;
+        private Long acquistionTax;
+        private Long enableLoanAmount;
+
+        @Builder
+        public ReadRealtyDetailResponseDto(Long realtyId, String realtyName, String realtyImg,
+            Long depreciationPercent, String region, Long predictedRentIncome, Long totalPrice,
+            Long evaluationAmount, Long acquistionTax, Long enableLoanAmount) {
+            this.realtyId = realtyId;
+            this.realtyName = realtyName;
+            this.realtyImg = realtyImg;
+            this.depreciationPercent = depreciationPercent;
+            this.region = region;
+            this.predictedRentIncome = predictedRentIncome;
+            this.totalPrice = totalPrice;
+            this.evaluationAmount = evaluationAmount;
+            this.acquistionTax = acquistionTax;
+            this.enableLoanAmount = enableLoanAmount;
+        }
+    }
 }
