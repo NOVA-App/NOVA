@@ -7,7 +7,7 @@ const LoginPage = () => {
 
   const handleLogin = () => {
     // 'SelectOptionPage'로 네비게이션 이동
-    navigation.navigate("ChooseOptions"); // 'StartGame'으로 변경
+    navigation.replace("Main"); // 'StartGame'으로 변경
   };
 
   return (
@@ -23,26 +23,25 @@ const LoginPage = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   logo: {
     width: 200,
     height: 200,
-    resizeMode: 'contain', // 로고 이미지 크기 조정
+    resizeMode: "contain", // 로고 이미지 크기 조정
   },
   loginButton: {
-    backgroundColor: 'gold',
+    backgroundColor: "gold",
     padding: 15,
     borderRadius: 10,
     marginTop: 20,
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
-
 
 export default LoginPage;

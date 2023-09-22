@@ -1,3 +1,3 @@
-import ChooseOptions from './ChooseOptions/index';
+import ChooseOptions from "./ChooseOptions/index";
 
-export {ChooseOptions};
+export { ChooseOptions };
