@@ -1,12 +1,11 @@
 package com.sehbeomschool.nova.domain.game.constant;
 
-public enum GameResponseMessage {
-    GAME_START_SUCCESS("게임 시작 완료"),
-    MARRY_SUCCESS("결혼 완료");
+public enum GameExceptionMessage {
+    GAME_NOT_FOUND("해당 게임 미존재");
 
     private final String message;
 
-    GameResponseMessage(String message) {
+    GameExceptionMessage(String message) {
         this.message = message;
     }
 
