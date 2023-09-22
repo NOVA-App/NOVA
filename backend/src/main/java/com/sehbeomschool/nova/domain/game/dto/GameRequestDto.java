@@ -17,4 +17,13 @@ public class GameRequestDto {
         private Integer startSalary;
         private Gender gender;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MarryRequestDto {
+
+        private Long gameId;
+    }
 }
