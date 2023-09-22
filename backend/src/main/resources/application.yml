@@ -8,4 +8,4 @@ spring:
         - redis-dev
         - jwt-dev
 
-    active: release
+    active: develop

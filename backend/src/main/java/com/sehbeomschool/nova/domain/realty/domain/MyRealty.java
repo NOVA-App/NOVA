@@ -52,4 +52,8 @@ public class MyRealty extends BaseEntity {
         this.investAmount = investAmount;
         this.rentIncome = rentIncome;
     }
+
+    public Long calDepreciationPercent(Long currentPrice){
+        return (currentPrice - this.investAmount) / this.investAmount * 100;
+    }
 }
