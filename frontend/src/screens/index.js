@@ -1,4 +1,4 @@
-import Start from "./Start/index";
-import Main from "./Main/index";
-
-export {Start, Main}
+import Login from "./Login";
+import Main from "./Main";
+import Game from "./Game"
+export {Login, Main, Game}

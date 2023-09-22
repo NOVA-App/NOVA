@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import SelectOptionPage from "./template/selectoptionpage";
+import { StartingGame } from "./template";
 
 const MainStack = createStackNavigator();
 
 export default function Main() {
   return (
-    <MainStack.Navigator initialRouteName="SelectOptionPage">
-      <MainStack.Screen name="SelectOptionPage" component={SelectOptionPage} />
+    <MainStack.Navigator>
+      <MainStack.Screen name="StartingGame" component={StartingGame} />
     </MainStack.Navigator>
   );
 }
