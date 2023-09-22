@@ -22,14 +22,17 @@ public class Realty extends BaseEntity {
 
     private Long startPrice;
 
+    private String name;
+
     private String realtyImg;
 
     private String region;
 
     @Builder
-    public Realty(Long id, Long startPrice, String realtyImg, String region) {
+    public Realty(Long id, Long startPrice, String name, String realtyImg, String region) {
         this.id = id;
         this.startPrice = startPrice;
+        this.name = name;
         this.realtyImg = realtyImg;
         this.region = region;
     }
