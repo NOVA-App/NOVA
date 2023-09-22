@@ -48,4 +48,8 @@ public class StocksInfo extends BaseEntity {
         this.prevPrice = prevPrice;
         this.nextPrice = nextPrice;
     }
+
+    public Long calFluctuaions(){
+        return this.currentPrice - this.prevPrice;
+    }
 }

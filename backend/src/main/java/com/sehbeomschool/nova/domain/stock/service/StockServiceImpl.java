@@ -33,7 +33,7 @@ public class StockServiceImpl implements StockService {
                 .stockId(si.getStock().getId())
                 .stockName(si.getStock().getName())
                 .evaluationAmount(si.getPrevPrice())
-                .evaluationAmount(si.getCurrentPrice() - si.getPrevPrice())
+                .fluctuations(si.calFluctuaions())
                 .build();
 
             readStocksListResponseDtoList.add(dto);
@@ -57,7 +57,7 @@ public class StockServiceImpl implements StockService {
         readStockDetailResponseDto dto = readStockDetailResponseDto.builder()
             .stockName(stocksInfo.getStock().getName())
             .evaluation(stocksInfo.getCurrentPrice())
-            .fluctuations(stocksInfo.getCurrentPrice() - stocksInfo.getPrevPrice())
+            .fluctuations(stocksInfo.calFluctuaions())
             .myQuantity(myQuantity)
             .graphValue(priceList)
             .build();
