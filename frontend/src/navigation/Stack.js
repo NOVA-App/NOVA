@@ -6,12 +6,14 @@ import ChildPage from '../screens/ChildPage';
 import MarriagePage from '../screens/MarriagePage';
 import Banking from '../screens/Banking';
 import { createStackNavigator } from '@react-navigation/stack';
+import RealEstatePage from '../screens/RealEstatePage';
 
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
   return (
     <Stack.Navigator>
+      <Stack.Screen name="RealEstatePage" component={RealEstatePage} />
       <Stack.Screen name="Banking" component={Banking} />
       <Stack.Screen name="MarriagePage" component={MarriagePage} />
       <Stack.Screen name="ChildPage" component={ChildPage} />
