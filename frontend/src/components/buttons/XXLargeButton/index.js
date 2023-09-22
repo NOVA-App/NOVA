@@ -2,7 +2,7 @@ import React from 'react';
 import { Dimensions, View, Text } from 'react-native';
 import * as S from './style'
 
-const { height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 // 로그인 후 메인페이지용
 
@@ -14,6 +14,7 @@ const Button = props => {
             pressRetentionOffset={{ bottom: 10, top: 10, left: 10, right: 10 }}
             bgColor= {props.bgColor}
             height= {height}
+            width={width}
             >
             <View>
                 <Text style={{ fontSize: 20, color: "white" }}>{props.title}</Text>
