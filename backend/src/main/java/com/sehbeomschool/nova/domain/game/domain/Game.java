@@ -1,7 +1,9 @@
 package com.sehbeomschool.nova.domain.game.domain;
 
+import com.sehbeomschool.nova.domain.game.constant.EventType;
 import com.sehbeomschool.nova.domain.game.constant.Gender;
 import com.sehbeomschool.nova.domain.user.domain.User;
+import com.sehbeomschool.nova.global.constant.FixedValues;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,5 +90,31 @@ public class Game extends BaseEntity {
     public void addAgeAndSetThis(Ages age) {
         this.ages.add(age);
         age.setGame(this);
+    }
+
+    public void setCurrentAge(Ages age) {
+        this.currentAge = age;
+    }
+
+    public void addEventAndSetThis(Event event) {
+        this.events.add(event);
+        event.setGame(this);
+
+        if (event.getEventType() == EventType.MARRIAGE) {
+            payMarriageCost();
+            return;
+        }
+
+        if (event.getEventType() == EventType.CHILD_BIRTH) {
+            addChildCost();
+        }
+    }
+
+    private void addChildCost() {
+        this.annualCost.addChildCost();
+    }
+
+    private void payMarriageCost() {
+        this.myAssets.useUsableAsset(FixedValues.MARRIAGE_COST.getValue().longValue());
     }
 }
