@@ -1,29 +1,18 @@
 import React from "react";
-import LoginPage from "../screens/loginpage/index";
-import StartGame from "../screens/selectoptionpage/index";
-import GameStart from "../screens/GameStartPage";
-import ChildPage from "../screens/ChildPage";
-import MarriagePage from "../screens/MarriagePage";
-import MainPage from "../screens/MainPage";
-import MenuPage from "../screens/MenuPage";
-import MyRealEstatePage from "../screens/RealEstatePage/MyRealEstatePage";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Login, Main, Game } from '../screens'
 
-const Stack = createStackNavigator();
 
-const StackNavigator = () => {
+const RootStack = createStackNavigator();
+
+const RootStackNavigator = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="MyRealEstatePage" component={MyRealEstatePage} />
-      <Stack.Screen name="MarriagePage" component={MarriagePage} />
-      <Stack.Screen name="ChildPage" component={ChildPage} />
-      <Stack.Screen name="LoginPage" component={LoginPage} />
-      <Stack.Screen name="StartGame" component={StartGame} />
-      <Stack.Screen name="GameStart" component={GameStart} />
-      <Stack.Screen name="MenuPage" component={MenuPage} />
-      <Stack.Screen name="MainPage" component={MainPage} />
-    </Stack.Navigator>
+    <RootStack.Navigator headerMode="none">
+      <RootStack.Screen name="Login" component={Login}/>
+      <RootStack.Screen name="Main" component={Main}/>
+      <RootStack.Screen name="Game" component={Game}/>
+    </RootStack.Navigator>
   );
 };
 
-export default StackNavigator;
+export default RootStackNavigator;
