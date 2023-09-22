@@ -31,12 +31,6 @@ public class User extends BaseEntity {
         this.profileImg = profileImg;
     }
 
-    public User(KakaoUserInfoDto user) {
-        this.socialId = user.getId();
-        this.name = user.getName();
-        this.profileImg = user.getProfileImg();
-    }
-
     public void updateName(String name) {
         this.name = name;
     }
