@@ -75,17 +75,13 @@ public class RealtyServiceImpl implements RealtyService {
             return null;
         }
 
-        Long depreciationPercent =
-            (realtyInfo.getCurrentPrice() - myRealty.getInvestAmount()) / myRealty.getInvestAmount()
-                * 100;
-
         ReadMyRealtyDetailResponseDto dto = ReadMyRealtyDetailResponseDto.builder()
             .realtyId(realtyId)
             .realtyName(myRealty.getRealty().getName())
             .realtyImg(myRealty.getRealty().getRealtyImg())
             .investAmount(myRealty.getInvestAmount())
             .evaluationAmount(realtyInfo.getCurrentPrice())
-            .depreciationPercent(depreciationPercent)
+            .depreciationPercent(myRealty.calDepreciationPercent(realtyInfo.getCurrentPrice()))
             .rentIncome(myRealty.getRentIncome())
             .principal(myRealty.getLoan().getPrincipal())
             .build();
@@ -101,15 +97,12 @@ public class RealtyServiceImpl implements RealtyService {
         List<ReadRealtyResponseDto> list = new ArrayList<>();
 
         for (RealtyInfo ri : realtyInfoList) {
-            Long depreciationPercent =
-                (ri.getCurrentPrice() - ri.getPrevPrice()) / ri.getPrevPrice();
-
             ReadRealtyResponseDto dto = ReadRealtyResponseDto.builder()
                 .realtyId(ri.getRealty().getId())
                 .realtyName(ri.getRealty().getName())
                 .realtyImg(ri.getRealty().getRealtyImg())
                 .region(ri.getRealty().getRegion())
-                .depreciationPercent(depreciationPercent)
+                .depreciationPercent(ri.calDepreciationPercent())
                 .evaluationAmount(ri.getCurrentPrice())
                 .predictedRentIncome(ri.getPredictedRentIncome())
                 .build();
@@ -131,24 +124,19 @@ public class RealtyServiceImpl implements RealtyService {
             return null;
         }
 
-        Long depreciationPercent =
-            (realtyInfo.getCurrentPrice() - realtyInfo.getPrevPrice()) / realtyInfo.getPrevPrice()
-                * 100;
-        Long enableLoanAmountPercent = (myCount == 0) ? 70L : 40L;
-
         ReadRealtyDetailResponseDto dto = ReadRealtyDetailResponseDto.builder()
             .realtyId(realtyId)
             .realtyName(realtyInfo.getRealty().getName())
             .realtyImg(realtyInfo.getRealty().getRealtyImg())
-            .depreciationPercent(depreciationPercent)
+            .depreciationPercent(realtyInfo.calDepreciationPercent())
             .region(realtyInfo.getRealty().getRegion())
             .predictedRentIncome(realtyInfo.getPredictedRentIncome())
-            .totalPrice(realtyInfo.getCurrentPrice() + taxCalculator.calRealtyAcquistionTax(
+            .totalPrice(taxCalculator.calRealtyTotalPrice(
                 realtyInfo.getCurrentPrice(), myCount))
             .evaluationAmount(realtyInfo.getCurrentPrice())
             .acquistionTax(
                 taxCalculator.calRealtyAcquistionTax(realtyInfo.getCurrentPrice(), myCount))
-            .enableLoanAmount(realtyInfo.getCurrentPrice() / 100 * enableLoanAmountPercent)
+            .enableLoanAmount(realtyInfo.calEnableLoanAmount(myCount))
             .build();
 
         return dto;
