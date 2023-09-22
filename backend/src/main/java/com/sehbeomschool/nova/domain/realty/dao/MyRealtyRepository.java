@@ -9,4 +9,6 @@ public interface MyRealtyRepository extends JpaRepository<MyRealty, Long> {
     List<MyRealty> findMyRealtiesByGameId(Long gameId);
 
     MyRealty findMyRealtyByGameIdAndRealtyId(Long gameId, Long realtyId);
+
+    Long countByGameId(Long gameId);
 }

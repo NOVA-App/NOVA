@@ -8,7 +8,9 @@ import com.sehbeomschool.nova.domain.realty.domain.RealtyInfo;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.MyRealtyResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyDetailResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyResponseDto;
+import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadRealtyDetailResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadRealtyResponseDto;
+import com.sehbeomschool.nova.global.util.TaxCalculator;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class RealtyServiceImpl implements RealtyService {
     private final RealtyRepository realtyRepository;
     private final RealtyInfoRepository realtyInfoRepository;
     private final MyRealtyRepository myRealtyRepository;
+    private TaxCalculator taxCalculator;
 
     @Override
     public ReadMyRealtyResponseDto readMyRealty(Long gameId) {
@@ -98,7 +101,8 @@ public class RealtyServiceImpl implements RealtyService {
         List<ReadRealtyResponseDto> list = new ArrayList<>();
 
         for (RealtyInfo ri : realtyInfoList) {
-            Long depreciationPercent = (ri.getCurrentPrice() - ri.getPrevPrice()) / ri.getPrevPrice();
+            Long depreciationPercent =
+                (ri.getCurrentPrice() - ri.getPrevPrice()) / ri.getPrevPrice();
 
             ReadRealtyResponseDto dto = ReadRealtyResponseDto.builder()
                 .realtyId(ri.getRealty().getId())
@@ -114,5 +118,39 @@ public class RealtyServiceImpl implements RealtyService {
         }
 
         return list;
+    }
+
+    @Override
+    public ReadRealtyDetailResponseDto readRealtyDetail(Long gameId, Long realtyId) {
+        RealtyInfo realtyInfo = realtyInfoRepository.findRealtyInfoByGameIdAndRealtyId(gameId,
+            realtyId);
+
+        Long myCount = myRealtyRepository.countByGameId(gameId);
+
+        if (realtyInfo == null) {
+            return null;
+        }
+
+        Long depreciationPercent =
+            (realtyInfo.getCurrentPrice() - realtyInfo.getPrevPrice()) / realtyInfo.getPrevPrice()
+                * 100;
+        Long enableLoanAmountPercent = (myCount == 0) ? 70L : 40L;
+
+        ReadRealtyDetailResponseDto dto = ReadRealtyDetailResponseDto.builder()
+            .realtyId(realtyId)
+            .realtyName(realtyInfo.getRealty().getName())
+            .realtyImg(realtyInfo.getRealty().getRealtyImg())
+            .depreciationPercent(depreciationPercent)
+            .region(realtyInfo.getRealty().getRegion())
+            .predictedRentIncome(realtyInfo.getPredictedRentIncome())
+            .totalPrice(realtyInfo.getCurrentPrice() + taxCalculator.calRealtyAcquistionTax(
+                realtyInfo.getCurrentPrice(), myCount))
+            .evaluationAmount(realtyInfo.getCurrentPrice())
+            .acquistionTax(
+                taxCalculator.calRealtyAcquistionTax(realtyInfo.getCurrentPrice(), myCount))
+            .enableLoanAmount(realtyInfo.getCurrentPrice() / 100 * enableLoanAmountPercent)
+            .build();
+
+        return dto;
     }
 }
