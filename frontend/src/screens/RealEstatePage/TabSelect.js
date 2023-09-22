@@ -1,16 +1,16 @@
-import React from 'react';
-import { Modal, Dimensions, Text, StyleSheet, View } from 'react-native';
-import MyRealEstate from '../../components/MyRealEstateComponent';
-import BBB from './b';
-import CCC from './c';
+import React from "react";
+import { Modal, Dimensions, Text, StyleSheet, View } from "react-native";
+import MyRealEstate from "../../components/estatepage/MyRealEstateComponent";
+import ForSaleEstate from "../../components/estatepage/ForSaleEstateComponent";
+import LoanEstate from "../../components/estatepage/LoanEstateComponent";
 
-const TabSelect = ({selectedTab}) => {
+const TabSelect = ({ selectedTab }) => {
   return (
     <View>
-      {selectedTab == 0 && <MyRealEstate/>}
-      {selectedTab == 1 && <BBB/>}
-      {selectedTab == 2 && <CCC/>}
+      {selectedTab == 0 && <MyRealEstate />}
+      {selectedTab == 1 && <ForSaleEstate />}
+      {selectedTab == 2 && <LoanEstate />}
     </View>
   );
 };
-export default TabSelect
+export default TabSelect;
