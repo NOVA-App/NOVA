@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // useNavigation 추가
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Login = () => {
   const navigation = useNavigation(); // 네비게이션 객체 생성
