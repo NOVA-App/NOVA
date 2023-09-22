@@ -26,7 +26,7 @@ public class KakaoApiController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/callback")
-    public ResponseEntity<ResponseDto<LoginResponseDto>> kakaoLogin(@RequestParam String code) {
+    public ResponseEntity<ResponseDto<LoginResponseDto>> kakaoLogin(@RequestParam("code") String code) {
         KakaoUserInfoDto kakaoUserInfo = webClientService.getKakaoUserInfo(code);
 
         if (!userService.isExistUser(kakaoUserInfo.getId())) {
@@ -44,10 +44,10 @@ public class KakaoApiController {
                     .build()));
     }
 
-    @GetMapping("/callback")
-    public ResponseEntity<ResponseDto> kakaoLoginError(@RequestParam String error) {
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(ResponseDto.create(UserResponseMessage.LOGIN_FAIL.getMessage() + " " + error));
-    }
+//    @GetMapping("/callback")
+//    public ResponseEntity<ResponseDto> kakaoLoginError(@RequestParam(name = "error") String error) {
+//
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//            .body(ResponseDto.create(UserResponseMessage.LOGIN_FAIL.getMessage() + " " + error));
+//    }
 }
