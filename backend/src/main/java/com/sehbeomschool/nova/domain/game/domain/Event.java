@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,4 +37,14 @@ public class Event extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     private EventType eventType;
+
+    @Builder
+    public Event(Ages age, EventType eventType) {
+        this.age = age;
+        this.eventType = eventType;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }
