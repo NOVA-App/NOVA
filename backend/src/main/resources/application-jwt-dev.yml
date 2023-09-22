@@ -1,0 +1,4 @@
+jwt:
+  expmin: 7200000
+  refresh-expmin: 36000000
+  secretKey: "aleaijfewlfijlweijfliwjelijeiljfwilejfo2wifjlwejdlaiejgflighlidjwldawj"

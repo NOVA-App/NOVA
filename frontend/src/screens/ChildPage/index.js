@@ -62,11 +62,6 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: "column",
   },
-  upper:{
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: 'space-between',
-  },
   content1:{
     flexDirection: "column",
     flex: 2,
@@ -89,6 +84,5 @@ const styles = StyleSheet.create({
   img: {
     width: 200,
     height: 200,
-
   }
 });

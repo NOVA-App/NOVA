@@ -3,7 +3,9 @@ spring:
     group:
       release:
         - redis-release
+        - jwt-release
       develop:
         - redis-dev
+        - jwt-dev
 
     active: develop
