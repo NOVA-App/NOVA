@@ -16,10 +16,10 @@ const StackNavigator = () => {
     <Stack.Navigator>
       <Stack.Screen name="MyRealEstatePage" component={MyRealEstatePage} />
       <Stack.Screen name="MarriagePage" component={MarriagePage} />
+      <Stack.Screen name="ChildPage" component={ChildPage} />
       <Stack.Screen name="LoginPage" component={LoginPage} />
       <Stack.Screen name="StartGame" component={StartGame} />
       <Stack.Screen name="GameStart" component={GameStart} />
-      <Stack.Screen name="ChildPage" component={ChildPage} />
       <Stack.Screen name="MenuPage" component={MenuPage} />
       <Stack.Screen name="MainPage" component={MainPage} />
     </Stack.Navigator>
