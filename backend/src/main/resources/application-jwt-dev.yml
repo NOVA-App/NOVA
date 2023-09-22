@@ -1,4 +1,4 @@
 jwt:
-  expmin: 120 * 1000 * 60
-  refresh-expmin: 120 * 1000 * 60 * 5
+  expmin: 7200000
+  refresh-expmin: 36000000
   secretKey: "aleaijfewlfijlweijfliwjelijeiljfwilejfo2wifjlwejdlaiejgflighlidjwldawj"
