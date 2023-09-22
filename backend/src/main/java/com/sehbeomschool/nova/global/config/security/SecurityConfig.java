@@ -33,8 +33,9 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-            .antMatchers("/api/user/oauth/kakao").permitAll()
-            .antMatchers(HttpMethod.POST, "/api/**").authenticated()
+            .anyRequest().permitAll()
+//            .antMatchers("/api/user/oauth/kakao").permitAll()
+//            .antMatchers(HttpMethod.POST, "/api/**").authenticated()
             .and()
             .addFilterBefore(new JwtFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
