@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
 import Budget from '../../components/budget/index'
 import Button from '../../components/buttons/SmallButton';
+import Marriage from '../../assets/Marriage.png'
+
 
 export default function MarriagePage() {
   const navigation = useNavigation(); // 네비게이션 객체 생성
@@ -38,6 +40,12 @@ export default function MarriagePage() {
           </View>
         </View>
       </View>
+      <View style={styles.content3}>
+        <Image 
+          source={Marriage} 
+          style={styles.img}
+          />
+      </View>
           
     </View>
   );
@@ -64,4 +72,14 @@ export default function MarriagePage() {
       // top: 20,
       alignItems: 'center',
     },
+    content3:{
+      flexDirection: "column",
+      flex: 3,
+      // top: 20,
+      alignItems: 'center',
+    },
+    img: {
+      width: 200,
+      height: 200,
+    }
   });
