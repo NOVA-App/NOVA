@@ -22,7 +22,6 @@ export const TagContainer = styled.View`
 export const TotalAssetContainer = styled.View`
   background-color: transparent;
   width: 90%;
-  height: 100%;
   justify-items: center;
   align-items: center;
   border-radius: 10px;
