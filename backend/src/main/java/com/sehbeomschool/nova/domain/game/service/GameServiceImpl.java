@@ -19,10 +19,13 @@ import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.global.constant.FixedValues;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -47,12 +50,12 @@ public class GameServiceImpl implements GameService {
             .annualCost(annualCost)
             .startSalary(gameStartRequestDto.getStartSalary())
             .gender(gameStartRequestDto.getGender())
+            .currentAge(FixedValues.START_AGE.getValue().intValue())
             .build();
 
         Ages startAge = Ages.createStartAge(gameStartRequestDto.getStartSalary());
 
         game.addAgeAndSetThis(startAge);
-        game.setCurrentAge(startAge);
 
         gameRepository.save(game);
 
@@ -66,7 +69,7 @@ public class GameServiceImpl implements GameService {
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
         game.addEventAndSetThis(Event.builder()
-            .age(game.getCurrentAge())
+            .age(agesRepository.findCurrentAge(game))
             .eventType(EventType.MARRIAGE)
             .build());
     }
