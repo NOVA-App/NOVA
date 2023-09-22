@@ -12,7 +12,10 @@ export default function Banking() {
     <View style={styles.container}>
       <Budget />
       <View style={styles.upper}>
-        <Text style={{fontSize: 20}}>금융</Text>
+        <View>  
+        <Text style={{fontSize: 20, marginBottom: 10}}>금융</Text>
+        </View>
+        <View style = {styles.lineStyle} />
       </View>
       <View style={styles.content1}>
         <Button title='계좌 확인'></Button>
@@ -33,6 +36,8 @@ const styles = StyleSheet.create({
   },
   upper: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content1:{
     flexDirection: "column",
@@ -40,4 +45,10 @@ const styles = StyleSheet.create({
     top: 20,
     alignItems: 'center',
   },
+  lineStyle:{
+    borderWidth: 0.5,
+    width: 600,
+    borderColor:'white',
+    margin:0,
+}
 });
