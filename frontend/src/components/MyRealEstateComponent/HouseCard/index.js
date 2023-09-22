@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ScrollView, Image } from "react-native";
-import Budget from "../../../components/budget";
+import Budget from "../../budget";
 import * as S from "./style";
 import HouseImg from "../../../assets/House.png";
 import SmallButton from "../../buttons/SmallButton";
