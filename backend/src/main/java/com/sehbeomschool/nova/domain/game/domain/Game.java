@@ -65,9 +65,7 @@ public class Game extends BaseEntity {
 
     private Long resultAssets;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CURRENT_AGE_ID")
-    private Ages currentAge;
+    private Integer currentAge;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ages> ages = new ArrayList<>();
@@ -75,7 +73,7 @@ public class Game extends BaseEntity {
     @Builder
     public Game(Long id, AnalysisComment analysisComment, MyAssets myAssets,
         OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualCost annualCost, Integer startSalary,
-        Gender gender, Long resultAssets, Ages currentAge) {
+        Gender gender, Long resultAssets, Integer currentAge) {
         this.id = id;
         this.analysisComment = analysisComment;
         this.myAssets = myAssets;
@@ -92,7 +90,7 @@ public class Game extends BaseEntity {
         age.setGame(this);
     }
 
-    public void setCurrentAge(Ages age) {
+    public void setCurrentAge(Integer age) {
         this.currentAge = age;
     }
 
