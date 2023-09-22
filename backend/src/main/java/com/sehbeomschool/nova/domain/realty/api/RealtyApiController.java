@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.realty.api;
 
 import com.sehbeomschool.nova.domain.realty.constant.RealtyResponseMessage;
+import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyDetailResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyResponseDto;
 import com.sehbeomschool.nova.domain.realty.service.RealtyService;
 import com.sehbeomschool.nova.global.dto.ResponseDto;
@@ -26,6 +27,18 @@ public class RealtyApiController {
             ResponseDto.create(
                 RealtyResponseMessage.READ_MY_REATIES.getMessage(),
                 realtyService.readMyRealty(gameId)
+            )
+        );
+    }
+
+    @GetMapping("/mine/{gameId}/{realtyId}")
+    public ResponseEntity<ResponseDto<ReadMyRealtyDetailResponseDto>> readMyRealtyDetail(
+        @PathVariable(value = "gameId") Long gameId,
+        @PathVariable(value = "realtyId") Long realtyId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(
+                RealtyResponseMessage.READ_MY_REALTY_DETAIL.getMessage(),
+                realtyService.readMyRealtyDetail(gameId, realtyId)
             )
         );
     }
