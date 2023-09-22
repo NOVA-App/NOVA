@@ -8,4 +8,8 @@ public class TaxCalculator {
         return price * (realtyAcquisitionTaxRate[count.intValue()]) / 100;
     }
 
+    public Long calRealtyTotalPrice(Long price, Long count) {
+        return price * (100 + realtyAcquisitionTaxRate[count.intValue()]) / 100;
+    }
+
 }
