@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -78,7 +79,7 @@ public class JwtUtil {
     }
 
     public boolean isValidToken(String token) {
-        boolean isExpired = Jwts.parserBuilder().setSigningKey(secretKey).build()
+        boolean isExpired = Jwts.parserBuilder().setSigningKey(Base64.getDecoder().decode(secretKey)).build()
             .parseClaimsJws(token)
             .getBody()
             .getExpiration().before(new Date());
