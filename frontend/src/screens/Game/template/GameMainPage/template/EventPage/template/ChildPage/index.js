@@ -2,9 +2,9 @@ import { StyleSheet, Text, View, StatusBar, Dimensions, TouchableOpacity, Image 
 import React, { useState } from 'react';
 // import * as S from './style';
 import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
-import Button from '../../components/buttons/SmallButton';
-import Budget from '../../components/budget/index'
-import Baby from  '../../assets/Baby.png'
+import Button from '../../../../../../../../components/buttons/SmallButton';
+import Budget from '../../../../../../../../components/budget/index'
+import Baby from  '../../../../../../../../assets/Baby.png'
 
 
 export default function ChildPage() {
