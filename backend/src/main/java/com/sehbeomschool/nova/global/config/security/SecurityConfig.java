@@ -33,7 +33,7 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-            .antMatchers("/api/**").permitAll()
+            .anyRequest().permitAll()
 //            .antMatchers("/api/user/oauth/kakao").permitAll()
 //            .antMatchers(HttpMethod.POST, "/api/**").authenticated()
             .and()
