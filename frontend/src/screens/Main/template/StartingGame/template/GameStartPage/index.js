@@ -1,13 +1,13 @@
 import { StyleSheet, Text, View, StatusBar, Dimensions, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
-import InputLarge from '../../components/input/LargeInput';
-import Button from '../../components/buttons/LargeButton';
+import InputLarge from '../../../../../../components/input/LargeInput';
+import Button from '../../../../../../components/buttons/LargeButton';
 // import BackArrow from '../../assets/BackArrow.png'
 import * as S from './style';
 import ToggleButton from './ToggleButton';
 import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
 
-export default function GameStart() {
+export default function GameStartPage() {
   const navigation = useNavigation(); // 네비게이션 객체 생성
 
   const handleNext = () => {
