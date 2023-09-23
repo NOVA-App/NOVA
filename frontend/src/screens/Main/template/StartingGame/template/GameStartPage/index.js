@@ -8,13 +8,12 @@ import ToggleButton from './ToggleButton';
 import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
 
 export default function GameStartPage() {
-  const navigation = useNavigation(); // 네비게이션 객체 생성
-
-  const handleNext = () => {
-    // 'SelectOptionPage'로 네비게이션 이동
-    navigation.navigate('LoginPage'); // 'LoginPage'로 변경
-  };
-
+  const navigation = useNavigation();
+  const handleGameMainPage = () => {
+    navigation.navigate('Game', 
+    {screen: "GameMainPage"}
+    );
+  }
   const [salary, setSalary] = useState(50000000);
   const [gender, setGender] = useState('남');
   // const { width, height } = Dimensions.get('window');
@@ -96,7 +95,7 @@ export default function GameStartPage() {
         </View>
         <Button 
           title='시작하기' 
-          onPress={ChangeSalary} 
+          onPress={handleGameMainPage} 
           bgColor='#038C7F'
           />
         
