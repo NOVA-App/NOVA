@@ -67,7 +67,7 @@ const RealEstatePage = () => {
   );
 };
 
-export default RealEstatePage;
+export {RealEstatePage};
 
 const styles = StyleSheet.create({
   container: {
