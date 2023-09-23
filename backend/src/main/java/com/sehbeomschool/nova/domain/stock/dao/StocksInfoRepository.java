@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface StocksInfoRepository extends JpaRepository<StocksInfo, Long> {
 
+    List<StocksInfo> findStocksInfosByAgeId(Long ageId);
+
     @Query("SELECT si.currentPrice FROM StocksInfo si WHERE si.id IN (SELECT a.id FROM Ages a WHERE a.game.id = :gameId) AND si.stock.id = :stockId")
     List<Long> findCurrentPricesByGameIdAndStockId(@Param("gameId") Long gameId,
         @Param("stockId") Long stockId);
@@ -16,5 +18,6 @@ public interface StocksInfoRepository extends JpaRepository<StocksInfo, Long> {
     List<StocksInfo> findStocksInfoListByGameId(@Param("gameId") Long gameId);
 
     @Query("SELECT si FROM StocksInfo si WHERE si.age.id = (SELECT a.id FROM Ages a WHERE a.game.id = :gameId AND a.age =(SELECT g.currentAge FROM Game g WHERE g.id = :gameId)) AND si.stock.id = :stockId")
-    StocksInfo findStocksInfoByGameIdAndStockId(@Param("gameId") Long gameId, @Param("stockId") Long stockId);
+    StocksInfo findStocksInfoByGameIdAndStockId(@Param("gameId") Long gameId,
+        @Param("stockId") Long stockId);
 }
