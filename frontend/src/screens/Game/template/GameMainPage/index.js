@@ -7,10 +7,9 @@ const GameMainPageStack = createStackNavigator();
 
 export function GameMainPage() {
     return (
-      <GameMainPageStack.Navigator
-        initialRouteName="MainPage">
-        <GameMainPageStack.Screen name="MainPage" component={MainPage} />
-        <GameMainPageStack.Screen name="EventPage" component={EventPage} />
+      <GameMainPageStack.Navigator initialRouteName="MainPage">
+        <GameMainPageStack.Screen name="MainPage" component={MainPage} options={{ headerShown: false }}/>
+        <GameMainPageStack.Screen name="EventPage" component={EventPage} options={{ headerShown: false }}/>
       </GameMainPageStack.Navigator>
     );
   }
