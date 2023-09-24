@@ -5,9 +5,11 @@ spring:
         - redis-release
         - jwt-release
         - oauth-release
+        - file-release
       develop:
         - redis-dev
         - jwt-dev
         - oauth-dev
+        - file-release
 
     active: release
