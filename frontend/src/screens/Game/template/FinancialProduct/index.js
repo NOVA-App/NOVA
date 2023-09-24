@@ -1,34 +1,32 @@
-import { StyleSheet, Text, View, StatusBar, Dimensions, TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
+import React from "react";
+import { Dimensions, View, Text, ScrollView } from "react-native";
 import Budget from '../../../../components/budget/index'
-import Button from '../../../../components/buttons/XXLargeButton'
+import InstallmentSavingsCard from "./InstallmentSavings";
+// import * as S from "./style";
 
-export function Banking() {
+const { height } = Dimensions.get("window");
 
-  const navigation = useNavigation();
+const FinancialProduct = () => {
 
-  const handleAccountButton = () => {
-    // 'SelectOptionPage'로 네비게이션 이동
-    navigation.replace("Account"); // 'StartGame'으로 변경
-  };
-  
   return (
     <View style={styles.container}>
       <Budget />
       <View style={styles.upper}>
         <View>  
-        <Text style={{fontSize: 20, marginBottom: 10}}>금융</Text>
+        <Text style={{fontSize: 20, marginBottom: 10}}>금융 | 계좌확인</Text>
         </View>
         <View style = {styles.lineStyle} />
       </View>
-      <View style={styles.content1}>
-        <Button title='계좌 확인' onPress={handleAccountButton} ></Button>
-        <Button title='추가 납입 / 상품 가입'></Button>
+      <View>
+        {/* <InstallmentSavingsCard /> */}
       </View>
+
+
     </View>
   );
 };
+
+export default FinancialProduct;
 
 const styles = StyleSheet.create({
   container: {
