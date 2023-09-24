@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -66,7 +65,7 @@ public class JwtUtil {
     }
 
     public Long getUserId(String token) {
-        token = token.substring(7);
+//        token = token.substring(7);
         if (redisUtil.hasKeyExcludeList(token)) {
             throw new RuntimeException("이미 로그아웃하였습니다");
         }
@@ -79,7 +78,8 @@ public class JwtUtil {
     }
 
     public boolean isValidToken(String token) {
-        boolean isExpired = Jwts.parserBuilder().setSigningKey(Base64.getDecoder().decode(secretKey)).build()
+        boolean isExpired = Jwts.parserBuilder()
+            .setSigningKey(DatatypeConverter.parseBase64Binary(secretKey)).build()
             .parseClaimsJws(token)
             .getBody()
             .getExpiration().before(new Date());
