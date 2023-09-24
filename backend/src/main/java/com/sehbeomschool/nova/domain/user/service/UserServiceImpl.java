@@ -4,10 +4,12 @@ import com.sehbeomschool.nova.domain.user.dao.UserRepository;
 import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.LoginResponseDto;
+import com.sehbeomschool.nova.global.file.FileStore;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final FileStore fileStore;
 
     @Override
     public Long createUser(KakaoUserInfoDto user) {
@@ -33,12 +36,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserProfileImg(Long userId, String profileImg) {
+    public void updateUserProfileImg(Long userId, MultipartFile profileImg) {
+        String filePath = fileStore.storeFile(profileImg);
         User user = userRepository.findById(userId).orElse(null);
+
         if (user == null) {
             return;
         }
-        user.updateProfileImg(profileImg);
+        fileStore.deleteFile(user.getProfileImg());
+        user.updateProfileImg(filePath);
     }
 
     @Override
