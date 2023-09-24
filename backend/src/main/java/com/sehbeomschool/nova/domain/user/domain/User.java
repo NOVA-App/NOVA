@@ -1,6 +1,5 @@
 package com.sehbeomschool.nova.domain.user.domain;
 
-import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,6 +22,7 @@ public class User extends BaseEntity {
     private Long socialId;
     private String name;
     private String profileImg;
+    private boolean isDeleted;
 
     @Builder
     public User(Long socialId, String name, String profileImg) {
@@ -37,6 +37,10 @@ public class User extends BaseEntity {
 
     public void updateProfileImg(String profileImg) {
         this.profileImg = profileImg;
+    }
+
+    public void signOut() {
+        this.isDeleted = true;
     }
 
 }
