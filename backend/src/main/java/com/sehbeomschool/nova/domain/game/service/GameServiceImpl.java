@@ -17,6 +17,7 @@ import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
@@ -62,6 +63,20 @@ public class GameServiceImpl implements GameService {
 
         return GameStartResponseDto.builder().gameId(game.getId()).build();
     }
+
+    @Override
+    public CurrentYearResponseDto readCurrentYear(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+            .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        return CurrentYearResponseDto.builder()
+            .game(game)
+            .events(game.getEvents())
+            .myAssets(game.getMyAssets())
+            .annualCost(game.getAnnualCost())
+            .build();
+    }
+
 
     @Override
     public FixedCostResponseDto readFixedCost(Long gameId) {
