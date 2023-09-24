@@ -41,4 +41,15 @@ public class UserResponseDto {
             this.accessToken = accessToken;
         }
     }
+
+    @Data
+    public static class FileUploadResponseDto {
+
+        private String filePath;
+
+        @Builder
+        public FileUploadResponseDto(String filePath) {
+            this.filePath = filePath;
+        }
+    }
 }
