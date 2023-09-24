@@ -30,4 +30,15 @@ public class UserResponseDto {
             this.profileImg = profileImg;
         }
     }
+
+    @Data
+    public static class RefreshTokenResponseDto {
+
+        private String accessToken;
+
+        @Builder
+        public RefreshTokenResponseDto(String accessToken) {
+            this.accessToken = accessToken;
+        }
+    }
 }
