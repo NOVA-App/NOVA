@@ -14,7 +14,8 @@ public enum UserResponseMessage {
     FAIL_GET_USER_INFO("유저 정보 조회 실패"),
     NOT_VALID_REFRESH_TOKEN("유효하지 않은 토큰입니다"),
     SUCCES_PROFILE_UPDATE("프로필 사진이 업데이트 되었습니다."),
-    SUCCES_NAME_UPDATE("닉네임 변경 완료");
+    SUCCES_NAME_UPDATE("닉네임 변경 완료"),
+    SUCCES_USER_DELETE("탈퇴가 완료되었습니다");
 
 
     private final String message;
