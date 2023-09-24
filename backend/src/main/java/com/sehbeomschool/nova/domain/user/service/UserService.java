@@ -13,7 +13,7 @@ public interface UserService {
 
     User readUserBySocialId(Long socialId);
 
-    void updateUserProfileImg(Long userId, MultipartFile profileImg);
+    String updateUserProfileImg(Long userId, MultipartFile profileImg);
 
     void updateUserName(Long userId, String name);
 
