@@ -3,10 +3,12 @@ package com.sehbeomschool.nova.domain.user.api;
 
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.CREATE_ACCESS_TOKEN;
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCESS_GET_USER_INFO;
+import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCES_PROFILE_UPDATE;
 
 import com.sehbeomschool.nova.domain.user.domain.CustomUserDetails;
 import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
+import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.FileUploadResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.RefreshTokenResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
 import com.sehbeomschool.nova.domain.user.service.UserService;
@@ -18,9 +20,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,5 +64,19 @@ public class UserApiController {
             RefreshTokenResponseDto.builder().accessToken(accessToken)
                 .build()));
     }
+
+    @PatchMapping("/profileimg")
+    public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyProfileImg
+        (@AuthenticationPrincipal CustomUserDetails authentication,
+            @RequestParam MultipartFile profile) {
+
+        User user = authentication.getUser();
+        String filePath = userService.updateUserProfileImg(user.getId(), profile);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(SUCCES_PROFILE_UPDATE.getMessage(),
+                FileUploadResponseDto.builder().filePath(filePath).build()));
+    }
+
 
 }
