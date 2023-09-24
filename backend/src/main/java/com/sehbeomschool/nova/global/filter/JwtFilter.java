@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authorization.split(" ")[1];
+        String token = authorization.substring(7);
 
         if (!jwtUtil.isValidToken(token)) {
             log.error(ExceptionMessage.NOT_VALID_TOKEN.getMessage());
