@@ -78,5 +78,15 @@ public class UserApiController {
                 FileUploadResponseDto.builder().filePath(filePath).build()));
     }
 
+    @PatchMapping("/name")
+    public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyName(
+        @AuthenticationPrincipal CustomUserDetails authentication, @RequestBody String name) {
+
+        User user = authentication.getUser();
+        userService.updateUserName(user.getId(), name);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(SUCCES_PROFILE_UPDATE.getMessage(), null));
+    }
 
 }
