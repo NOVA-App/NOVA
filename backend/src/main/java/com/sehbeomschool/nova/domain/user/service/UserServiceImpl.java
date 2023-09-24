@@ -36,15 +36,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserProfileImg(Long userId, MultipartFile profileImg) {
+    public String updateUserProfileImg(Long userId, MultipartFile profileImg) {
         String filePath = fileStore.storeFile(profileImg);
         User user = userRepository.findById(userId).orElse(null);
 
         if (user == null) {
-            return;
+            return null;
         }
         fileStore.deleteFile(user.getProfileImg());
         user.updateProfileImg(filePath);
+        return filePath;
     }
 
     @Override
