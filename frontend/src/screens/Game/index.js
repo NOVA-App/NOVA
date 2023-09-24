@@ -2,7 +2,7 @@ import React from "react";
 import { Image } from 'react-native';
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { GameMainPage, Banking, RealEstatePage } from "./template";
+import { GameMainPage, Banking, RealEstatePage, NewsPage } from "./template";
 
 const GameStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -10,6 +10,16 @@ const Tab = createBottomTabNavigator();
 function BottomNav() {
   return(
     <Tab.Navigator initialRouteName="GameMainPage">
+      <Tab.Screen name="NewsPage" component={NewsPage} options={{
+        tabBarLabel: '뉴스',
+        headerShown: false,
+        tabBarIcon: ({ focused, color, size }) => (
+          <Image
+            source={focused ? require('../../assets/BottomNav/News.png') : require('../../assets/BottomNav/News.png')}
+            style={{ width: 30, height: 30 }}
+          />
+        ),
+      }}/>
       <Tab.Screen name="Banking" component={Banking} options={{
         tabBarLabel: '뱅킹',
         headerShown: false,
