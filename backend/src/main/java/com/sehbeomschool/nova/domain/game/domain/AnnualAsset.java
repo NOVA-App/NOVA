@@ -15,12 +15,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AnnualCost extends BaseEntity {
+public class AnnualAsset extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ANNUAL_COST_ID")
+    @Column(name = "ANNUAL_ASSET_ID")
     private Long id;
+
+    private Long totalAnnualAsset;
+
+    private Long usableAsset;
 
     private Long livingCost;
 
@@ -35,9 +39,12 @@ public class AnnualCost extends BaseEntity {
     private Long installmentSavingCost;
 
     @Builder
-    public AnnualCost(Long id, Long livingCost, Long monthlyRentCost, Long IRPCost,
-        Long childCost, Long loansCost, Long installmentSavingCost) {
+    public AnnualAsset(Long id, Long totalAnnualAsset, Long usableAsset, Long livingCost,
+        Long monthlyRentCost, Long IRPCost, Long childCost, Long loansCost,
+        Long installmentSavingCost) {
         this.id = id;
+        this.totalAnnualAsset = totalAnnualAsset;
+        this.usableAsset = usableAsset;
         this.livingCost = livingCost;
         this.monthlyRentCost = monthlyRentCost;
         this.IRPCost = IRPCost;
@@ -46,8 +53,14 @@ public class AnnualCost extends BaseEntity {
         this.installmentSavingCost = installmentSavingCost;
     }
 
-    public static AnnualCost createStartAnnualCost() {
-        return AnnualCost.builder()
+    public static AnnualAsset createStartAnnualAsset(Integer startSalary) {
+        Long startUsableAsset =
+            startSalary.longValue() - (FixedValues.LIVING_COST_MIN.getValue().longValue() +
+                FixedValues.MONTHLY_RENT_COST.getValue().longValue());
+
+        return AnnualAsset.builder()
+            .totalAnnualAsset(startSalary.longValue())
+            .usableAsset(startUsableAsset)
             .livingCost(FixedValues.LIVING_COST_MIN.getValue().longValue())
             .monthlyRentCost(FixedValues.MONTHLY_RENT_COST.getValue().longValue())
             .IRPCost(0L)
@@ -57,23 +70,28 @@ public class AnnualCost extends BaseEntity {
             .build();
     }
 
-    public Long sumOfAnnualCost() {
-        Long sum = 0L;
-        sum += this.livingCost;
-        sum += this.monthlyRentCost;
-        sum += this.IRPCost;
-        sum += this.installmentSavingCost;
-        sum += this.loansCost;
-        sum += this.childCost;
+    public Long sumOfFixedCost() {
+        Long fixedCost = 0L;
+        fixedCost += this.monthlyRentCost;
+        fixedCost += this.IRPCost;
+        fixedCost += this.childCost;
+        fixedCost += this.loansCost;
+        fixedCost += this.installmentSavingCost;
 
-        return sum;
+        return fixedCost;
     }
 
-    public Long sumOfFixedCost() {
-        return sumOfAnnualCost() - this.livingCost;
+    public void updateLivingCost(Long livingCost) {
+        this.livingCost = livingCost;
+        this.usableAsset = this.totalAnnualAsset - (this.livingCost + sumOfFixedCost());
     }
 
     public void addChildCost() {
         this.childCost += FixedValues.CHILD_COST.getValue().intValue();
+    }
+
+    public void useUsableAsset(Long cost) {
+        this.usableAsset -= cost;
+        this.totalAnnualAsset -= cost;
     }
 }

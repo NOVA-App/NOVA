@@ -3,9 +3,12 @@ package com.sehbeomschool.nova.domain.game.domain;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +26,9 @@ public class MyAssets extends BaseEntity {
 
     private Long totalAsset;
 
-    private Long usableAsset;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ANNUAL_ASSET_ID")
+    private AnnualAsset annualAsset;
 
     @Column(name = "IPR_ASSET")
     private Long IRPAsset;
@@ -39,12 +44,12 @@ public class MyAssets extends BaseEntity {
     private Long totalTax;
 
     @Builder
-    public MyAssets(Long id, Long totalAsset, Long usableAsset, Long IRPAsset,
+    public MyAssets(Long id, Long totalAsset, AnnualAsset annualAsset, Long IRPAsset,
         Long installmentSavingAsset, Long stockAsset, Long realtyAsset, Long loanAsset,
         Long totalTax) {
         this.id = id;
         this.totalAsset = totalAsset;
-        this.usableAsset = usableAsset;
+        this.annualAsset = annualAsset;
         this.IRPAsset = IRPAsset;
         this.installmentSavingAsset = installmentSavingAsset;
         this.stockAsset = stockAsset;
@@ -53,10 +58,10 @@ public class MyAssets extends BaseEntity {
         this.totalTax = totalTax;
     }
 
-    public static MyAssets createStartMyAsset(Integer startSalary, AnnualCost annualCost) {
+    public static MyAssets createStartMyAsset(Integer startSalary, AnnualAsset annualAsset) {
         return MyAssets.builder()
-            .totalAsset(Long.valueOf(startSalary))
-            .usableAsset(startSalary - annualCost.sumOfAnnualCost())
+            .totalAsset(startSalary.longValue())
+            .annualAsset(annualAsset)
             .IRPAsset(0L)
             .installmentSavingAsset(0L)
             .stockAsset(0L)
@@ -68,7 +73,7 @@ public class MyAssets extends BaseEntity {
 
     public void recalculateTotalAsset() {
         Long newTotalAsset = 0L;
-        newTotalAsset += this.usableAsset;
+        newTotalAsset += this.annualAsset.getTotalAnnualAsset();
         newTotalAsset += this.IRPAsset;
         newTotalAsset += this.installmentSavingAsset;
         newTotalAsset += this.stockAsset;
@@ -76,10 +81,5 @@ public class MyAssets extends BaseEntity {
         newTotalAsset -= this.loanAsset;
 
         this.totalAsset = newTotalAsset;
-    }
-
-    public void useUsableAsset(Long cost) {
-        this.usableAsset -= cost;
-        recalculateTotalAsset();
     }
 }
