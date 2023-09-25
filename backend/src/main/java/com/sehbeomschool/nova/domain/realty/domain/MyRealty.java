@@ -34,7 +34,7 @@ public class MyRealty extends BaseEntity {
     @JoinColumn(name = "REALTY_ID")
     private Realty realty;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "LOAN_ID")
     private Loan loan;
 
@@ -53,7 +53,11 @@ public class MyRealty extends BaseEntity {
         this.rentIncome = rentIncome;
     }
 
-    public Long calDepreciationPercent(Long currentPrice){
+    public void setRentIncome(Long realtyPrice) {
+        this.rentIncome = realtyPrice / 20;
+    }
+
+    public Long calDepreciationPercent(Long currentPrice) {
         return (currentPrice - this.investAmount) / this.investAmount * 100;
     }
 }

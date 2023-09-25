@@ -47,13 +47,13 @@ public class GameResponseDto {
     @Getter
     public static class UpdateLivingCostResponseDto {
 
-        private Long usableCost;
+        private Long usableAsset;
         private Long livingCost;
         private FixedCostResponseDto fixedCost;
 
         @Builder
         public UpdateLivingCostResponseDto(MyAssets myAssets, AnnualCost annualCost) {
-            this.usableCost = myAssets.getUsableAsset();
+            this.usableAsset = myAssets.getUsableAsset();
             this.livingCost = annualCost.getLivingCost();
             this.fixedCost = FixedCostResponseDto.builder().annualCost(annualCost).build();
         }
