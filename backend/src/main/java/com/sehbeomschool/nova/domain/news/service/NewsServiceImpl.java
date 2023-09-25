@@ -75,6 +75,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
+    @Transactional
     public void updateNewsInfoByNextYear(Long gameId, Long ageId) {
         List<NewsInfo> list = newsInfoRepository.findNewsInfosByGameId(gameId);
 
