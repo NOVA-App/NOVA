@@ -1,0 +1,6 @@
+kakao:
+  client_id: ad1df559dc905b03ec9d59ad4afbe212
+  redirect: https://nohoo.site:8080/api/oauth/kakao/callback
+  url:
+    token: https://kauth.kakao.com/oauth/token
+    profile: https://kapi.kakao.com/v2/user/me

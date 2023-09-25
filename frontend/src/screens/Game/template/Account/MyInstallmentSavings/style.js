@@ -16,13 +16,6 @@ export const MiddleText = styled.Text`
   margin-right: 20px;
 `;
 
-export const ImgBox = styled.Image`
-  height: 100%;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-`;
-
-
 
 export const SmallContainer = styled.View`
   flex-direction: row;
@@ -37,11 +30,12 @@ export const TagContainer = styled.View`
   width: 30%;
   height: 100%;
   /* height: 50px; */
-  justify-items: flex-start;
+  justify-items: center;
   align-items: center;
   border-radius: 10px;
   margin-top: 3%;
-  flex: 0.4;
+  margin-bottom: 3%;
+  flex: 0.15;
 `;
 
 

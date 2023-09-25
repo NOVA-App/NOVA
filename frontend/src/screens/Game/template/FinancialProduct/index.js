@@ -1,10 +1,11 @@
 import React from "react";
-import { Dimensions, View, Text, ScrollView } from "react-native";
+import { Dimensions, View, Text, ScrollView, StyleSheet } from "react-native";
 import Budget from '../../../../components/budget/index'
 import InstallmentSavingsCard from "./InstallmentSavings";
+import IRPCard from "./IRPCards";
 // import * as S from "./style";
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 const FinancialProduct = () => {
 
@@ -13,14 +14,17 @@ const FinancialProduct = () => {
       <Budget />
       <View style={styles.upper}>
         <View>  
-        <Text style={{fontSize: 20, marginBottom: 10}}>금융 | 계좌확인</Text>
+        <Text style={{fontSize: 20, marginBottom: 10}}>금융 | 추가납입 / 상품가입</Text>
         </View>
         <View style = {styles.lineStyle} />
       </View>
-      <View>
-        {/* <InstallmentSavingsCard /> */}
+      <View style={styles.content1}>
+        <InstallmentSavingsCard />
+        {/* <IRPCard /> */}
       </View>
-
+      <View style={styles.content1}>
+        <IRPCard />
+      </View>
 
     </View>
   );
@@ -43,10 +47,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content1:{
-    flexDirection: "column",
-    flex: 9,
-    top: 20,
+    // flexDirection: "column",
+    flex: 4,
     alignItems: 'center',
+    width: '90%',
+    height: '90%',
   },
   lineStyle:{
     borderWidth: 0.5,
@@ -54,4 +59,5 @@ const styles = StyleSheet.create({
     borderColor:'white',
     margin:0,
 }
+
 });
