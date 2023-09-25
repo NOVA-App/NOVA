@@ -2,12 +2,14 @@ package com.sehbeomschool.nova.domain.game.api;
 
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.GAME_START_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.MARRY_SUCCESS;
+import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_CURRENT_YEAR_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_FIXED_COST_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.UPDATE_LIVING_COST_SUCCESS;
 
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.UpdateLivingCostRequestDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
@@ -50,6 +52,17 @@ public class GameApiController {
             ResponseDto.create(
                 UPDATE_LIVING_COST_SUCCESS.getMessage(),
                 gameService.updateLivingCost(updateLivingCostRequestDto)
+            )
+        );
+    }
+
+    @GetMapping("/{gameId}")
+    public ResponseEntity<ResponseDto<CurrentYearResponseDto>> readCurrentYear(
+        @PathVariable("gameId") Long gameId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(
+                READ_CURRENT_YEAR_SUCCESS.getMessage(),
+                gameService.readCurrentYear(gameId)
             )
         );
     }
