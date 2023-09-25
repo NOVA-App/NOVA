@@ -2,6 +2,7 @@ package com.sehbeomschool.nova.domain.saving.domain;
 
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,7 +30,7 @@ public class InstallmentSavings extends BaseEntity {
     @JoinColumn(name = "GAME_ID")
     private Game game;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INS_INTEREST_ID")
     private InsInterest interest;
 
