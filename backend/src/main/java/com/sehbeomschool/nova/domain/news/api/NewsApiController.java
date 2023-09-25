@@ -1,13 +1,10 @@
 package com.sehbeomschool.nova.domain.news.api;
 
-import static com.sehbeomschool.nova.domain.news.constant.NewsResponseMessage.*;
+import static com.sehbeomschool.nova.domain.news.constant.NewsResponseMessage.READ_NEWS;
 
-import com.sehbeomschool.nova.domain.news.constant.NewsResponseMessage;
-import com.sehbeomschool.nova.domain.news.domain.News;
 import com.sehbeomschool.nova.domain.news.dto.NewsResponseDto.ReadNewsResponseDto;
 import com.sehbeomschool.nova.domain.news.service.NewsService;
 import com.sehbeomschool.nova.global.dto.ResponseDto;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +21,7 @@ public class NewsApiController {
     private final NewsService newsService;
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<ResponseDto<ReadNewsResponseDto>> readNews(@PathVariable Long gameId){
+    public ResponseEntity<ResponseDto<ReadNewsResponseDto>> readNews(@PathVariable Long gameId) {
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(
                 READ_NEWS.getMessage(),

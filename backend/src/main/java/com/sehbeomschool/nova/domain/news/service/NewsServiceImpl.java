@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.news.service;
 
-import static com.sehbeomschool.nova.domain.news.domain.Prediction.*;
+import static com.sehbeomschool.nova.domain.news.domain.Prediction.BAD;
+import static com.sehbeomschool.nova.domain.news.domain.Prediction.GOOD;
 
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.news.dao.NewsInfoRepository;

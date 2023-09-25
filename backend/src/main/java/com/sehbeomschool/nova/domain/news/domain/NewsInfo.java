@@ -39,7 +39,7 @@ public class NewsInfo extends BaseEntity {
         this.game = game;
     }
 
-    public void setNews(News news){
+    public void setNews(News news) {
         this.news = news;
     }
 }
