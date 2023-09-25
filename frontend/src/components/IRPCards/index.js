@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, ScrollView, Image, Dimensions } from "react-native";
 import * as S from "./style";
-import SmallButton from "../../../../../components/buttons/SmallButton/index"
-import InputSmall from "../../../../../components/input/SmallInput";
+import SmallButton from "../buttons/SmallButton/index"
+import InputSmall from "../input/SmallInput";
 
 const { height, width } = Dimensions.get("window");
 
