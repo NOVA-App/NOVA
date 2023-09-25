@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.user.api;
 
-import com.sehbeomschool.nova.domain.user.constant.UserResponseMessage;
+import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.LOGIN_SUCCESS;
+
 import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.LoginResponseDto;
@@ -26,7 +27,9 @@ public class KakaoApiController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/callback")
-    public ResponseEntity<ResponseDto<LoginResponseDto>> kakaoLogin(@RequestParam("code") String code) {
+    public ResponseEntity<ResponseDto<LoginResponseDto>> kakaoLogin(
+        @RequestParam("code") String code) {
+
         KakaoUserInfoDto kakaoUserInfo = webClientService.getKakaoUserInfo(code);
 
         if (!userService.isExistUser(kakaoUserInfo.getId())) {
@@ -39,15 +42,9 @@ public class KakaoApiController {
         String refreshToken = jwtUtil.createRefreshToken(user.getId());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-            .body(ResponseDto.create(UserResponseMessage.LOGIN_SUCCESS.getMessage(),
+            .body(ResponseDto.create(LOGIN_SUCCESS.getMessage(),
                 LoginResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken)
                     .build()));
     }
 
-//    @GetMapping("/callback")
-//    public ResponseEntity<ResponseDto> kakaoLoginError(@RequestParam(name = "error") String error) {
-//
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//            .body(ResponseDto.create(UserResponseMessage.LOGIN_FAIL.getMessage() + " " + error));
-//    }
 }
