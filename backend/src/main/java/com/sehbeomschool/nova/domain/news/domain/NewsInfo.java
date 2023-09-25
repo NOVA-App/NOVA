@@ -38,4 +38,8 @@ public class NewsInfo extends BaseEntity {
         this.news = news;
         this.game = game;
     }
+
+    public void setNews(News news){
+        this.news = news;
+    }
 }
