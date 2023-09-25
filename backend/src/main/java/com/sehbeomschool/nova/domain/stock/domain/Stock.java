@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,10 @@ public class Stock extends BaseEntity {
 
     private Long startPrice;
 
+    @Builder
+    public Stock(Long id, String name, Long startPrice) {
+        this.id = id;
+        this.name = name;
+        this.startPrice = startPrice;
+    }
 }
