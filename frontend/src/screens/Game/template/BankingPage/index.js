@@ -10,7 +10,7 @@ export function Banking() {
 
   const handleAccountButton = () => {
     // 'SelectOptionPage'로 네비게이션 이동
-    navigation.replace("Account"); // 'StartGame'으로 변경
+    navigation.navigate("Account"); // 'StartGame'으로 변경
   };
   
   return (

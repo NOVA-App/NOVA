@@ -1,5 +1,5 @@
 import {GameMainPage} from "./GameMainPage";
-import {Banking} from "./Banking";
+import {Banking} from "./BankingPage";
 import { RealEstatePage } from "./RealEstatePage";
 import NewsPage from "./NewsPage";
 

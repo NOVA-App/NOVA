@@ -26,7 +26,7 @@ export const ImgBox = styled.Image`
 
 export const SmallContainer = styled.View`
   flex-direction: row;
-  flex: 1;
+  flex: 4;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -41,7 +41,7 @@ export const TagContainer = styled.View`
   align-items: center;
   border-radius: 10px;
   margin-top: 3%;
-  flex: 0.4;
+  flex: 0.5;
 `;
 
 
