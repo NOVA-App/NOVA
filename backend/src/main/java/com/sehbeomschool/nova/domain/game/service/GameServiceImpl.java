@@ -17,9 +17,11 @@ import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
+import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.UpdateLivingCostRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
 import com.sehbeomschool.nova.global.constant.FixedValues;
 import lombok.RequiredArgsConstructor;
@@ -77,6 +79,22 @@ public class GameServiceImpl implements GameService {
             .build();
     }
 
+
+    @Override
+    @Transactional
+    public UpdateLivingCostResponseDto updateLivingCost(
+        UpdateLivingCostRequestDto updateLivingCostRequestDto) {
+        Game game = gameRepository.findById(updateLivingCostRequestDto.getGameId())
+            .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        game.getAnnualCost().setLivingCost(updateLivingCostRequestDto.getLivingCost());
+        game.getMyAssets().setUsableAssetByAnnualCost(game.getAnnualCost().sumOfAnnualCost());
+
+        return UpdateLivingCostResponseDto.builder()
+            .myAssets(game.getMyAssets())
+            .annualCost(game.getAnnualCost())
+            .build();
+    }
 
     @Override
     public FixedCostResponseDto readFixedCost(Long gameId) {
