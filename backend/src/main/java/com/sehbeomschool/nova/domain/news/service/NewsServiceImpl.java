@@ -1,5 +1,7 @@
 package com.sehbeomschool.nova.domain.news.service;
 
+import static com.sehbeomschool.nova.domain.news.domain.Prediction.*;
+
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.news.dao.NewsInfoRepository;
 import com.sehbeomschool.nova.domain.news.dao.NewsRepository;
@@ -50,13 +52,13 @@ public class NewsServiceImpl implements NewsService {
 
         for (StocksInfo si : stocksInfos) {
             Prediction prediction =
-                (si.getNextPrice() - si.getCurrentPrice()) > 0 ? Prediction.GOOD : Prediction.BAD;
+                (si.getNextPrice() - si.getCurrentPrice()) > 0 ? GOOD : BAD;
             list.add(stockNewsRepository.findStockNewsByRandom(si.getStock().getId(), prediction));
         }
 
         for (RealtyInfo ri : realtyInfos) {
             Prediction prediction =
-                (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? Prediction.GOOD : Prediction.BAD;
+                (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? GOOD : BAD;
             list.add(realtyNewsRepository.findRealtyNewsByRandom(ri.getRealty().getId(),
                 prediction));
         }
@@ -86,13 +88,13 @@ public class NewsServiceImpl implements NewsService {
 
         for (StocksInfo si : stocksInfos) {
             Prediction prediction =
-                (si.getNextPrice() - si.getCurrentPrice()) > 0 ? Prediction.GOOD : Prediction.BAD;
+                (si.getNextPrice() - si.getCurrentPrice()) > 0 ? GOOD : BAD;
             news.add(stockNewsRepository.findStockNewsByRandom(si.getStock().getId(), prediction));
         }
 
         for (RealtyInfo ri : realtyInfos) {
             Prediction prediction =
-                (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? Prediction.GOOD : Prediction.BAD;
+                (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? GOOD : BAD;
             news.add(realtyNewsRepository.findRealtyNewsByRandom(ri.getRealty().getId(),
                 prediction));
         }
