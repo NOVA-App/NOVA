@@ -22,21 +22,21 @@ public class AnnualCost extends BaseEntity {
     @Column(name = "ANNUAL_COST_ID")
     private Long id;
 
-    private Integer livingCost;
+    private Long livingCost;
 
-    private Integer monthlyRentCost;
+    private Long monthlyRentCost;
 
-    private Integer IRPCost;
+    private Long IRPCost;
 
-    private Integer childCost;
+    private Long childCost;
 
-    private Integer loansCost;
+    private Long loansCost;
 
-    private Integer installmentSavingCost;
+    private Long installmentSavingCost;
 
     @Builder
-    public AnnualCost(Long id, Integer livingCost, Integer monthlyRentCost, Integer IRPCost,
-        Integer childCost, Integer loansCost, Integer installmentSavingCost) {
+    public AnnualCost(Long id, Long livingCost, Long monthlyRentCost, Long IRPCost,
+        Long childCost, Long loansCost, Long installmentSavingCost) {
         this.id = id;
         this.livingCost = livingCost;
         this.monthlyRentCost = monthlyRentCost;
@@ -48,12 +48,12 @@ public class AnnualCost extends BaseEntity {
 
     public static AnnualCost createStartAnnualCost() {
         return AnnualCost.builder()
-            .livingCost(FixedValues.LIVING_COST_MIN.getValue().intValue())
-            .monthlyRentCost(FixedValues.MONTHLY_RENT_COST.getValue().intValue())
-            .IRPCost(0)
-            .childCost(0)
-            .loansCost(0)
-            .installmentSavingCost(0)
+            .livingCost(FixedValues.LIVING_COST_MIN.getValue().longValue())
+            .monthlyRentCost(FixedValues.MONTHLY_RENT_COST.getValue().longValue())
+            .IRPCost(0L)
+            .childCost(0L)
+            .loansCost(0L)
+            .installmentSavingCost(0L)
             .build();
     }
 
@@ -67,6 +67,14 @@ public class AnnualCost extends BaseEntity {
         sum += this.childCost;
 
         return sum;
+    }
+
+    public Long sumOfFixedCost() {
+        return sumOfAnnualCost() - this.livingCost;
+    }
+
+    public void setLivingCost(Long livingCost) {
+        this.livingCost = livingCost;
     }
 
     public void addChildCost() {
