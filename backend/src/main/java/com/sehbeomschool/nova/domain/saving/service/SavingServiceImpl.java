@@ -54,4 +54,12 @@ public class SavingServiceImpl implements SavingService {
 
         //TODO : annual_cost 에 추가하기
     }
+
+    @Override
+    public void deleteInstallment(Long installmentSavingId) {
+        InstallmentSavings installmentSavings = savingRepository.findById(installmentSavingId)
+            .orElseThrow();
+
+        savingRepository.delete(installmentSavings);
+    }
 }

@@ -8,5 +8,6 @@ public interface SavingService {
     SavingInfoResponseDto readSavingInfo(Long gameId);
 
     void createInstallment(AddInstallmentRequestDto addInstallmentRequestDto);
+    void deleteInstallment(Long installmentSavingId);
 
 }
