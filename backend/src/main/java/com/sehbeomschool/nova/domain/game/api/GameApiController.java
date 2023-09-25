@@ -35,7 +35,7 @@ public class GameApiController {
 
     @PostMapping("")
     public ResponseEntity<ResponseDto<GameStartResponseDto>> createGame(@RequestBody
-        GameStartRequestDto gameStartRequestDto) {
+    GameStartRequestDto gameStartRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ResponseDto.create(
                 GAME_START_SUCCESS.getMessage(),
