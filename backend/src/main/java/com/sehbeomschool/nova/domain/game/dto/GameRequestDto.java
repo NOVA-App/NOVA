@@ -26,4 +26,14 @@ public class GameRequestDto {
 
         private Long gameId;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateLivingCostRequestDto {
+
+        private Long gameId;
+        private Long livingCost;
+    }
 }

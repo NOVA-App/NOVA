@@ -82,4 +82,14 @@ public class MyAssets extends BaseEntity {
         this.usableAsset -= cost;
         recalculateTotalAsset();
     }
+
+    public void setUsableAssetByAnnualCost(Long totalAnnualCost) {
+        this.usableAsset = this.totalAsset;
+
+        this.usableAsset -= this.IRPAsset;
+        this.usableAsset -= this.installmentSavingAsset;
+        this.usableAsset -= this.stockAsset;
+        this.usableAsset -= this.realtyAsset;
+        this.usableAsset -= totalAnnualCost;
+    }
 }

@@ -2,7 +2,6 @@ import React from 'react';
 import { Dimensions } from 'react-native';
 import * as S from './style';
 import BasicIcon from '../../assets/ProfileIcon.png';
-
 const { width, height } = Dimensions.get('window');
 
 const ImgBox = props => {
