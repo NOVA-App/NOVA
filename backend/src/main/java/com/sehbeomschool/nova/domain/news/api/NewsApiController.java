@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api//news")
+@RequestMapping("/api/news")
 public class NewsApiController {
 
     private final NewsService newsService;
