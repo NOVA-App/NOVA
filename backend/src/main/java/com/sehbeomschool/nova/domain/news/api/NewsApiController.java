@@ -2,6 +2,7 @@ package com.sehbeomschool.nova.domain.news.api;
 
 import com.sehbeomschool.nova.domain.news.constant.NewsResponseMessage;
 import com.sehbeomschool.nova.domain.news.domain.News;
+import com.sehbeomschool.nova.domain.news.dto.NewsResponseDto.ReadNewsResponseDto;
 import com.sehbeomschool.nova.domain.news.service.NewsService;
 import com.sehbeomschool.nova.global.dto.ResponseDto;
 import java.util.List;
@@ -21,7 +22,7 @@ public class NewsApiController {
     private final NewsService newsService;
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<ResponseDto<List<String>>> readNews(@PathVariable Long gameId){
+    public ResponseEntity<ResponseDto<ReadNewsResponseDto>> readNews(@PathVariable Long gameId){
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(
                 NewsResponseMessage.READ_NEWS.getMessage(),
