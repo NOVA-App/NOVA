@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.game.dto;
 
 import com.sehbeomschool.nova.domain.game.domain.AnnualCost;
+import com.sehbeomschool.nova.domain.game.domain.MyAssets;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -35,6 +36,21 @@ public class GameResponseDto {
             this.childCost = annualCost.getChildCost();
             this.loansCost = annualCost.getLoansCost();
             this.installmentSavingCost = annualCost.getInstallmentSavingCost();
+        }
+    }
+
+    @Getter
+    public static class UpdateLivingCostResponseDto {
+
+        private Long usableAsset;
+        private Long livingCost;
+        private FixedCostResponseDto fixedCost;
+
+        @Builder
+        public UpdateLivingCostResponseDto(MyAssets myAssets, AnnualCost annualCost) {
+            this.usableAsset = myAssets.getUsableAsset();
+            this.livingCost = annualCost.getLivingCost();
+            this.fixedCost = FixedCostResponseDto.builder().annualCost(annualCost).build();
         }
     }
 }
