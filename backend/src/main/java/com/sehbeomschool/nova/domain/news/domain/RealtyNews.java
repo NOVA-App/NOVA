@@ -22,7 +22,7 @@ public class RealtyNews extends News {
     private Realty realty;
 
     @Builder
-    public RealtyNews(Long id, String content,Prediction prediction, Realty realty) {
+    public RealtyNews(Long id, String content, Prediction prediction, Realty realty) {
         super(id, content, prediction);
         this.realty = realty;
     }

@@ -1,6 +1,5 @@
 package com.sehbeomschool.nova.domain.news.dao;
 
-import com.sehbeomschool.nova.domain.news.domain.News;
 import com.sehbeomschool.nova.domain.news.domain.NewsInfo;
 import io.lettuce.core.dynamic.annotation.Param;
 import java.util.List;
