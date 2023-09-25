@@ -1,29 +1,36 @@
-import { StyleSheet, Text, View, StatusBar, Dimensions, TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
+import React from "react";
+import { Dimensions, View, Text, ScrollView, StyleSheet } from "react-native";
 import Budget from '../../../../components/budget/index'
-import Button from '../../../../components/buttons/XXLargeButton'
+import InstallmentSavingsCard from "./InstallmentSavings";
+import IRPCard from "./IRPCards";
+// import * as S from "./style";
 
-export function Banking() {
+const { height, width } = Dimensions.get("window");
 
-  const navigation = useNavigation();
+const FinancialProduct = () => {
 
   return (
     <View style={styles.container}>
       <Budget />
       <View style={styles.upper}>
         <View>  
-        <Text style={{fontSize: 20, marginBottom: 10}}>금융</Text>
+        <Text style={{fontSize: 20, marginBottom: 10}}>금융 | 추가납입 / 상품가입</Text>
         </View>
         <View style = {styles.lineStyle} />
       </View>
       <View style={styles.content1}>
-        <Button title='계좌 확인'></Button>
-        <Button title='추가 납입 / 상품 가입'></Button>
+        <InstallmentSavingsCard />
+        {/* <IRPCard /> */}
       </View>
+      <View style={styles.content1}>
+        <IRPCard />
+      </View>
+
     </View>
   );
 };
+
+export default FinancialProduct;
 
 const styles = StyleSheet.create({
   container: {
@@ -40,10 +47,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content1:{
-    flexDirection: "column",
-    flex: 9,
-    top: 20,
+    // flexDirection: "column",
+    flex: 4,
     alignItems: 'center',
+    width: '90%',
+    height: '90%',
   },
   lineStyle:{
     borderWidth: 0.5,
@@ -51,4 +59,5 @@ const styles = StyleSheet.create({
     borderColor:'white',
     margin:0,
 }
+
 });
