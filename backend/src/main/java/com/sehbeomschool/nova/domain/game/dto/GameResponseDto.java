@@ -2,7 +2,7 @@ package com.sehbeomschool.nova.domain.game.dto;
 
 import com.sehbeomschool.nova.domain.game.constant.EventType;
 import com.sehbeomschool.nova.domain.game.constant.Gender;
-import com.sehbeomschool.nova.domain.game.domain.AnnualCost;
+import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Event;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
@@ -34,13 +34,13 @@ public class GameResponseDto {
         private Long installmentSavingCost;
 
         @Builder
-        public FixedCostResponseDto(AnnualCost annualCost) {
-            this.totalFixedCost = annualCost.sumOfFixedCost();
-            this.monthlyRentCost = annualCost.getMonthlyRentCost();
-            this.IRPCost = annualCost.getIRPCost();
-            this.childCost = annualCost.getChildCost();
-            this.loansCost = annualCost.getLoansCost();
-            this.installmentSavingCost = annualCost.getInstallmentSavingCost();
+        public FixedCostResponseDto(AnnualAsset annualAsset) {
+            this.totalFixedCost = annualAsset.sumOfFixedCost();
+            this.monthlyRentCost = annualAsset.getMonthlyRentCost();
+            this.IRPCost = annualAsset.getIRPCost();
+            this.childCost = annualAsset.getChildCost();
+            this.loansCost = annualAsset.getLoansCost();
+            this.installmentSavingCost = annualAsset.getInstallmentSavingCost();
         }
     }
 
@@ -52,10 +52,10 @@ public class GameResponseDto {
         private FixedCostResponseDto fixedCost;
 
         @Builder
-        public UpdateLivingCostResponseDto(MyAssets myAssets, AnnualCost annualCost) {
-            this.usableAsset = myAssets.getUsableAsset();
-            this.livingCost = annualCost.getLivingCost();
-            this.fixedCost = FixedCostResponseDto.builder().annualCost(annualCost).build();
+        public UpdateLivingCostResponseDto(AnnualAsset annualAsset) {
+            this.usableAsset = annualAsset.getUsableAsset();
+            this.livingCost = annualAsset.getLivingCost();
+            this.fixedCost = FixedCostResponseDto.builder().annualAsset(annualAsset).build();
         }
     }
 
@@ -72,14 +72,13 @@ public class GameResponseDto {
 
         @Builder
         public CurrentYearResponseDto(Game game, List<Event> events, MyAssets myAssets,
-            AnnualCost annualCost) {
+            AnnualAsset annualAsset) {
             this.gameId = game.getId();
             this.gender = game.getGender();
             this.currentAge = game.getCurrentAge();
             setEventInfo(events);
             this.annualAssets = UpdateLivingCostResponseDto.builder()
-                .myAssets(myAssets)
-                .annualCost(annualCost)
+                .annualAsset(annualAsset)
                 .build();
             this.myAssets = MyAssetsResponseDto.builder()
                 .myAssets(myAssets)
