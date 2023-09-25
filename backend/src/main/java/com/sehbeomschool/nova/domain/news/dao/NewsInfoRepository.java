@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface NewsInfoRepository extends JpaRepository<NewsInfo, Long> {
 
-    @Query("SELECT ni.news FROM NewsInfo ni WHERE ni.game.id = :gameId")
-    List<News> findByGameId(@Param("gameId") Long gameId);
+    @Query("SELECT ni.news.content FROM NewsInfo ni WHERE ni.game.id = :gameId")
+    List<String> findContentByGameId(@Param("gameId") Long gameId);
+
+    List<NewsInfo> findNewsInfosByGameId(Long gameId);
 }
