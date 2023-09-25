@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.saving.api;
 
 import static com.sehbeomschool.nova.domain.saving.constant.SavingResponseMessage.SUCCESS_ADD_INSTALLMENT;
+import static com.sehbeomschool.nova.domain.saving.constant.SavingResponseMessage.SUCCESS_DELETE_INSTALLMENT;
 import static com.sehbeomschool.nova.domain.saving.constant.SavingResponseMessage.SUCCESS_GET_SAVING_INFO;
 
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentRequestDto;
@@ -10,6 +11,7 @@ import com.sehbeomschool.nova.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +44,17 @@ public class SavingApiController {
 
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(SUCCESS_ADD_INSTALLMENT.getMessage()));
+
+    }
+
+    @DeleteMapping("/{installmentSavingId}")
+    public ResponseEntity<ResponseDto<SavingInfoResponseDto>> deleteInstallment(
+        @PathVariable Long installmentSavingId) {
+
+        savingService.deleteInstallment(installmentSavingId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(SUCCESS_DELETE_INSTALLMENT.getMessage()));
 
     }
 }
