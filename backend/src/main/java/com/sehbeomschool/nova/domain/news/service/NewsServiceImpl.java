@@ -7,6 +7,8 @@ import com.sehbeomschool.nova.domain.news.dao.RealtyNewsRepository;
 import com.sehbeomschool.nova.domain.news.dao.StockNewsRepository;
 import com.sehbeomschool.nova.domain.news.domain.News;
 import com.sehbeomschool.nova.domain.news.domain.NewsInfo;
+import com.sehbeomschool.nova.domain.news.domain.Prediction;
+import com.sehbeomschool.nova.domain.news.dto.NewsResponseDto.ReadNewsResponseDto;
 import com.sehbeomschool.nova.domain.realty.dao.RealtyInfoRepository;
 import com.sehbeomschool.nova.domain.realty.domain.RealtyInfo;
 import com.sehbeomschool.nova.domain.stock.dao.StocksInfoRepository;
@@ -30,8 +32,12 @@ public class NewsServiceImpl implements NewsService {
     private final StocksInfoRepository stocksInfoRepository;
 
 
-    public List<String> readNews(Long gameId) {
-        return newsInfoRepository.findContentByGameId(gameId);
+    public ReadNewsResponseDto readNews(Long gameId) {
+        ReadNewsResponseDto dto = ReadNewsResponseDto.builder()
+            .news(newsInfoRepository.findContentByGameId(gameId))
+            .build();
+
+        return dto;
     }
 
     @Override
@@ -43,12 +49,14 @@ public class NewsServiceImpl implements NewsService {
         List<News> list = new ArrayList<>();
 
         for (StocksInfo si : stocksInfos) {
-            String prediction = (si.getNextPrice() - si.getCurrentPrice()) > 0 ? "GOOD" : "BAD";
+            Prediction prediction =
+                (si.getNextPrice() - si.getCurrentPrice()) > 0 ? Prediction.GOOD : Prediction.BAD;
             list.add(stockNewsRepository.findStockNewsByRandom(si.getStock().getId(), prediction));
         }
 
         for (RealtyInfo ri : realtyInfos) {
-            String prediction = (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? "GOOD" : "BAD";
+            Prediction prediction =
+                (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? Prediction.GOOD : Prediction.BAD;
             list.add(realtyNewsRepository.findRealtyNewsByRandom(ri.getRealty().getId(),
                 prediction));
         }
@@ -76,12 +84,14 @@ public class NewsServiceImpl implements NewsService {
         List<News> news = new ArrayList<>();
 
         for (StocksInfo si : stocksInfos) {
-            String prediction = (si.getNextPrice() - si.getCurrentPrice()) > 0 ? "GOOD" : "BAD";
+            Prediction prediction =
+                (si.getNextPrice() - si.getCurrentPrice()) > 0 ? Prediction.GOOD : Prediction.BAD;
             news.add(stockNewsRepository.findStockNewsByRandom(si.getStock().getId(), prediction));
         }
 
         for (RealtyInfo ri : realtyInfos) {
-            String prediction = (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? "GOOD" : "BAD";
+            Prediction prediction =
+                (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? Prediction.GOOD : Prediction.BAD;
             news.add(realtyNewsRepository.findRealtyNewsByRandom(ri.getRealty().getId(),
                 prediction));
         }
