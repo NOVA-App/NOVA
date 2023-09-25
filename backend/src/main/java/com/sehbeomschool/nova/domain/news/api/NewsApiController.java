@@ -21,7 +21,7 @@ public class NewsApiController {
     private final NewsService newsService;
 
     @GetMapping("/{gameId}")
-    public ResponseEntity<ResponseDto<List<News>>> readNews(@PathVariable Long gameId){
+    public ResponseEntity<ResponseDto<List<String>>> readNews(@PathVariable Long gameId){
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(
                 NewsResponseMessage.READ_NEWS.getMessage(),
