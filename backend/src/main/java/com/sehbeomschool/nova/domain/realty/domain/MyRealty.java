@@ -60,4 +60,8 @@ public class MyRealty extends BaseEntity {
     public Long calDepreciationPercent(Long currentPrice) {
         return (currentPrice - this.investAmount) / this.investAmount * 100;
     }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }

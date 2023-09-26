@@ -23,4 +23,6 @@ public interface StocksInfoRepository extends JpaRepository<StocksInfo, Long> {
 
     @Query(value = "SELECT * FROM STOCKS_INFO WHERE AGE_ID = :ageId ORDER BY RAND() LIMIT 3", nativeQuery = true)
     List<StocksInfo> findStocksInfosByRandom(@Param("ageId") Long ageId);
+
+    StocksInfo findStocksInfoByAgeIdAndStockId(Long ageId, Long stockId);
 }
