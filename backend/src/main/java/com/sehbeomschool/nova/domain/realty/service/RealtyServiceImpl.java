@@ -23,7 +23,7 @@ public class RealtyServiceImpl implements RealtyService {
     private final RealtyRepository realtyRepository;
     private final RealtyInfoRepository realtyInfoRepository;
     private final MyRealtyRepository myRealtyRepository;
-    private TaxCalculator taxCalculator;
+    private TaxCalculator taxCalculator = new TaxCalculator();
 
     @Override
     public ReadMyRealtyResponseDto readMyRealty(Long gameId) {
