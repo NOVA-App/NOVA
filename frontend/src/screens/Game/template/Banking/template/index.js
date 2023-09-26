@@ -20,6 +20,11 @@ export function Banking() {
     navigation.navigate("Account"); // 'StartGame'으로 변경
   };
 
+  const handleFinancialButton = () => {
+    // 'SelectOptionPage'로 네비게이션 이동
+    navigation.navigate("FinancialProduct"); // 'StartGame'으로 변경
+  };
+
   return (
     <View style={styles.container}>
       <Budget />
@@ -31,7 +36,7 @@ export function Banking() {
       </View>
       <View style={styles.content1}>
         <Button title="계좌 확인" onPress={handleAccountButton}></Button>
-        <Button title="추가 납입 / 상품 가입"></Button>
+        <Button title="추가 납입 / 상품 가입" onPress={handleFinancialButton}></Button>
       </View>
     </View>
   );
