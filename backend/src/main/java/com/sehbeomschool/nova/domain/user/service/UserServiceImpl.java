@@ -5,6 +5,7 @@ import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.LoginResponseDto;
 import com.sehbeomschool.nova.global.file.FileStore;
+import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User readUser(Long userId) {
-        return userRepository.findById(userId).orElse(null);
+    public UserInfoResponseDto readUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        return UserInfoResponseDto.builder().user(user).build();
     }
 
     @Override
