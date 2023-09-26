@@ -10,4 +10,4 @@ spring:
         - jwt-dev
         - oauth-dev
 
-    active: release
+    active: develop
