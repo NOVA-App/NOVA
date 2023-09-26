@@ -48,4 +48,14 @@ public class MyStocks extends BaseEntity {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public void updateQuantityAndInvestAmountByBuy(Long purchaseAmount, Long price) {
+        this.quantity += purchaseAmount;
+        this.investAmount += purchaseAmount * price;
+    }
+
+    public void updateQuantityAndInvestAmountBySell(Long purchaseAmount) {
+        this.investAmount -= (this.investAmount / this.quantity) * purchaseAmount;
+        this.quantity -= purchaseAmount;
+    }
 }
