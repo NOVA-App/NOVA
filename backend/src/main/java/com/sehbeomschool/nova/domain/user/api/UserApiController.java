@@ -46,7 +46,7 @@ public class UserApiController {
     }
 
     @GetMapping("/refreshtoken")
-    public ResponseEntity<ResponseDto<TokenResponseDto>> getUserInfo(
+    public ResponseEntity<ResponseDto<TokenResponseDto>> refresh(
         @RequestBody String refreshToken) {
 
         return ResponseEntity.status(
@@ -74,7 +74,7 @@ public class UserApiController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyName(
+    public ResponseEntity<ResponseDto<FileUploadResponseDto>> deleteUser(
         @AuthenticationPrincipal Long userId) {
 
         userService.deleteUser(userId);
