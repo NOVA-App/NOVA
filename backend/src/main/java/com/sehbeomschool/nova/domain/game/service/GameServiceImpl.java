@@ -5,13 +5,13 @@ import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.G
 import com.sehbeomschool.nova.domain.game.constant.EventType;
 import com.sehbeomschool.nova.domain.game.dao.AgesRepository;
 import com.sehbeomschool.nova.domain.game.dao.AnalysisCommentRepository;
-import com.sehbeomschool.nova.domain.game.dao.AnnualCostRepository;
+import com.sehbeomschool.nova.domain.game.dao.AnnualAssetRepository;
 import com.sehbeomschool.nova.domain.game.dao.EventRepository;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.dao.MyAssetsRepository;
 import com.sehbeomschool.nova.domain.game.dao.OldAgeMonthlyAssetsRepository;
 import com.sehbeomschool.nova.domain.game.domain.Ages;
-import com.sehbeomschool.nova.domain.game.domain.AnnualCost;
+import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Event;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
@@ -23,6 +23,9 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseD
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.domain.news.service.NewsService;
+import com.sehbeomschool.nova.domain.realty.service.RealtyManagerService;
+import com.sehbeomschool.nova.domain.stock.service.StockManagerService;
 import com.sehbeomschool.nova.global.constant.FixedValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,19 +42,25 @@ public class GameServiceImpl implements GameService {
     private final AnalysisCommentRepository analysisCommentRepository;
     private final EventRepository eventRepository;
     private final GameRepository gameRepository;
-    private final AnnualCostRepository annualCostRepository;
+    private final AnnualAssetRepository annualAssetRepository;
     private final MyAssetsRepository myAssetsRepository;
     private final OldAgeMonthlyAssetsRepository oldAgeMonthlyAssetsRepository;
+
+    private final RealtyManagerService realtyManagerService;
+    private final StockManagerService stockManagerService;
+    private final NewsService newsService;
 
     @Override
     @Transactional
     public GameStartResponseDto createGame(GameStartRequestDto gameStartRequestDto) {
-        AnnualCost annualCost = AnnualCost.createStartAnnualCost();
+        AnnualAsset annualAsset = AnnualAsset.createStartAnnualAsset(
+            gameStartRequestDto.getStartSalary());
 
         // TODO: 2023-09-19 User 객체 추가 
         Game game = Game.builder()
-            .myAssets(MyAssets.createStartMyAsset(gameStartRequestDto.getStartSalary(), annualCost))
-            .annualCost(annualCost)
+            .myAssets(
+                MyAssets.createStartMyAsset(gameStartRequestDto.getStartSalary(), annualAsset))
+            .annualAsset(annualAsset)
             .startSalary(gameStartRequestDto.getStartSalary())
             .gender(gameStartRequestDto.getGender())
             .currentAge(FixedValues.START_AGE.getValue().intValue())
@@ -62,6 +71,10 @@ public class GameServiceImpl implements GameService {
         game.addAgeAndSetThis(startAge);
 
         gameRepository.save(game);
+
+        realtyManagerService.createRealtyInfoByGameStart(game);
+        stockManagerService.createStocksInfoByGameStart(game.getAges().get(0));
+        newsService.createNewsInfoByGameStart(game, game.getAges().get(0));
 
         return GameStartResponseDto.builder().gameId(game.getId()).build();
     }
@@ -75,7 +88,7 @@ public class GameServiceImpl implements GameService {
             .game(game)
             .events(game.getEvents())
             .myAssets(game.getMyAssets())
-            .annualCost(game.getAnnualCost())
+            .annualAsset(game.getAnnualAsset())
             .build();
     }
 
@@ -87,12 +100,11 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(updateLivingCostRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        game.getAnnualCost().setLivingCost(updateLivingCostRequestDto.getLivingCost());
-        game.getMyAssets().setUsableAssetByAnnualCost(game.getAnnualCost().sumOfAnnualCost());
+        game.getAnnualAsset().updateLivingCost(updateLivingCostRequestDto.getLivingCost());
+        game.getMyAssets().recalculateTotalAsset();
 
         return UpdateLivingCostResponseDto.builder()
-            .myAssets(game.getMyAssets())
-            .annualCost(game.getAnnualCost())
+            .annualAsset(game.getAnnualAsset())
             .build();
     }
 
@@ -101,7 +113,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        return FixedCostResponseDto.builder().annualCost(game.getAnnualCost()).build();
+        return FixedCostResponseDto.builder().annualAsset(game.getAnnualAsset()).build();
     }
 
     @Override
@@ -114,5 +126,7 @@ public class GameServiceImpl implements GameService {
             .age(agesRepository.findCurrentAge(game))
             .eventType(EventType.MARRIAGE)
             .build());
+
+        game.getMyAssets().recalculateTotalAsset();
     }
 }

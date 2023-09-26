@@ -53,7 +53,7 @@ public class RealtyInfo extends BaseEntity {
     }
 
     public Long calDepreciationPercent() {
-        return (this.currentPrice - this.prevPrice) / this.prevPrice * 100;
+        return (this.currentPrice - this.prevPrice) * 100 / this.prevPrice ;
     }
 
     public Long calEnableLoanAmount(Long myCount) {
