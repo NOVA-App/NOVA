@@ -3,7 +3,8 @@ package com.sehbeomschool.nova.domain.user.service;
 import com.sehbeomschool.nova.domain.user.dao.UserRepository;
 import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
-import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.LoginResponseDto;
+import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.FileUploadResponseDto;
+import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
 import com.sehbeomschool.nova.global.file.FileStore;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
 import java.util.Optional;
@@ -38,16 +39,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUserProfileImg(Long userId, MultipartFile profileImg) {
+    public FileUploadResponseDto updateUserProfileImg(Long userId, MultipartFile profileImg) {
         String filePath = fileStore.storeFile(profileImg);
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow();
 
-        if (user == null) {
-            return null;
-        }
         fileStore.deleteFile(user.getProfileImg());
         user.updateProfileImg(filePath);
-        return filePath;
+        return FileUploadResponseDto.builder().filePath(filePath).build();
     }
 
     @Override
@@ -72,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginResponseDto login(Long socialId) {
+    public TokenResponseDto login(Long socialId) {
         User bySocialId = userRepository.findBySocialId(socialId).orElse(null);
 
         return null;
