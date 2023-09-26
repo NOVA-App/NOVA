@@ -33,13 +33,4 @@ public class UserApiController {
             userService.readUser(userId)));
     }
 
-    @GetMapping("/token")
-    public ResponseEntity<String> token() {
-        KakaoUserInfoDto test1 = KakaoUserInfoDto.builder().id(123L).name("test1")
-            .profileImg("").build();
-        userService.createUser(test1);
-        String jwtToken = jwtUtil.createJwtToken(1L);
-        return ResponseEntity.ok(jwtToken);
-    }
-
 }
