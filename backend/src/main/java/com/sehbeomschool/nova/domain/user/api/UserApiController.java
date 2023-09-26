@@ -69,11 +69,10 @@ public class UserApiController {
 
     @PatchMapping("/profileimg")
     public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyProfileImg
-        (@AuthenticationPrincipal CustomUserDetails authentication,
+        (@AuthenticationPrincipal Long userId,
             @RequestParam MultipartFile profile) {
 
-        User user = authentication.getUser();
-        String filePath = userService.updateUserProfileImg(user.getId(), profile);
+        String filePath = userService.updateUserProfileImg(userId, profile);
 
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(SUCCES_PROFILE_UPDATE.getMessage(),
@@ -82,10 +81,9 @@ public class UserApiController {
 
     @PatchMapping("/name")
     public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyName(
-        @AuthenticationPrincipal CustomUserDetails authentication, @RequestBody String name) {
+        @AuthenticationPrincipal Long userId, @RequestBody String name) {
 
-        User user = authentication.getUser();
-        userService.updateUserName(user.getId(), name);
+        userService.updateUserName(userId, name);
 
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(SUCCES_NAME_UPDATE.getMessage(), null));
@@ -93,10 +91,9 @@ public class UserApiController {
 
     @DeleteMapping("")
     public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyName(
-        @AuthenticationPrincipal CustomUserDetails authentication) {
+        @AuthenticationPrincipal Long userId) {
 
-        User user = authentication.getUser();
-        userService.deleteUser(user.getId());
+        userService.deleteUser(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(SUCCES_USER_DELETE.getMessage()));
