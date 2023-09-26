@@ -7,7 +7,6 @@ import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SU
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCES_PROFILE_UPDATE;
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCES_USER_DELETE;
 
-import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.FileUploadResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
@@ -44,15 +43,6 @@ public class UserApiController {
         return ResponseEntity.status(
             HttpStatus.OK).body(ResponseDto.create(SUCCESS_GET_USER_INFO.getMessage(),
             userService.readUser(userId)));
-    }
-
-    @GetMapping("/token")
-    public ResponseEntity<String> token() {
-        KakaoUserInfoDto test1 = KakaoUserInfoDto.builder().id(123L).name("test1")
-            .profileImg("").build();
-        userService.createUser(test1);
-        String jwtToken = jwtUtil.createJwtToken(1L);
-        return ResponseEntity.ok(jwtToken);
     }
 
     @GetMapping("/refreshtoken")
