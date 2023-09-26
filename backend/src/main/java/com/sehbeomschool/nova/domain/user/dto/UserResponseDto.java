@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.user.dto;
 
+import com.sehbeomschool.nova.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -25,9 +26,9 @@ public class UserResponseDto {
         private String profileImg;
 
         @Builder
-        public UserInfoResponseDto(String name, String profileImg) {
-            this.name = name;
-            this.profileImg = profileImg;
+        public UserInfoResponseDto(User user) {
+            this.name = user.getName();
+            this.profileImg = user.getProfileImg();
         }
     }
 }
