@@ -7,11 +7,9 @@ import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SU
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCES_PROFILE_UPDATE;
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCES_USER_DELETE;
 
-import com.sehbeomschool.nova.domain.user.domain.CustomUserDetails;
-import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.FileUploadResponseDto;
-import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.RefreshTokenResponseDto;
+import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
 import com.sehbeomschool.nova.domain.user.service.UserService;
 import com.sehbeomschool.nova.global.dto.ResponseDto;
@@ -58,13 +56,11 @@ public class UserApiController {
     }
 
     @GetMapping("/refreshtoken")
-    public ResponseEntity<ResponseDto<RefreshTokenResponseDto>> getUserInfo(
+    public ResponseEntity<ResponseDto<TokenResponseDto>> getUserInfo(
         @RequestBody String refreshToken) {
-        String accessToken = jwtUtil.reCreateJwtToken(refreshToken);
         return ResponseEntity.status(
             HttpStatus.OK).body(ResponseDto.create(CREATE_ACCESS_TOKEN.getMessage(),
-            RefreshTokenResponseDto.builder().accessToken(accessToken)
-                .build()));
+            jwtUtil.reCreateJwtToken(refreshToken)));
     }
 
     @PatchMapping("/profileimg")
