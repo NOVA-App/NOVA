@@ -84,13 +84,16 @@ public class StockServiceImpl implements StockService {
 
         List<MyStocks> myStocks = myStocksRepository.findMyStocksByGameId(gameId);
 
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(
+            GAME_NOT_FOUND.getMessage()));
+
         if (myStocks.size() == 0) {
             return null;
         }
 
         for (MyStocks myStock : myStocks) {
-            StocksInfo myStockInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(gameId,
-                myStock.getId());
+            StocksInfo myStockInfo = stocksInfoRepository.findStocksInfoByAgeIdAndStockId(
+                game.getAges().get(game.getAges().size() - 1).getId(), myStock.getStock().getId());
 
             investAmounts += myStock.getInvestAmount();
             evaluationAmounts += myStockInfo.getCurrentPrice() * myStock.getQuantity();
@@ -102,7 +105,8 @@ public class StockServiceImpl implements StockService {
                 .evaluationAmount(myStockInfo.getCurrentPrice() * myStock.getQuantity())
                 .fluctuations(fluctuation * myStock.getQuantity())
                 .fluctuationsPercent(
-                    fluctuation * myStock.getQuantity() / myStock.getInvestAmount() * 100)
+                    fluctuation * myStock.getQuantity() * 100L / myStock.getInvestAmount())
+                .quantity(myStock.getQuantity())
                 .build();
 
             list.add(myStockResponseDto);
@@ -110,7 +114,7 @@ public class StockServiceImpl implements StockService {
         }
 
         depreciation = evaluationAmounts - investAmounts;
-        depreciationPercent = depreciation / investAmounts * 100;
+        depreciationPercent = depreciation * 100L / investAmounts;
 
         readMyStocksResponseDto dto = readMyStocksResponseDto.builder()
             .investAmounts(investAmounts)
@@ -126,17 +130,20 @@ public class StockServiceImpl implements StockService {
     @Override
     @Transactional
     public void buyStock(TradeStockRequestDto tradeStockRequestDto) {
-        Game game = gameRepository.findById(tradeStockRequestDto.getGameId()).orElseThrow(() -> new GameNotFoundException(
-            GAME_NOT_FOUND.getMessage()));
+        Game game = gameRepository.findById(tradeStockRequestDto.getGameId())
+            .orElseThrow(() -> new GameNotFoundException(
+                GAME_NOT_FOUND.getMessage()));
 
-        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(tradeStockRequestDto.getGameId(),
+        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(
+            tradeStockRequestDto.getGameId(),
             tradeStockRequestDto.getStockId());
 
         Long totalPrice = tradeStockRequestDto.getPurchaseAmount() * stocksInfo.getCurrentPrice();
 
         for (MyStocks ms : game.getMyStocks()) {
             if (ms.getStock().getId() == tradeStockRequestDto.getStockId()) {
-                ms.updateQuantityAndInvestAmountByBuy(tradeStockRequestDto.getPurchaseAmount(), stocksInfo.getCurrentPrice());
+                ms.updateQuantityAndInvestAmountByBuy(tradeStockRequestDto.getPurchaseAmount(),
+                    stocksInfo.getCurrentPrice());
 
                 game.getAnnualAsset().useUsableAsset(totalPrice);
                 // TODO 주식 자산 반영
@@ -162,10 +169,12 @@ public class StockServiceImpl implements StockService {
     @Override
     @Transactional
     public void sellStock(TradeStockRequestDto tradeStockRequestDto) {
-        Game game = gameRepository.findById(tradeStockRequestDto.getGameId()).orElseThrow(() -> new GameNotFoundException(
-            GAME_NOT_FOUND.getMessage()));
+        Game game = gameRepository.findById(tradeStockRequestDto.getGameId())
+            .orElseThrow(() -> new GameNotFoundException(
+                GAME_NOT_FOUND.getMessage()));
 
-        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(tradeStockRequestDto.getGameId(),
+        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(
+            tradeStockRequestDto.getGameId(),
             tradeStockRequestDto.getStockId());
 
         Long totalPrice = tradeStockRequestDto.getPurchaseAmount() * stocksInfo.getCurrentPrice();
@@ -181,7 +190,7 @@ public class StockServiceImpl implements StockService {
                 // TODO 주식 자산 반영
                 game.getMyAssets().recalculateTotalAsset();
 
-                if(ms.getQuantity() == 0){
+                if (ms.getQuantity() == 0) {
                     game.getMyStocks().remove(ms);
                     i--;
                 }
