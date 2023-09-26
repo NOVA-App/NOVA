@@ -4,7 +4,7 @@ import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.LO
 
 import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
-import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.LoginResponseDto;
+import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
 import com.sehbeomschool.nova.domain.user.service.UserService;
 import com.sehbeomschool.nova.domain.user.service.WebClientService;
 import com.sehbeomschool.nova.global.dto.ResponseDto;
@@ -27,7 +27,7 @@ public class KakaoApiController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/callback")
-    public ResponseEntity<ResponseDto<LoginResponseDto>> kakaoLogin(
+    public ResponseEntity<ResponseDto<TokenResponseDto>> kakaoLogin(
         @RequestParam("code") String code) {
 
         KakaoUserInfoDto kakaoUserInfo = webClientService.getKakaoUserInfo(code);
@@ -43,7 +43,7 @@ public class KakaoApiController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
             .body(ResponseDto.create(LOGIN_SUCCESS.getMessage(),
-                LoginResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken)
+                TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken)
                     .build()));
     }
 
