@@ -1,6 +1,6 @@
 import React from "react";
 import { Dimensions, View, Text, ScrollView } from "react-native";
-import Budget from "../budget";
+import Budget from "../../budget";
 import HouseCard from "./HouseCard";
 import * as S from "./style";
 
@@ -22,23 +22,25 @@ const MyRealEstate = () => {
           </S.TagContainer>
         </View>
         <View style={{ flex: 8 }}>
-          <View style={{ height: "25%" }}>
+          <View>
             <S.TotalAssetContainer>
               <S.MiddleText>{`총 투자금                      150,000,000`}</S.MiddleText>
               <S.MiddleText>{`총 평가금                      150,000,000`}</S.MiddleText>
               <S.MiddleText>{`월세 수익                      150,000,000`}</S.MiddleText>
             </S.TotalAssetContainer>
           </View>
-          <ScrollView>
-            <S.CenterView>
+          <View style={{ marginTop: "5%" }}>
+            <ScrollView>
+              <S.CenterView>
+                <HouseCard height={height} />
+              </S.CenterView>
               <HouseCard height={height} />
-            </S.CenterView>
-            <HouseCard height={height} />
-            <HouseCard height={height} />
-            <HouseCard height={height} />
-            <HouseCard height={height} />
-            <HouseCard height={height} />
-          </ScrollView>
+              <HouseCard height={height} />
+              <HouseCard height={height} />
+              <HouseCard height={height} />
+              <HouseCard height={height} />
+            </ScrollView>
+          </View>
         </View>
       </S.Container>
     </View>

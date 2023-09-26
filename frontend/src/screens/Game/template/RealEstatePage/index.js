@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
-import Budget from "../../components/budget";
+import Budget from "../../../../components/budget";
 import TabSelect from "./TabSelect";
 import styled from "styled-components/native";
 
@@ -67,7 +67,7 @@ const RealEstatePage = () => {
   );
 };
 
-export default RealEstatePage;
+export {RealEstatePage};
 
 const styles = StyleSheet.create({
   container: {

@@ -73,6 +73,10 @@ public class AnnualCost extends BaseEntity {
         return sumOfAnnualCost() - this.livingCost;
     }
 
+    public void setLivingCost(Long livingCost) {
+        this.livingCost = livingCost;
+    }
+
     public void addChildCost() {
         this.childCost += FixedValues.CHILD_COST.getValue().intValue();
     }
