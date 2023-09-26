@@ -58,7 +58,7 @@ public class StockServiceImpl implements StockService {
             .stockName(stocksInfo.getStock().getName())
             .evaluation(stocksInfo.getCurrentPrice())
             .fluctuations(stocksInfo.calFluctuaions())
-            .myQuantity(myQuantity)
+            .myQuantity(myQuantity == null ? 0 : myQuantity)
             .graphValue(priceList)
             .build();
         return dto;
@@ -75,7 +75,7 @@ public class StockServiceImpl implements StockService {
 
         List<MyStocks> myStocks = myStocksRepository.findMyStocksByGameId(gameId);
 
-        if(myStocks.size() == 0){
+        if (myStocks.size() == 0) {
             return null;
         }
 
