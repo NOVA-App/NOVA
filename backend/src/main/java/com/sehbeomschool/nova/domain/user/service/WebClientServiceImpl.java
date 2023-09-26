@@ -48,7 +48,7 @@ public class WebClientServiceImpl implements WebClientService {
             .block();
 
         String accessToken = String.valueOf(result.get("access_token"));
-        String refreshToken = String.valueOf(result.get("access_token"));
+        String refreshToken = String.valueOf(result.get("refresh_token"));
 
         result = webClient
             .get()

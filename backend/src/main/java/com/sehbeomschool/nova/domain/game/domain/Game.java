@@ -52,8 +52,8 @@ public class Game extends BaseEntity {
     private OldAgeMonthlyAssets oldAgeMonthlyAssets;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ANNUAL_COST_ID")
-    private AnnualCost annualCost;
+    @JoinColumn(name = "ANNUAL_ASSET_ID")
+    private AnnualAsset annualAsset;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events = new ArrayList<>();
@@ -72,13 +72,13 @@ public class Game extends BaseEntity {
 
     @Builder
     public Game(Long id, AnalysisComment analysisComment, MyAssets myAssets,
-        OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualCost annualCost, Integer startSalary,
+        OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualAsset annualAsset, Integer startSalary,
         Gender gender, Long resultAssets, Integer currentAge) {
         this.id = id;
         this.analysisComment = analysisComment;
         this.myAssets = myAssets;
         this.oldAgeMonthlyAssets = oldAgeMonthlyAssets;
-        this.annualCost = annualCost;
+        this.annualAsset = annualAsset;
         this.startSalary = startSalary;
         this.gender = gender;
         this.resultAssets = resultAssets;
@@ -109,10 +109,10 @@ public class Game extends BaseEntity {
     }
 
     private void addChildCost() {
-        this.annualCost.addChildCost();
+        this.annualAsset.addChildCost();
     }
 
     private void payMarriageCost() {
-        this.myAssets.useUsableAsset(FixedValues.MARRIAGE_COST.getValue().longValue());
+        this.annualAsset.useUsableAsset(FixedValues.MARRIAGE_COST.getValue().longValue());
     }
 }

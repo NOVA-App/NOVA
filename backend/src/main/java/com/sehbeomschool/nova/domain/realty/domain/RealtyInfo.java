@@ -52,11 +52,18 @@ public class RealtyInfo extends BaseEntity {
         this.predictedRentIncome = predictedRentIncome;
     }
 
-    public Long calDepreciationPercent(){
-        return (this.currentPrice - this.prevPrice) / this.prevPrice * 100;
+    public Long calDepreciationPercent() {
+        return (this.currentPrice - this.prevPrice) * 100 / this.prevPrice ;
     }
 
-    public Long calEnableLoanAmount(Long myCount){
-        return this.currentPrice / 100 * ((myCount == 0)? 70L : 40L);
+    public Long calEnableLoanAmount(Long myCount) {
+        return this.currentPrice / 100 * ((myCount == 0) ? 70L : 40L);
+    }
+
+    public void setNextYearPrice(Long nextPrice) {
+        this.prevPrice = this.currentPrice;
+        this.currentPrice = this.nextPrice;
+        this.nextPrice = nextPrice;
+        this.predictedRentIncome = this.currentPrice / 20;
     }
 }

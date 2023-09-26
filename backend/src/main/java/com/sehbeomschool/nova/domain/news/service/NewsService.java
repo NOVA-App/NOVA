@@ -1,8 +1,14 @@
 package com.sehbeomschool.nova.domain.news.service;
 
-import com.sehbeomschool.nova.domain.news.domain.News;
-import java.util.List;
+import com.sehbeomschool.nova.domain.game.domain.Ages;
+import com.sehbeomschool.nova.domain.game.domain.Game;
+import com.sehbeomschool.nova.domain.news.dto.NewsResponseDto.ReadNewsResponseDto;
 
 public interface NewsService {
-    List<News> readNews(Long gameId);
+
+    ReadNewsResponseDto readNews(Long gameId);
+
+    void createNewsInfoByGameStart(Game game, Ages age);
+
+    void updateNewsInfoByNextYear(Game game, Ages age);
 }
