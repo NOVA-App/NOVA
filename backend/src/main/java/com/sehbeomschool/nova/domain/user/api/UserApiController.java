@@ -58,6 +58,7 @@ public class UserApiController {
     @GetMapping("/refreshtoken")
     public ResponseEntity<ResponseDto<TokenResponseDto>> getUserInfo(
         @RequestBody String refreshToken) {
+
         return ResponseEntity.status(
             HttpStatus.OK).body(ResponseDto.create(CREATE_ACCESS_TOKEN.getMessage(),
             jwtUtil.reCreateJwtToken(refreshToken)));
@@ -65,14 +66,11 @@ public class UserApiController {
 
     @PatchMapping("/profileimg")
     public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyProfileImg
-        (@AuthenticationPrincipal Long userId,
-            @RequestParam MultipartFile profile) {
-
-        String filePath = userService.updateUserProfileImg(userId, profile);
+        (@AuthenticationPrincipal Long userId, @RequestParam MultipartFile profile) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(SUCCES_PROFILE_UPDATE.getMessage(),
-                FileUploadResponseDto.builder().filePath(filePath).build()));
+                userService.updateUserProfileImg(userId, profile)));
     }
 
     @PatchMapping("/name")
@@ -82,7 +80,7 @@ public class UserApiController {
         userService.updateUserName(userId, name);
 
         return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(SUCCES_NAME_UPDATE.getMessage(), null));
+            ResponseDto.create(SUCCES_NAME_UPDATE.getMessage()));
     }
 
     @DeleteMapping("")
