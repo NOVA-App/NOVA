@@ -1,11 +1,10 @@
 package com.sehbeomschool.nova.domain.stock.dao;
 
-import com.sehbeomschool.nova.domain.realty.domain.RealtyInfo;
 import com.sehbeomschool.nova.domain.stock.domain.StocksInfo;
-import io.lettuce.core.dynamic.annotation.Param;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface StocksInfoRepository extends JpaRepository<StocksInfo, Long> {
 

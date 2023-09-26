@@ -3,6 +3,7 @@ package com.sehbeomschool.nova.domain.news.service;
 import static com.sehbeomschool.nova.domain.news.domain.Prediction.BAD;
 import static com.sehbeomschool.nova.domain.news.domain.Prediction.GOOD;
 
+import com.sehbeomschool.nova.domain.game.domain.Ages;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.news.dao.NewsInfoRepository;
 import com.sehbeomschool.nova.domain.news.dao.NewsRepository;
@@ -45,8 +46,8 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public void createNewsInfoByGameStart(Game game, Long ageId) {
-        List<StocksInfo> stocksInfos = stocksInfoRepository.findStocksInfosByRandom(ageId);
+    public void createNewsInfoByGameStart(Game game, Ages age) {
+        List<StocksInfo> stocksInfos = stocksInfoRepository.findStocksInfosByRandom(age.getId());
         List<RealtyInfo> realtyInfos = realtyInfoRepository.findRealtyInfosByRandom(game.getId());
 
         List<News> list = new ArrayList<>();
@@ -54,14 +55,15 @@ public class NewsServiceImpl implements NewsService {
         for (StocksInfo si : stocksInfos) {
             Prediction prediction =
                 (si.getNextPrice() - si.getCurrentPrice()) > 0 ? GOOD : BAD;
-            list.add(stockNewsRepository.findStockNewsByRandom(si.getStock().getId(), prediction));
+            list.add(stockNewsRepository.findStockNewsByRandom(si.getStock().getId(),
+                prediction.name()));
         }
 
         for (RealtyInfo ri : realtyInfos) {
             Prediction prediction =
                 (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? GOOD : BAD;
             list.add(realtyNewsRepository.findRealtyNewsByRandom(ri.getRealty().getId(),
-                prediction));
+                prediction.name()));
         }
 
         Collections.shuffle(list);
@@ -79,25 +81,26 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public void updateNewsInfoByNextYear(Long gameId, Long ageId) {
-        List<NewsInfo> list = newsInfoRepository.findNewsInfosByGameId(gameId);
+    public void updateNewsInfoByNextYear(Game game, Ages age) {
+        List<NewsInfo> list = newsInfoRepository.findNewsInfosByGameId(game.getId());
 
-        List<StocksInfo> stocksInfos = stocksInfoRepository.findStocksInfosByRandom(ageId);
-        List<RealtyInfo> realtyInfos = realtyInfoRepository.findRealtyInfosByRandom(gameId);
+        List<StocksInfo> stocksInfos = stocksInfoRepository.findStocksInfosByRandom(age.getId());
+        List<RealtyInfo> realtyInfos = realtyInfoRepository.findRealtyInfosByRandom(game.getId());
 
         List<News> news = new ArrayList<>();
 
         for (StocksInfo si : stocksInfos) {
             Prediction prediction =
                 (si.getNextPrice() - si.getCurrentPrice()) > 0 ? GOOD : BAD;
-            news.add(stockNewsRepository.findStockNewsByRandom(si.getStock().getId(), prediction));
+            news.add(stockNewsRepository.findStockNewsByRandom(si.getStock().getId(),
+                prediction.name()));
         }
 
         for (RealtyInfo ri : realtyInfos) {
             Prediction prediction =
                 (ri.getNextPrice() - ri.getCurrentPrice()) > 0 ? GOOD : BAD;
             news.add(realtyNewsRepository.findRealtyNewsByRandom(ri.getRealty().getId(),
-                prediction));
+                prediction.name()));
         }
 
         Collections.shuffle(news);

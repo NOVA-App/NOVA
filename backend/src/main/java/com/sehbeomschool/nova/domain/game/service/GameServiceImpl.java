@@ -23,6 +23,9 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseD
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.domain.news.service.NewsService;
+import com.sehbeomschool.nova.domain.realty.service.RealtyManagerService;
+import com.sehbeomschool.nova.domain.stock.service.StockManagerService;
 import com.sehbeomschool.nova.global.constant.FixedValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +45,10 @@ public class GameServiceImpl implements GameService {
     private final AnnualAssetRepository annualAssetRepository;
     private final MyAssetsRepository myAssetsRepository;
     private final OldAgeMonthlyAssetsRepository oldAgeMonthlyAssetsRepository;
+
+    private final RealtyManagerService realtyManagerService;
+    private final StockManagerService stockManagerService;
+    private final NewsService newsService;
 
     @Override
     @Transactional
@@ -64,6 +71,10 @@ public class GameServiceImpl implements GameService {
         game.addAgeAndSetThis(startAge);
 
         gameRepository.save(game);
+
+        realtyManagerService.createRealtyInfoByGameStart(game);
+        stockManagerService.createStocksInfoByGameStart(game.getAges().get(0));
+        newsService.createNewsInfoByGameStart(game, game.getAges().get(0));
 
         return GameStartResponseDto.builder().gameId(game.getId()).build();
     }

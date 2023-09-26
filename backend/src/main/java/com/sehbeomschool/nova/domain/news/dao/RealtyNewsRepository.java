@@ -1,14 +1,17 @@
 package com.sehbeomschool.nova.domain.news.dao;
 
-import com.sehbeomschool.nova.domain.news.domain.Prediction;
 import com.sehbeomschool.nova.domain.news.domain.RealtyNews;
-import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface RealtyNewsRepository extends JpaRepository<RealtyNews, Long> {
 
-    @Query(value = "SELECT * FROM REALTY_NEWS rn WHERE rn.REALTY_ID = :realtyId AND rn.PREDICTION = :prediction ORDER BY RAND() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM REALTY_NEWS rn, NEWS n "
+        + "WHERE rn.NEWS_ID = n.NEWS_ID AND "
+        + "rn.REALTY_ID = :realtyId AND "
+        + "n.PREDICTION = :prediction "
+        + "ORDER BY RAND() LIMIT 1", nativeQuery = true)
     RealtyNews findRealtyNewsByRandom(@Param("realtyId") Long realtyId,
-        @Param("prediction") Prediction prediction);
+        @Param("prediction") String prediction);
 }
