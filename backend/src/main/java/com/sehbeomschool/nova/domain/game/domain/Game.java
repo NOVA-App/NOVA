@@ -80,23 +80,18 @@ public class Game extends BaseEntity {
 
     @Builder
     public Game(Long id, User user, AnalysisComment analysisComment, MyAssets myAssets,
-        OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualAsset annualAsset, List<Event> events,
-        Integer startSalary, Gender gender, Long resultAssets, Integer currentAge, List<Ages> ages,
-        List<MyStocks> myStocks, List<MyRealty> myRealties) {
+        OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualAsset annualAsset, Integer startSalary,
+        Gender gender, Long resultAssets, Integer currentAge) {
         this.id = id;
         this.user = user;
         this.analysisComment = analysisComment;
         this.myAssets = myAssets;
         this.oldAgeMonthlyAssets = oldAgeMonthlyAssets;
         this.annualAsset = annualAsset;
-        this.events = events;
         this.startSalary = startSalary;
         this.gender = gender;
         this.resultAssets = resultAssets;
         this.currentAge = currentAge;
-        this.ages = ages;
-        this.myStocks = myStocks;
-        this.myRealties = myRealties;
     }
 
     public void addAgeAndSetThis(Ages age) {
