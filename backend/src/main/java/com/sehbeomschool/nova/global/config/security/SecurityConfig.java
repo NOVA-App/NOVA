@@ -28,9 +28,9 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-//            .anyRequest().permitAll()
+            .anyRequest().permitAll()
 //            .antMatchers("/api/user/oauth/kakao").permitAll()
-            .antMatchers("/api/user").authenticated()
+//            .antMatchers("/api/user").authenticated()
             .and()
             .addFilterBefore(new JwtFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
