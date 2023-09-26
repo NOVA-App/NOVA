@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UserApiController {
 
-    private final JwtUtil jwtUtil;
     private final UserService userService;
 
     @GetMapping("")
