@@ -1,8 +1,6 @@
 package com.sehbeomschool.nova.domain.user.api;
 
 
-import com.sehbeomschool.nova.domain.user.domain.CustomUserDetails;
-import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
 import com.sehbeomschool.nova.domain.user.service.UserService;
@@ -28,12 +26,11 @@ public class UserApiController {
 
     @GetMapping("")
     public ResponseEntity<ResponseDto<UserInfoResponseDto>> getUserInfo(
-        @AuthenticationPrincipal CustomUserDetails authentication) {
-        User user = authentication.getUser();
+        @AuthenticationPrincipal Long userId) {
+
         return ResponseEntity.status(
             HttpStatus.OK).body(ResponseDto.create("",
-            UserInfoResponseDto.builder().name(user.getName()).profileImg(user.getProfileImg())
-                .build()));
+            userService.readUser(userId)));
     }
 
     @GetMapping("/token")
