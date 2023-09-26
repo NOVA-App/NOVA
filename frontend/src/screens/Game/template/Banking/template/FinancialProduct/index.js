@@ -1,8 +1,8 @@
 import React from "react";
 import { Dimensions, View, Text, ScrollView, StyleSheet } from "react-native";
-import Budget from '../../../../components/budget/index'
-import InstallmentSavingsCard from "./InstallmentSavings";
-import IRPCard from "./IRPCards";
+import Budget from '../../../../../../components/budget/index'
+import InstallmentSavingsCard from "../../../../../../components/InstallmentSavings/index";
+import IRPCard from "../../../../../../components/IRPCards/index";
 // import * as S from "./style";
 
 const { height, width } = Dimensions.get("window");
