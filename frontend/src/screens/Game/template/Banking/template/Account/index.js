@@ -9,13 +9,14 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native"; // useNavigation 추가
-import Budget from "../../../../components/budget/index";
-import MyInstallmentSavings from "./MyInstallmentSavings";
-import MyIRP from "./MyIRP";
+import Budget from "../../../../../../components/budget/index";
+import MyInstallmentSavings from "../../../../../../components/MyInstallmentSavings/index"
+import MyIRP from "../../../../../../components/MyIRP/index"
 
 // import * as S from "./style";
 
-export function Account() {
+const Account = (props) => {
+
   const navigation = useNavigation();
 
   return (
@@ -40,6 +41,9 @@ export function Account() {
     </View>
   );
 }
+
+
+export default Account;
 
 const styles = StyleSheet.create({
   container: {
