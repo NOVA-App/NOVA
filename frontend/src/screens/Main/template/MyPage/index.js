@@ -2,10 +2,8 @@ import React from "react";
 import { View, Text, StatusBar, TouchableOpacity } from "react-native";
 import Button from "../../../../components/buttons/XLargeButton";
 import MediumButton from "../../../../components/buttons/MediumButton";
-
 import * as S from "./style";
 import ProfileImg from "../../../../assets/ProfileIcon.png";
-import { Image } from "react-native-elements";
 
 const MyPage = () => {
   return (
