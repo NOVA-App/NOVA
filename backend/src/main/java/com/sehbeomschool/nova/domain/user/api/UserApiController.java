@@ -41,12 +41,11 @@ public class UserApiController {
 
     @GetMapping("")
     public ResponseEntity<ResponseDto<UserInfoResponseDto>> getUserInfo(
-        @AuthenticationPrincipal CustomUserDetails authentication) {
-        User user = authentication.getUser();
+        @AuthenticationPrincipal Long userId) {
+
         return ResponseEntity.status(
             HttpStatus.OK).body(ResponseDto.create(SUCCESS_GET_USER_INFO.getMessage(),
-            UserInfoResponseDto.builder().name(user.getName()).profileImg(user.getProfileImg())
-                .build()));
+            userService.readUser(userId)));
     }
 
     @GetMapping("/token")

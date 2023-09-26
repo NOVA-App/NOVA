@@ -1,6 +1,5 @@
 package com.sehbeomschool.nova.global.filter;
 
-import com.sehbeomschool.nova.domain.user.service.CustomUserDetailsService;
 import com.sehbeomschool.nova.global.error.constant.ExceptionMessage;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import java.io.IOException;
@@ -11,12 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,10 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.secretKey}")
-    private String secretKey;
     private final JwtUtil jwtUtil;
-    private final CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -57,10 +51,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         Long userId = jwtUtil.getUserId(token);
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(
-            String.valueOf(userId));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            userDetails, null, List.of(new SimpleGrantedAuthority("USER")));
+            userId, null, List.of(new SimpleGrantedAuthority("USER")));
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
