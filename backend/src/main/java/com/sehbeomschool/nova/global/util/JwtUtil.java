@@ -26,14 +26,14 @@ public class JwtUtil {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    public String createRefreshToken(Long userNo) {
-        String refreshToken = create(userNo, refreshExpireMin);
-        redisUtil.set(String.valueOf(userNo), refreshToken, refreshExpireMin);
+    public String createRefreshToken(Long userId) {
+        String refreshToken = create(userId, refreshExpireMin);
+        redisUtil.set(String.valueOf(userId), refreshToken, refreshExpireMin);
         return refreshToken;
     }
 
-    public String createJwtToken(Long subject) {
-        return create(subject, expireMin);
+    public String createJwtToken(Long userId) {
+        return create(userId, expireMin);
     }
 
     public void logout(Long userNo, String accessToken) {
@@ -65,7 +65,7 @@ public class JwtUtil {
     }
 
     public Long getUserId(String token) {
-        token = token.substring(7);
+//        token = token.substring(7);
         if (redisUtil.hasKeyExcludeList(token)) {
             throw new RuntimeException("이미 로그아웃하였습니다");
         }
@@ -78,7 +78,8 @@ public class JwtUtil {
     }
 
     public boolean isValidToken(String token) {
-        boolean isExpired = Jwts.parserBuilder().setSigningKey(secretKey).build()
+        boolean isExpired = Jwts.parserBuilder()
+            .setSigningKey(DatatypeConverter.parseBase64Binary(secretKey)).build()
             .parseClaimsJws(token)
             .getBody()
             .getExpiration().before(new Date());
