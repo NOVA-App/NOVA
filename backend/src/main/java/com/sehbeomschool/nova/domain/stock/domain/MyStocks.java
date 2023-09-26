@@ -44,4 +44,8 @@ public class MyStocks extends BaseEntity {
         this.stock = stock;
         this.investAmount = investAmount;
     }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 }
