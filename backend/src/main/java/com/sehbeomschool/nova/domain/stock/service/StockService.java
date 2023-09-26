@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.stock.service;
 
+import com.sehbeomschool.nova.domain.stock.dto.StockRequestDto.TradeStockRequestDto;
 import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readMyStocksResponseDto;
 import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readStockDetailResponseDto;
 import com.sehbeomschool.nova.domain.stock.dto.StockResponseDto.readStocksListResponseDto;
@@ -12,4 +13,8 @@ public interface StockService {
     readStockDetailResponseDto readStockDetail(Long gameId, Long stockId);
 
     readMyStocksResponseDto readMyStocks(Long gameId);
+
+    void buyStock(TradeStockRequestDto tradeStockRequestDto);
+
+    void sellStock(TradeStockRequestDto tradeStockRequestDto);
 }
