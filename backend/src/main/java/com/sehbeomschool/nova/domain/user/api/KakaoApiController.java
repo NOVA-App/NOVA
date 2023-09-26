@@ -10,6 +10,7 @@ import com.sehbeomschool.nova.domain.user.service.WebClientService;
 import com.sehbeomschool.nova.global.dto.ResponseDto;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/oauth/kakao")
 @RequiredArgsConstructor
+@Slf4j
 public class KakaoApiController {
 
     private final WebClientService webClientService;
@@ -30,6 +32,7 @@ public class KakaoApiController {
     public ResponseEntity<ResponseDto<TokenResponseDto>> kakaoLogin(
         @RequestParam("code") String code) {
 
+        log.info("kakao callback");
         KakaoUserInfoDto kakaoUserInfo = webClientService.getKakaoUserInfo(code);
 
         if (!userService.isExistUser(kakaoUserInfo.getId())) {
