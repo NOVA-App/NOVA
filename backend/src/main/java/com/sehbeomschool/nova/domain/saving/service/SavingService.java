@@ -9,5 +9,7 @@ public interface SavingService {
 
     void createInstallment(AddInstallmentRequestDto addInstallmentRequestDto);
     void deleteInstallment(Long installmentSavingId);
+    void matureInstallment(Long installmentSavingId);
+    void updateInstallmentByNextYear(Long gameId);
 
 }

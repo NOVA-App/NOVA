@@ -1,6 +1,8 @@
 package com.sehbeomschool.nova.domain.saving.service;
 
+import com.sehbeomschool.nova.domain.game.constant.AssetType;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
+import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
 import com.sehbeomschool.nova.domain.saving.dao.InsInterestRepository;
@@ -52,7 +54,12 @@ public class SavingServiceImpl implements SavingService {
             insInterest);
         savingRepository.save(installmentSavings);
 
+        AnnualAsset annualAsset = game.getAnnualAsset();
+        MyAssets myAssets = game.getMyAssets();
         //TODO : annual_cost 에 추가하기
+        // annualAsset.addInstallmentSaving(installmentSavings.getAmount());
+        myAssets.increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getAmount());
+
     }
 
     @Override
@@ -60,6 +67,63 @@ public class SavingServiceImpl implements SavingService {
         InstallmentSavings installmentSavings = savingRepository.findById(installmentSavingId)
             .orElseThrow();
 
+        Game game = installmentSavings.getGame();
+        AnnualAsset annualAsset = game.getAnnualAsset();
+        MyAssets myAssets = game.getMyAssets();
+        //TODO : annual_cost 에 추가하기
+
+        // annualAsset.deleteInstallmentSaving(installmentSavings.getAmount());
+        annualAsset.earnAsset(installmentSavings.getTotalAmount());
+        myAssets.decreaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getTotalAmount());
+
         savingRepository.delete(installmentSavings);
     }
+
+    @Override
+    public void matureInstallment(Long installmentSavingId) {
+        InstallmentSavings installmentSavings = savingRepository.findById(installmentSavingId)
+            .orElseThrow();
+
+        Game game = installmentSavings.getGame();
+        AnnualAsset annualAsset = game.getAnnualAsset();
+        MyAssets myAssets = game.getMyAssets();
+        //TODO : annual_cost 에 추가하기
+
+        //annualAsset.deleteInstallmentSaving(installmentSavings.getAmount());
+        annualAsset.earnAsset(installmentSavings.getTotalAmount());
+
+        InsInterest interest = installmentSavings.getInterest();
+        double CompoundInterest = calculateCompoundInterest(installmentSavings.getAmount(),
+            interest.getInterest(),
+            interest.getPeriod());
+        //myAssets.increaseAsset(AssetType);
+    }
+
+    public static double calculateCompoundInterest(Long principal, int annualInterestRate,
+        int years) {
+        double compoundInterest = principal * Math.pow(1 + annualInterestRate, years) - principal;
+        return compoundInterest;
+    }
+
+    @Override
+    public void updateInstallmentByNextYear(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow();
+        List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
+            .orElseThrow();
+        for (InstallmentSavings installmentSaving : installmentSavings) {
+
+        }
+    }
+
+//    @Override
+//    public void updateInstallmentByCurrentYear(Long gameId) {
+//        Game game = gameRepository.findById(gameId).orElseThrow();
+//        List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
+//            .orElseThrow();
+//        for (InstallmentSavings installmentSaving : installmentSavings) {
+//            if(installmentSaving.getEndAge() == game.getCurrentAge()){
+//                matureInstallment(installmentSaving.getId());
+//            }
+//        }
+//    }
 }
