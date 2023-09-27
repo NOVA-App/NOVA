@@ -99,8 +99,8 @@ public class Game extends BaseEntity {
         age.setGame(this);
     }
 
-    public void setCurrentAge(Integer age) {
-        this.currentAge = age;
+    public void increaseCurrentAge() {
+        this.currentAge += 1;
     }
 
     public void addEventAndSetThis(Event event) {
