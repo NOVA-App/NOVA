@@ -80,37 +80,18 @@ public class GameServiceImpl implements GameService {
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
         // 생활비, 고정 지출 지불된 현재 해 총 자산 Ages에 반영
-        game.getAnnualAsset().payLivingAndFixedCost();
-        if (game.getAnnualAsset().getTotalAnnualAsset() < 0) {
-            throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
-        }
-
-        game.getMyAssets().recalculateTotalAsset();
-        Ages currentAge = game.getAges().get(game.getAges().size() - 1);
-        currentAge.setTotalAsset(game.getMyAssets().getTotalAsset());
+        Ages currentAge = payAllCostsAndSetToCurrentAge(game);
 
         // 다음 해 Ages 생성 및 추가
-        game.increaseCurrentAge();
-        Ages nextAge = Ages.builder()
-            .age(game.getCurrentAge())
-            .build();
-        game.addAgeAndSetThis(nextAge);
+        Ages nextAge = makeNextAge(game);
 
         // 근로 소득 및 부동산 월세 수익 여유 자금에 추가
-        long income = calculateNextSalary(game);
-        log.debug("next salary : {}", income);
-
-        for (MyRealty mr : game.getMyRealties()) {
-            income += mr.getRentIncome();
-        }
+        long income = calculateAllIncome(game);
         game.getAnnualAsset().earnAsset(income);
 
         // 자녀 출산 이벤트 처리
         if (nextYearRequestDto.getIsChildBirth()) {
-            game.addEventAndSetThis(Event.builder()
-                .eventType(EventType.CHILD_BIRTH)
-                .age(nextAge)
-                .build());
+            addChildBirthEvent(game, nextAge);
         }
 
         // 주식 가격 변화 + newAge에 반영
@@ -180,6 +161,44 @@ public class GameServiceImpl implements GameService {
             .build());
 
         game.getMyAssets().recalculateTotalAsset();
+    }
+
+    private static void addChildBirthEvent(Game game, Ages nextAge) {
+        game.addEventAndSetThis(Event.builder()
+            .eventType(EventType.CHILD_BIRTH)
+            .age(nextAge)
+            .build());
+    }
+
+    private long calculateAllIncome(Game game) {
+        long income = calculateNextSalary(game);
+        log.debug("next salary : {}", income);
+
+        for (MyRealty mr : game.getMyRealties()) {
+            income += mr.getRentIncome();
+        }
+        return income;
+    }
+
+    private static Ages makeNextAge(Game game) {
+        game.increaseCurrentAge();
+        Ages nextAge = Ages.builder()
+            .age(game.getCurrentAge())
+            .build();
+        game.addAgeAndSetThis(nextAge);
+        return nextAge;
+    }
+
+    private static Ages payAllCostsAndSetToCurrentAge(Game game) {
+        game.getAnnualAsset().payLivingAndFixedCost();
+        if (game.getAnnualAsset().getTotalAnnualAsset() < 0) {
+            throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
+        }
+
+        game.getMyAssets().recalculateTotalAsset();
+        Ages currentAge = game.getAges().get(game.getAges().size() - 1);
+        currentAge.setTotalAsset(game.getMyAssets().getTotalAsset());
+        return currentAge;
     }
 
     private long calculateNextSalary(Game game) {
