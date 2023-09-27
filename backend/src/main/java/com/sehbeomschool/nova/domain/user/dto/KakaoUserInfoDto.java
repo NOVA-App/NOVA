@@ -15,14 +15,6 @@ public class KakaoUserInfoDto {
     private String profileImg;
 
     @Builder
-    public KakaoUserInfoDto(Long id, String name, String profileImg) {
-        this.id = id;
-        this.name = name;
-        this.profileImg = profileImg;
-    }
-
-
-    @Builder
     public KakaoUserInfoDto(Map<String, Object> info) {
         this.id = (Long) info.get("id");
         this.name = String.valueOf(((Map<?, ?>) info.get("properties")).get("nickname"));

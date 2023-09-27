@@ -12,4 +12,4 @@ spring:
         - oauth-dev
         - file-release
 
-    active: release
+    active: develop
