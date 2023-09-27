@@ -51,4 +51,8 @@ public class Ages extends BaseEntity {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public void setTotalAsset(Long totalAsset) {
+        this.totalAsset = totalAsset;
+    }
 }

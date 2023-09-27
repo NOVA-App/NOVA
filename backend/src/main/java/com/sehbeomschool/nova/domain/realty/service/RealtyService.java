@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.realty.service;
 
+import com.sehbeomschool.nova.domain.realty.dto.RealtyRequestDto.TradeRealtyRequestDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyDetailResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadRealtyDetailResponseDto;
@@ -15,4 +16,8 @@ public interface RealtyService {
     List<ReadRealtyResponseDto> readRealtyList(Long gameId);
 
     ReadRealtyDetailResponseDto readRealtyDetail(Long gameId, Long realtyId);
+
+    void buyRealty(TradeRealtyRequestDto tradeRealtyRequestDto);
+
+    void sellRealty(Long gameId, Long realtyId);
 }

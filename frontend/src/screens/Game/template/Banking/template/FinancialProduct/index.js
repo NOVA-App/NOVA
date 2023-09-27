@@ -1,6 +1,5 @@
 import React from "react";
 import { Dimensions, View, Text, ScrollView, StyleSheet } from "react-native";
-import Budget from '../../../../../../components/budget/index'
 import InstallmentSavingsCard from "../../../../../../components/InstallmentSavings/index";
 import IRPCard from "../../../../../../components/IRPCards/index";
 // import * as S from "./style";
@@ -11,7 +10,6 @@ const FinancialProduct = () => {
 
   return (
     <View style={styles.container}>
-      <Budget />
       <View style={styles.upper}>
         <View>  
         <Text style={{fontSize: 20, marginBottom: 10}}>금융 | 추가납입 / 상품가입</Text>
