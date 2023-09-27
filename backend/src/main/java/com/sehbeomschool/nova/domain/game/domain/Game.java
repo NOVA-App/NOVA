@@ -2,6 +2,8 @@ package com.sehbeomschool.nova.domain.game.domain;
 
 import com.sehbeomschool.nova.domain.game.constant.EventType;
 import com.sehbeomschool.nova.domain.game.constant.Gender;
+import com.sehbeomschool.nova.domain.realty.domain.MyRealty;
+import com.sehbeomschool.nova.domain.stock.domain.MyStocks;
 import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.global.constant.FixedValues;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
@@ -52,8 +54,8 @@ public class Game extends BaseEntity {
     private OldAgeMonthlyAssets oldAgeMonthlyAssets;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "ANNUAL_COST_ID")
-    private AnnualCost annualCost;
+    @JoinColumn(name = "ANNUAL_ASSET_ID")
+    private AnnualAsset annualAsset;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events = new ArrayList<>();
@@ -70,15 +72,22 @@ public class Game extends BaseEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ages> ages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MyStocks> myStocks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MyRealty> myRealties = new ArrayList<>();
+
     @Builder
-    public Game(Long id, AnalysisComment analysisComment, MyAssets myAssets,
-        OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualCost annualCost, Integer startSalary,
+    public Game(Long id, User user, AnalysisComment analysisComment, MyAssets myAssets,
+        OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualAsset annualAsset, Integer startSalary,
         Gender gender, Long resultAssets, Integer currentAge) {
         this.id = id;
+        this.user = user;
         this.analysisComment = analysisComment;
         this.myAssets = myAssets;
         this.oldAgeMonthlyAssets = oldAgeMonthlyAssets;
-        this.annualCost = annualCost;
+        this.annualAsset = annualAsset;
         this.startSalary = startSalary;
         this.gender = gender;
         this.resultAssets = resultAssets;
@@ -108,11 +117,21 @@ public class Game extends BaseEntity {
         }
     }
 
+    public void addMyStockAndSetThis(MyStocks myStock) {
+        this.myStocks.add(myStock);
+        myStock.setGame(this);
+    }
+
+    public void addMyRealtyAndSetThis(MyRealty myRealty) {
+        this.myRealties.add(myRealty);
+        myRealty.setGame(this);
+    }
+
     private void addChildCost() {
-        this.annualCost.addChildCost();
+        this.annualAsset.addChildCost();
     }
 
     private void payMarriageCost() {
-        this.myAssets.useUsableAsset(FixedValues.MARRIAGE_COST.getValue().longValue());
+        this.annualAsset.useUsableAsset(FixedValues.MARRIAGE_COST.getValue().longValue());
     }
 }

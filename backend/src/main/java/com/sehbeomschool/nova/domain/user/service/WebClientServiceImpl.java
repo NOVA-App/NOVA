@@ -15,10 +15,16 @@ public class WebClientServiceImpl implements WebClientService {
     @Value("${kakao.client_id}")
     private String clientId;
 
-    @Value("${kakao.url.token}")
+    @Value("${kakao.url.token.host}")
+    private String tokenHost;
+
+    @Value("${kakao.url.token.path}")
     private String tokenUrl;
 
-    @Value("${kakao.url.profile}")
+    @Value("${kakao.url.profile.host}")
+    private String infoHost;
+
+    @Value("${kakao.url.profile.path}")
     private String infoUrl;
 
     @Value("${kakao.redirect}")
@@ -33,9 +39,11 @@ public class WebClientServiceImpl implements WebClientService {
                 .build();
 
         Map result = webClient
-            .get()
+            .post()
             .uri(uriBuilder ->
                 uriBuilder
+                    .scheme("https") // 스키마 설정 (https)
+                    .host(tokenHost)
                     .path(tokenUrl)
                     .queryParam("code", code)
                     .queryParam("grant_type", "authorization_code")
@@ -48,12 +56,14 @@ public class WebClientServiceImpl implements WebClientService {
             .block();
 
         String accessToken = String.valueOf(result.get("access_token"));
-        String refreshToken = String.valueOf(result.get("access_token"));
+        String refreshToken = String.valueOf(result.get("refresh_token"));
 
         result = webClient
             .get()
             .uri(uriBuilder ->
                 uriBuilder
+                    .scheme("https")
+                    .host(infoHost)
                     .path(infoUrl)
                     .build())
             .header(HttpHeaders.AUTHORIZATION, "Bearer "+accessToken)

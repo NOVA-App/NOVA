@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -22,6 +23,8 @@ public class User extends BaseEntity {
     private Long socialId;
     private String name;
     private String profileImg;
+
+    @ColumnDefault("false")
     private boolean isDeleted;
 
     @Builder

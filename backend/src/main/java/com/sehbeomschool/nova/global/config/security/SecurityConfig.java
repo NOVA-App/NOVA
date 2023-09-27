@@ -1,6 +1,5 @@
 package com.sehbeomschool.nova.global.config.security;
 
-import com.sehbeomschool.nova.domain.user.service.CustomUserDetailsService;
 import com.sehbeomschool.nova.global.filter.JwtFilter;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
-    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,11 +28,11 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-//            .anyRequest().permitAll()
+            .anyRequest().permitAll()
 //            .antMatchers("/api/user/oauth/kakao").permitAll()
-            .antMatchers("/api/user").authenticated()
+//            .antMatchers("/api/user").authenticated()
             .and()
-            .addFilterBefore(new JwtFilter(jwtUtil, customUserDetailsService),
+            .addFilterBefore(new JwtFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
             .build();
     }
