@@ -99,4 +99,14 @@ public class AnnualAsset extends BaseEntity {
         this.usableAsset -= cost;
         this.totalAnnualAsset -= cost;
     }
+
+    public void earnAsset(Long asset) {
+        this.totalAnnualAsset += asset;
+        recalculateUsableAsset();
+    }
+
+    public void payLivingAndFixedCost() {
+        this.totalAnnualAsset -= this.livingCost;
+        this.totalAnnualAsset -= sumOfFixedCost();
+    }
 }
