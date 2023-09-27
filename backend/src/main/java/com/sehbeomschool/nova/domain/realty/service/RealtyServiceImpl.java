@@ -1,10 +1,12 @@
 package com.sehbeomschool.nova.domain.realty.service;
 
+import static com.sehbeomschool.nova.domain.game.constant.AssetType.LOAN;
+import static com.sehbeomschool.nova.domain.game.constant.AssetType.REALTY;
+import static com.sehbeomschool.nova.domain.game.constant.AssetType.TAX;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
 import static com.sehbeomschool.nova.global.util.TaxCalculator.calRealtyAcquistionTax;
 
-import com.sehbeomschool.nova.domain.game.constant.AssetType;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
@@ -195,11 +197,9 @@ public class RealtyServiceImpl implements RealtyService {
             realtyInfo.getCurrentPrice() + aquisitionTax
                 - tradeRealtyRequestDto.getPrincipalAmount());
 
-        game.getMyAssets().increaseAsset(AssetType.REALTY,
-            realtyInfo.getCurrentPrice());
-        game.getMyAssets()
-            .increaseAsset(AssetType.LOAN, tradeRealtyRequestDto.getPrincipalAmount());
-        game.getMyAssets().increaseAsset(AssetType.TAX, aquisitionTax);
+        game.getMyAssets().increaseAsset(REALTY, realtyInfo.getCurrentPrice());
+        game.getMyAssets().increaseAsset(LOAN, tradeRealtyRequestDto.getPrincipalAmount());
+        game.getMyAssets().increaseAsset(TAX, aquisitionTax);
     }
 
     @Override
@@ -230,9 +230,9 @@ public class RealtyServiceImpl implements RealtyService {
                 }
 
                 game.getAnnualAsset().useUsableAsset(-totalPrice);
-                game.getMyAssets().decreaseAsset(AssetType.REALTY, ri.getCurrentPrice());
-                game.getMyAssets().decreaseAsset(AssetType.LOAN, mr.getLoan().getPrincipal());
-                game.getMyAssets().increaseAsset(AssetType.TAX, aquisitionTax);
+                game.getMyAssets().decreaseAsset(REALTY, ri.getCurrentPrice());
+                game.getMyAssets().decreaseAsset(LOAN, mr.getLoan().getPrincipal());
+                game.getMyAssets().increaseAsset(TAX, aquisitionTax);
                 game.getMyRealties().remove(i);
                 return;
             }

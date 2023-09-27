@@ -1,8 +1,8 @@
 package com.sehbeomschool.nova.domain.stock.service;
 
+import static com.sehbeomschool.nova.domain.game.constant.AssetType.STOCK;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
 
-import com.sehbeomschool.nova.domain.game.constant.AssetType;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
@@ -148,7 +148,7 @@ public class StockServiceImpl implements StockService {
 
                 game.getAnnualAsset().useUsableAsset(totalPrice);
 
-                game.getMyAssets().increaseAsset(AssetType.STOCK, totalPrice);
+                game.getMyAssets().increaseAsset(STOCK, totalPrice);
 
                 game.getMyAssets().recalculateTotalAsset();
                 return;
@@ -165,7 +165,7 @@ public class StockServiceImpl implements StockService {
 
         game.addMyStockAndSetThis(myStocks);
         game.getAnnualAsset().useUsableAsset(totalPrice);
-        game.getMyAssets().increaseAsset(AssetType.STOCK, totalPrice);
+        game.getMyAssets().increaseAsset(STOCK, totalPrice);
         game.getMyAssets().recalculateTotalAsset();
     }
 
@@ -187,9 +187,9 @@ public class StockServiceImpl implements StockService {
             ms = game.getMyStocks().get(i);
             if (ms.getStock().getId() == tradeStockRequestDto.getStockId()) {
                 ms.updateQuantityAndInvestAmountBySell(tradeStockRequestDto.getPurchaseAmount());
-                
+
                 game.getAnnualAsset().useUsableAsset(-totalPrice);
-                game.getMyAssets().decreaseAsset(AssetType.STOCK, totalPrice);
+                game.getMyAssets().decreaseAsset(STOCK, totalPrice);
                 game.getMyAssets().recalculateTotalAsset();
 
                 if (ms.getQuantity() == 0) {
