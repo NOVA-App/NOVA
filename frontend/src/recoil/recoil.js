@@ -1,4 +1,5 @@
 // MyRecoilState.js
+// 나이, 게임ID, 여유자금
 
 import { atom } from "recoil";
 
