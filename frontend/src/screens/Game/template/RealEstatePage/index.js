@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
-import Budget from "../../../../components/budget";
 import TabSelect from "./TabSelect";
 import styled from "styled-components/native";
 
@@ -19,7 +18,6 @@ const RealEstatePage = () => {
 
   return (
     <View style={styles.container}>
-      <Budget />
       <View style={styles.tab}>
         <View style={styles.textContainer}>
           <TouchableOpacity onPress={changeTabFirst}>
