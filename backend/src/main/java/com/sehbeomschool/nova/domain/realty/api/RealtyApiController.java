@@ -1,6 +1,11 @@
 package com.sehbeomschool.nova.domain.realty.api;
 
+import static com.sehbeomschool.nova.domain.realty.constant.RealtyResponseMessage.BUY_REALTY;
+import static com.sehbeomschool.nova.domain.realty.constant.RealtyResponseMessage.READ_REALTY;
+import static com.sehbeomschool.nova.domain.realty.constant.RealtyResponseMessage.SELL_REALTY;
+
 import com.sehbeomschool.nova.domain.realty.constant.RealtyResponseMessage;
+import com.sehbeomschool.nova.domain.realty.dto.RealtyRequestDto.TradeRealtyRequestDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyDetailResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadRealtyDetailResponseDto;
@@ -9,10 +14,14 @@ import com.sehbeomschool.nova.domain.realty.service.RealtyService;
 import com.sehbeomschool.nova.global.dto.ResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -63,8 +72,31 @@ public class RealtyApiController {
         @PathVariable(value = "realtyId") Long realtyId) {
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(
-                RealtyResponseMessage.READ_REALTY.getMessage(),
+                READ_REALTY.getMessage(),
                 realtyService.readRealtyDetail(gameId, realtyId)
+            )
+        );
+    }
+
+    @PostMapping("/buy")
+    public ResponseEntity<ResponseDto<?>> buyRealty(
+        @RequestBody TradeRealtyRequestDto tradeRealtyRequestDto) {
+        realtyService.buyRealty(tradeRealtyRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(
+                BUY_REALTY.getMessage()
+            )
+        );
+    }
+
+    @DeleteMapping("/sell/{gameId}/{realtyId}")
+    public ResponseEntity<ResponseDto<?>> sellRealty(@PathVariable(value = "gameId") Long gameId, @PathVariable(value = "realtyId") Long realtyId){
+        realtyService.sellRealty(gameId, realtyId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(
+                SELL_REALTY.getMessage()
             )
         );
     }
