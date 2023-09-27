@@ -2,12 +2,14 @@ package com.sehbeomschool.nova.domain.game.api;
 
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.GAME_START_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.MARRY_SUCCESS;
+import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.NEXT_YEAR_UPDATE_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_CURRENT_YEAR_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_FIXED_COST_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.UPDATE_LIVING_COST_SUCCESS;
 
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
+import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.UpdateLivingCostRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +44,16 @@ public class GameApiController {
                 GAME_START_SUCCESS.getMessage(),
                 gameService.createGame(gameStartRequestDto)
             )
+        );
+    }
+
+    @PutMapping("")
+    public ResponseEntity<ResponseDto<?>> updateForNextYear(
+        @RequestBody NextYearRequestDto nextYearRequestDto) {
+        gameService.updateForNextYear(nextYearRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(NEXT_YEAR_UPDATE_SUCCESS.getMessage())
         );
     }
 
