@@ -21,15 +21,13 @@ public class RealtyManagerServiceImpl implements RealtyManagerService {
     private final RealtyInfoRepository realtyInfoRepository;
     private final MyRealtyRepository myRealtyRepository;
 
-    private RandomCalculator random = new RandomCalculator();
-
     @Override
     @Transactional
     public void createRealtyInfoByGameStart(Game game) {
         List<Realty> list = realtyRepository.findAll();
 
         for (Realty r : list) {
-            Long currentPrice = random.calRealty(r.getStartPrice());
+            Long currentPrice = RandomCalculator.calRealty(r.getStartPrice());
 
             RealtyInfo ri = RealtyInfo.builder()
                 .id(null)
@@ -37,7 +35,7 @@ public class RealtyManagerServiceImpl implements RealtyManagerService {
                 .realty(r)
                 .prevPrice(r.getStartPrice())
                 .currentPrice(currentPrice)
-                .nextPrice(random.calRealty(currentPrice))
+                .nextPrice(RandomCalculator.calRealty(currentPrice))
                 .predictedRentIncome(r.getStartPrice() / 20)
                 .build();
 
@@ -51,7 +49,7 @@ public class RealtyManagerServiceImpl implements RealtyManagerService {
         List<RealtyInfo> list = realtyInfoRepository.findRealtyInfoByGameId(gameId);
 
         for (RealtyInfo ri : list) {
-            Long nextPrice = random.calRealty(ri.getNextPrice());
+            Long nextPrice = RandomCalculator.calRealty(ri.getNextPrice());
 
             ri.setNextYearPrice(nextPrice);
         }
@@ -59,11 +57,11 @@ public class RealtyManagerServiceImpl implements RealtyManagerService {
 
     @Override
     @Transactional
-    public void updateMyRealtyByNextYear(Long gameId) {
-        List<MyRealty> list = myRealtyRepository.findMyRealtiesByGameId(gameId);
+    public void updateMyRealtyByNextYear(Game game) {
+        List<MyRealty> list = game.getMyRealties();
 
         for (MyRealty mr : list) {
-            RealtyInfo ri = realtyInfoRepository.findRealtyInfoByGameIdAndRealtyId(gameId,
+            RealtyInfo ri = realtyInfoRepository.findRealtyInfoByGameIdAndRealtyId(game.getId(),
                 mr.getRealty().getId());
 
             mr.setRentIncome(ri.getCurrentPrice());

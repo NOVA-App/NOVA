@@ -1,15 +1,11 @@
 package com.sehbeomschool.nova.domain.game.service;
 
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
 
 import com.sehbeomschool.nova.domain.game.constant.EventType;
 import com.sehbeomschool.nova.domain.game.dao.AgesRepository;
-import com.sehbeomschool.nova.domain.game.dao.AnalysisCommentRepository;
-import com.sehbeomschool.nova.domain.game.dao.AnnualAssetRepository;
-import com.sehbeomschool.nova.domain.game.dao.EventRepository;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
-import com.sehbeomschool.nova.domain.game.dao.MyAssetsRepository;
-import com.sehbeomschool.nova.domain.game.dao.OldAgeMonthlyAssetsRepository;
 import com.sehbeomschool.nova.domain.game.domain.Ages;
 import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Event;
@@ -17,13 +13,16 @@ import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
+import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.UpdateLivingCostRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
 import com.sehbeomschool.nova.domain.news.service.NewsService;
+import com.sehbeomschool.nova.domain.realty.domain.MyRealty;
 import com.sehbeomschool.nova.domain.realty.service.RealtyManagerService;
 import com.sehbeomschool.nova.domain.stock.service.StockManagerService;
 import com.sehbeomschool.nova.global.constant.FixedValues;
@@ -39,12 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GameServiceImpl implements GameService {
 
     private final AgesRepository agesRepository;
-    private final AnalysisCommentRepository analysisCommentRepository;
-    private final EventRepository eventRepository;
     private final GameRepository gameRepository;
-    private final AnnualAssetRepository annualAssetRepository;
-    private final MyAssetsRepository myAssetsRepository;
-    private final OldAgeMonthlyAssetsRepository oldAgeMonthlyAssetsRepository;
 
     private final RealtyManagerService realtyManagerService;
     private final StockManagerService stockManagerService;
@@ -77,6 +71,45 @@ public class GameServiceImpl implements GameService {
         newsService.createNewsInfoByGameStart(game, game.getAges().get(0));
 
         return GameStartResponseDto.builder().gameId(game.getId()).build();
+    }
+
+    @Override
+    @Transactional
+    public void updateForNextYear(NextYearRequestDto nextYearRequestDto) {
+        Game game = gameRepository.findById(nextYearRequestDto.getGameId())
+            .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        // 생활비, 고정 지출 지불된 현재 해 총 자산 Ages에 반영
+        Ages currentAge = payAllCostsAndSetToCurrentAge(game);
+
+        // 다음 해 Ages 생성 및 추가
+        Ages nextAge = makeNextAge(game);
+
+        // 근로 소득 및 부동산 월세 수익 여유 자금에 추가
+        long income = calculateAllIncome(game);
+        game.getAnnualAsset().earnAsset(income);
+
+        // 자녀 출산 이벤트 처리
+        if (nextYearRequestDto.getIsChildBirth()) {
+            addChildBirthEvent(game, nextAge);
+        }
+
+        // 주식 가격 변화 + newAge에 반영
+        stockManagerService.createStocksInfoByNextYear(currentAge, nextAge);
+
+        // 부동산 가격 변화
+        realtyManagerService.updateRealtyInfoByNextYear(game.getId());
+        realtyManagerService.updateMyRealtyByNextYear(game);
+
+        // 뉴스 변화
+        newsService.updateNewsInfoByNextYear(game, nextAge);
+
+        // TODO : 적금 변화
+        // TODO : IRP 변화
+
+        // 다음 해 총 자산 저장 및 다음 해 Ages에 반영
+        game.getMyAssets().recalculateTotalAsset();
+        nextAge.setTotalAsset(game.getMyAssets().getTotalAsset());
     }
 
     @Override
@@ -128,5 +161,53 @@ public class GameServiceImpl implements GameService {
             .build());
 
         game.getMyAssets().recalculateTotalAsset();
+    }
+
+    private void addChildBirthEvent(Game game, Ages nextAge) {
+        game.addEventAndSetThis(Event.builder()
+            .eventType(EventType.CHILD_BIRTH)
+            .age(nextAge)
+            .build());
+    }
+
+    private long calculateAllIncome(Game game) {
+        long income = calculateNextSalary(game);
+        log.debug("next salary : {}", income);
+
+        for (MyRealty mr : game.getMyRealties()) {
+            income += mr.getRentIncome();
+        }
+        return income;
+    }
+
+    private Ages makeNextAge(Game game) {
+        game.increaseCurrentAge();
+        Ages nextAge = Ages.builder()
+            .age(game.getCurrentAge())
+            .build();
+        game.addAgeAndSetThis(nextAge);
+        return nextAge;
+    }
+
+    private Ages payAllCostsAndSetToCurrentAge(Game game) {
+        game.getAnnualAsset().payLivingAndFixedCost();
+        if (game.getAnnualAsset().getTotalAnnualAsset() < 0) {
+            throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
+        }
+
+        game.getMyAssets().recalculateTotalAsset();
+        Ages currentAge = game.getAges().get(game.getAges().size() - 1);
+        currentAge.setTotalAsset(game.getMyAssets().getTotalAsset());
+        return currentAge;
+    }
+
+    private long calculateNextSalary(Game game) {
+        long salary = game.getStartSalary().longValue();
+
+        for (int i = FixedValues.START_AGE.getValue().intValue(); i < game.getCurrentAge(); i++) {
+            salary = (long) (salary * FixedValues.SALARY_INCREASE_RATE.getValue());
+        }
+
+        return salary;
     }
 }

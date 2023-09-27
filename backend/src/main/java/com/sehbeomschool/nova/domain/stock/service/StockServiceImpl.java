@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.stock.service;
 
+import static com.sehbeomschool.nova.domain.game.constant.AssetType.STOCK;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
 
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
@@ -84,13 +85,16 @@ public class StockServiceImpl implements StockService {
 
         List<MyStocks> myStocks = myStocksRepository.findMyStocksByGameId(gameId);
 
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> new GameNotFoundException(
+            GAME_NOT_FOUND.getMessage()));
+
         if (myStocks.size() == 0) {
             return null;
         }
 
         for (MyStocks myStock : myStocks) {
-            StocksInfo myStockInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(gameId,
-                myStock.getId());
+            StocksInfo myStockInfo = stocksInfoRepository.findStocksInfoByAgeIdAndStockId(
+                game.getAges().get(game.getAges().size() - 1).getId(), myStock.getStock().getId());
 
             investAmounts += myStock.getInvestAmount();
             evaluationAmounts += myStockInfo.getCurrentPrice() * myStock.getQuantity();
@@ -102,7 +106,8 @@ public class StockServiceImpl implements StockService {
                 .evaluationAmount(myStockInfo.getCurrentPrice() * myStock.getQuantity())
                 .fluctuations(fluctuation * myStock.getQuantity())
                 .fluctuationsPercent(
-                    fluctuation * myStock.getQuantity() / myStock.getInvestAmount() * 100)
+                    fluctuation * myStock.getQuantity() * 100L / myStock.getInvestAmount())
+                .quantity(myStock.getQuantity())
                 .build();
 
             list.add(myStockResponseDto);
@@ -110,7 +115,7 @@ public class StockServiceImpl implements StockService {
         }
 
         depreciation = evaluationAmounts - investAmounts;
-        depreciationPercent = depreciation / investAmounts * 100;
+        depreciationPercent = depreciation * 100L / investAmounts;
 
         readMyStocksResponseDto dto = readMyStocksResponseDto.builder()
             .investAmounts(investAmounts)
@@ -126,20 +131,25 @@ public class StockServiceImpl implements StockService {
     @Override
     @Transactional
     public void buyStock(TradeStockRequestDto tradeStockRequestDto) {
-        Game game = gameRepository.findById(tradeStockRequestDto.getGameId()).orElseThrow(() -> new GameNotFoundException(
-            GAME_NOT_FOUND.getMessage()));
+        Game game = gameRepository.findById(tradeStockRequestDto.getGameId())
+            .orElseThrow(() -> new GameNotFoundException(
+                GAME_NOT_FOUND.getMessage()));
 
-        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(tradeStockRequestDto.getGameId(),
+        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(
+            tradeStockRequestDto.getGameId(),
             tradeStockRequestDto.getStockId());
 
         Long totalPrice = tradeStockRequestDto.getPurchaseAmount() * stocksInfo.getCurrentPrice();
 
         for (MyStocks ms : game.getMyStocks()) {
             if (ms.getStock().getId() == tradeStockRequestDto.getStockId()) {
-                ms.updateQuantityAndInvestAmountByBuy(tradeStockRequestDto.getPurchaseAmount(), stocksInfo.getCurrentPrice());
+                ms.updateQuantityAndInvestAmountByBuy(tradeStockRequestDto.getPurchaseAmount(),
+                    stocksInfo.getCurrentPrice());
 
                 game.getAnnualAsset().useUsableAsset(totalPrice);
-                // TODO 주식 자산 반영
+
+                game.getMyAssets().increaseAsset(STOCK, totalPrice);
+
                 game.getMyAssets().recalculateTotalAsset();
                 return;
             }
@@ -155,17 +165,19 @@ public class StockServiceImpl implements StockService {
 
         game.addMyStockAndSetThis(myStocks);
         game.getAnnualAsset().useUsableAsset(totalPrice);
-        // TODO 주식 자산 반영
+        game.getMyAssets().increaseAsset(STOCK, totalPrice);
         game.getMyAssets().recalculateTotalAsset();
     }
 
     @Override
     @Transactional
     public void sellStock(TradeStockRequestDto tradeStockRequestDto) {
-        Game game = gameRepository.findById(tradeStockRequestDto.getGameId()).orElseThrow(() -> new GameNotFoundException(
-            GAME_NOT_FOUND.getMessage()));
+        Game game = gameRepository.findById(tradeStockRequestDto.getGameId())
+            .orElseThrow(() -> new GameNotFoundException(
+                GAME_NOT_FOUND.getMessage()));
 
-        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(tradeStockRequestDto.getGameId(),
+        StocksInfo stocksInfo = stocksInfoRepository.findStocksInfoByGameIdAndStockId(
+            tradeStockRequestDto.getGameId(),
             tradeStockRequestDto.getStockId());
 
         Long totalPrice = tradeStockRequestDto.getPurchaseAmount() * stocksInfo.getCurrentPrice();
@@ -176,12 +188,11 @@ public class StockServiceImpl implements StockService {
             if (ms.getStock().getId() == tradeStockRequestDto.getStockId()) {
                 ms.updateQuantityAndInvestAmountBySell(tradeStockRequestDto.getPurchaseAmount());
 
-                // TODO 여유 자산 추가 메소드
                 game.getAnnualAsset().useUsableAsset(-totalPrice);
-                // TODO 주식 자산 반영
+                game.getMyAssets().decreaseAsset(STOCK, totalPrice);
                 game.getMyAssets().recalculateTotalAsset();
 
-                if(ms.getQuantity() == 0){
+                if (ms.getQuantity() == 0) {
                     game.getMyStocks().remove(ms);
                     i--;
                 }
