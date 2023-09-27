@@ -3,9 +3,9 @@ package com.sehbeomschool.nova.domain.user.api;
 
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.CREATE_ACCESS_TOKEN;
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCESS_GET_USER_INFO;
-import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCES_NAME_UPDATE;
-import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCES_PROFILE_UPDATE;
-import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCES_USER_DELETE;
+import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCESS_NAME_UPDATE;
+import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCESS_PROFILE_UPDATE;
+import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.SUCCESS_USER_DELETE;
 
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.FileUploadResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +48,7 @@ public class UserApiController {
 
     @GetMapping("/refreshtoken")
     public ResponseEntity<ResponseDto<TokenResponseDto>> refresh(
-        @RequestBody String refreshToken) {
+        @RequestHeader String refreshToken) {
 
         return ResponseEntity.status(
             HttpStatus.OK).body(ResponseDto.create(CREATE_ACCESS_TOKEN.getMessage(),
@@ -59,7 +60,7 @@ public class UserApiController {
         (@AuthenticationPrincipal Long userId, @RequestParam MultipartFile profile) {
 
         return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(SUCCES_PROFILE_UPDATE.getMessage(),
+            ResponseDto.create(SUCCESS_PROFILE_UPDATE.getMessage(),
                 userService.updateUserProfileImg(userId, profile)));
     }
 
@@ -70,7 +71,7 @@ public class UserApiController {
         userService.updateUserName(userId, name);
 
         return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(SUCCES_NAME_UPDATE.getMessage()));
+            ResponseDto.create(SUCCESS_NAME_UPDATE.getMessage()));
     }
 
     @DeleteMapping("")
@@ -80,7 +81,7 @@ public class UserApiController {
         userService.deleteUser(userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(SUCCES_USER_DELETE.getMessage()));
+            ResponseDto.create(SUCCESS_USER_DELETE.getMessage()));
     }
 
 }
