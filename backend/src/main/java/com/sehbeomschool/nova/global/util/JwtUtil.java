@@ -1,5 +1,9 @@
 package com.sehbeomschool.nova.global.util;
 
+import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.NOT_VALID_REFRESH_TOKEN;
+
+import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
+import com.sehbeomschool.nova.domain.user.exception.UserNotFoundException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -34,6 +38,17 @@ public class JwtUtil {
 
     public String createJwtToken(Long userId) {
         return create(userId, expireMin);
+    }
+
+    public TokenResponseDto reCreateJwtToken(String refreshToken) {
+        String userId = String.valueOf(getUserId(refreshToken));
+        if (redisUtil.hasKey(userId) && redisUtil.get(userId).equals(refreshToken)) {
+            String accessToken = createJwtToken(Long.valueOf(userId));
+            refreshToken = createRefreshToken(Long.valueOf(userId));
+            redisUtil.set(userId, refreshToken, refreshExpireMin);
+            return TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+        }
+        throw new UserNotFoundException(NOT_VALID_REFRESH_TOKEN.getMessage());
     }
 
     public void logout(Long userNo, String accessToken) {

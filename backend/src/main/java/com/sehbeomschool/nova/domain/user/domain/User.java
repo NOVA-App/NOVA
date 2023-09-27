@@ -1,6 +1,5 @@
 package com.sehbeomschool.nova.domain.user.domain;
 
-import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -24,6 +24,9 @@ public class User extends BaseEntity {
     private String name;
     private String profileImg;
 
+    @ColumnDefault("false")
+    private boolean isDeleted;
+
     @Builder
     public User(Long socialId, String name, String profileImg) {
         this.socialId = socialId;
@@ -37,6 +40,10 @@ public class User extends BaseEntity {
 
     public void updateProfileImg(String profileImg) {
         this.profileImg = profileImg;
+    }
+
+    public void signOut() {
+        this.isDeleted = true;
     }
 
 }
