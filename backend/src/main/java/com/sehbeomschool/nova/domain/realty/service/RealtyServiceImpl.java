@@ -23,7 +23,6 @@ public class RealtyServiceImpl implements RealtyService {
     private final RealtyRepository realtyRepository;
     private final RealtyInfoRepository realtyInfoRepository;
     private final MyRealtyRepository myRealtyRepository;
-    private TaxCalculator taxCalculator;
 
     @Override
     public ReadMyRealtyResponseDto readMyRealty(Long gameId) {
@@ -131,11 +130,11 @@ public class RealtyServiceImpl implements RealtyService {
             .depreciationPercent(realtyInfo.calDepreciationPercent())
             .region(realtyInfo.getRealty().getRegion())
             .predictedRentIncome(realtyInfo.getPredictedRentIncome())
-            .totalPrice(taxCalculator.calRealtyTotalPrice(
+            .totalPrice(TaxCalculator.calRealtyTotalPrice(
                 realtyInfo.getCurrentPrice(), myCount))
             .evaluationAmount(realtyInfo.getCurrentPrice())
             .acquistionTax(
-                taxCalculator.calRealtyAcquistionTax(realtyInfo.getCurrentPrice(), myCount))
+                TaxCalculator.calRealtyAcquistionTax(realtyInfo.getCurrentPrice(), myCount))
             .enableLoanAmount(realtyInfo.calEnableLoanAmount(myCount))
             .build();
 

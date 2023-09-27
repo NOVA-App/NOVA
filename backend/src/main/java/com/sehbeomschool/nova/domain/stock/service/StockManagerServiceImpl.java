@@ -18,15 +18,13 @@ public class StockManagerServiceImpl implements StockManagerService {
     private final StockRepository stockRepository;
     private final StocksInfoRepository stocksInfoRepository;
 
-    private RandomCalculator random = new RandomCalculator();
-
     @Override
     @Transactional
     public void createStocksInfoByGameStart(Ages age) {
         List<Stock> list = stockRepository.findAll();
 
         for (Stock s : list) {
-            Long currentPrice = random.calStock(s.getStartPrice());
+            Long currentPrice = RandomCalculator.calStock(s.getStartPrice());
 
             StocksInfo si = StocksInfo.builder()
                 .id(null)
@@ -34,7 +32,7 @@ public class StockManagerServiceImpl implements StockManagerService {
                 .stock(s)
                 .prevPrice(s.getStartPrice())
                 .currentPrice(currentPrice)
-                .nextPrice(random.calStock(currentPrice))
+                .nextPrice(RandomCalculator.calStock(currentPrice))
                 .build();
 
             stocksInfoRepository.save(si);
@@ -53,7 +51,7 @@ public class StockManagerServiceImpl implements StockManagerService {
                 .stock(si.getStock())
                 .prevPrice(si.getCurrentPrice())
                 .currentPrice(si.getNextPrice())
-                .nextPrice(random.calStock(si.getNextPrice()))
+                .nextPrice(RandomCalculator.calStock(si.getNextPrice()))
                 .build();
 
             stocksInfoRepository.save(newStocksInfo);

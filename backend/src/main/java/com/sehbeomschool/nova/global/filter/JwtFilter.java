@@ -1,6 +1,5 @@
 package com.sehbeomschool.nova.global.filter;
 
-import com.sehbeomschool.nova.domain.user.service.UserService;
 import com.sehbeomschool.nova.global.error.constant.ExceptionMessage;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,8 +21,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.secretKey}")
-    private String secretKey;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -46,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authorization.split(" ")[1];
+        String token = authorization.substring(7);
 
         if (!jwtUtil.isValidToken(token)) {
             log.error(ExceptionMessage.NOT_VALID_TOKEN.getMessage());
@@ -54,9 +50,12 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         Long userId = jwtUtil.getUserId(token);
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
             userId, null, List.of(new SimpleGrantedAuthority("USER")));
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+        filterChain.doFilter(request, response);
     }
 }
