@@ -1,11 +1,14 @@
 package com.sehbeomschool.nova.domain.realty.service;
 
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
 import static com.sehbeomschool.nova.global.util.TaxCalculator.calRealtyAcquistionTax;
 
+import com.sehbeomschool.nova.domain.game.constant.AssetType;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
 import com.sehbeomschool.nova.domain.realty.dao.LoanRepository;
 import com.sehbeomschool.nova.domain.realty.dao.MyRealtyRepository;
 import com.sehbeomschool.nova.domain.realty.dao.RealtyInfoRepository;
@@ -166,6 +169,9 @@ public class RealtyServiceImpl implements RealtyService {
 
         Loan loan = null;
 
+        Long aquisitionTax = calRealtyAcquistionTax(realtyInfo.getCurrentPrice(),
+            Long.valueOf(game.getMyRealties().size()));
+
         if (tradeRealtyRequestDto.getPrincipalAmount() != 0) {
             loan = Loan.builder()
                 .principal(tradeRealtyRequestDto.getPrincipalAmount())
@@ -186,8 +192,14 @@ public class RealtyServiceImpl implements RealtyService {
         myRealtyRepository.save(myRealty);
 
         game.getAnnualAsset().useUsableAsset(
-            realtyInfo.getCurrentPrice() - tradeRealtyRequestDto.getPrincipalAmount());
-        // TODO 부동산 자산 최신화
+            realtyInfo.getCurrentPrice() + aquisitionTax
+                - tradeRealtyRequestDto.getPrincipalAmount());
+
+        game.getMyAssets().increaseAsset(AssetType.REALTY,
+            realtyInfo.getCurrentPrice());
+        game.getMyAssets()
+            .increaseAsset(AssetType.LOAN, tradeRealtyRequestDto.getPrincipalAmount());
+        game.getMyAssets().increaseAsset(AssetType.TAX, aquisitionTax);
     }
 
     @Override
@@ -214,13 +226,13 @@ public class RealtyServiceImpl implements RealtyService {
                     >= mr.getLoan().getPrincipal() + aquisitionTax) {
                     totalPrice = -(totalPrice - mr.getLoan().getPrincipal());
                 } else {
-                    // TODO AssetLack 예외처리
+                    throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
                 }
-                // TODO
+
                 game.getAnnualAsset().useUsableAsset(-totalPrice);
-
-                // TODO 부동산 자산 최신화
-
+                game.getMyAssets().decreaseAsset(AssetType.REALTY, ri.getCurrentPrice());
+                game.getMyAssets().decreaseAsset(AssetType.LOAN, mr.getLoan().getPrincipal());
+                game.getMyAssets().increaseAsset(AssetType.TAX, aquisitionTax);
                 game.getMyRealties().remove(i);
                 return;
             }
