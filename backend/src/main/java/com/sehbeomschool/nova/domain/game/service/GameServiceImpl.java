@@ -163,7 +163,7 @@ public class GameServiceImpl implements GameService {
         game.getMyAssets().recalculateTotalAsset();
     }
 
-    private static void addChildBirthEvent(Game game, Ages nextAge) {
+    private void addChildBirthEvent(Game game, Ages nextAge) {
         game.addEventAndSetThis(Event.builder()
             .eventType(EventType.CHILD_BIRTH)
             .age(nextAge)
@@ -180,7 +180,7 @@ public class GameServiceImpl implements GameService {
         return income;
     }
 
-    private static Ages makeNextAge(Game game) {
+    private Ages makeNextAge(Game game) {
         game.increaseCurrentAge();
         Ages nextAge = Ages.builder()
             .age(game.getCurrentAge())
@@ -189,7 +189,7 @@ public class GameServiceImpl implements GameService {
         return nextAge;
     }
 
-    private static Ages payAllCostsAndSetToCurrentAge(Game game) {
+    private Ages payAllCostsAndSetToCurrentAge(Game game) {
         game.getAnnualAsset().payLivingAndFixedCost();
         if (game.getAnnualAsset().getTotalAnnualAsset() < 0) {
             throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
