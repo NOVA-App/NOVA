@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SavingServiceImpl implements SavingService {
 
+    private final static double TAX_PERCENTAGE = 0.154;
+
     private final SavingRepository savingRepository;
     private final GameRepository gameRepository;
     private final InsInterestRepository insInterestRepository;
@@ -59,7 +61,7 @@ public class SavingServiceImpl implements SavingService {
         //TODO : annual_cost 에 추가하기
         // annualAsset.addInstallmentSaving(installmentSavings.getAmount());
         myAssets.increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getAmount());
-
+        myAssets.recalculateTotalAsset();
     }
 
     @Override
@@ -84,25 +86,32 @@ public class SavingServiceImpl implements SavingService {
         InstallmentSavings installmentSavings = savingRepository.findById(installmentSavingId)
             .orElseThrow();
 
+        InsInterest interest = installmentSavings.getInterest();
+        double compoundInterest = calculateCompoundInterest(installmentSavings.getAmount(),
+            (double) interest.getInterest() / 100,
+            interest.getPeriod());
+        double tax = compoundInterest * TAX_PERCENTAGE;
+
+        System.out.println("이자 : " + compoundInterest);
+
         Game game = installmentSavings.getGame();
         AnnualAsset annualAsset = game.getAnnualAsset();
         MyAssets myAssets = game.getMyAssets();
         //TODO : annual_cost 에 추가하기
 
         //annualAsset.deleteInstallmentSaving(installmentSavings.getAmount());
-        annualAsset.earnAsset(installmentSavings.getTotalAmount());
 
-        InsInterest interest = installmentSavings.getInterest();
-        double CompoundInterest = calculateCompoundInterest(installmentSavings.getAmount(),
-            interest.getInterest(),
-            interest.getPeriod());
-        //myAssets.increaseAsset(AssetType);
+        annualAsset.earnAsset(
+            installmentSavings.getTotalAmount() + (long) (compoundInterest - tax));
+        myAssets.decreaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getTotalAmount());
+        myAssets.increaseAsset(AssetType.TAX, (long) tax);
+
+        savingRepository.delete(installmentSavings);
     }
 
-    public static double calculateCompoundInterest(Long principal, int annualInterestRate,
+    public static double calculateCompoundInterest(Long principal, double annualInterestRate,
         int years) {
-        double compoundInterest = principal * Math.pow(1 + annualInterestRate, years) - principal;
-        return compoundInterest;
+        return principal * Math.pow(1 + annualInterestRate, years) - principal;
     }
 
     @Override
@@ -111,19 +120,15 @@ public class SavingServiceImpl implements SavingService {
         List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
             .orElseThrow();
         for (InstallmentSavings installmentSaving : installmentSavings) {
-
+            if (installmentSaving.getEndAge() - 1 == game.getCurrentAge()) {
+                matureInstallment(installmentSaving.getId());
+                continue;
+            }
+            installmentSaving.updateTotalAmountForNextYear();
+            //TODO : 연간 적금 자산 증가 시키기
+            game.getMyAssets()
+                .increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSaving.getAmount());
         }
     }
 
-//    @Override
-//    public void updateInstallmentByCurrentYear(Long gameId) {
-//        Game game = gameRepository.findById(gameId).orElseThrow();
-//        List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
-//            .orElseThrow();
-//        for (InstallmentSavings installmentSaving : installmentSavings) {
-//            if(installmentSaving.getEndAge() == game.getCurrentAge()){
-//                matureInstallment(installmentSaving.getId());
-//            }
-//        }
-//    }
 }
