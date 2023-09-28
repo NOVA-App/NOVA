@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View, StatusBar, Dimensions, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
-import Budget from '../../../../../../../../components/budget/index'
 import Button from '../../../../../../../../components/buttons/SmallButton';
 import Marriage from '../../../../../../../../assets/Marriage.png'
 
@@ -24,7 +23,6 @@ export default function MarriagePage() {
 
   return (
     <View style={styles.container}>
-      <Budget /> 
       <View style={styles.content1}>
         <Text style={{fontSize: 23, fontWeight: 'bold'}}>결혼하기</Text>
         <Text style={{fontSize: 15}}>소요금액: 2000만원</Text>
