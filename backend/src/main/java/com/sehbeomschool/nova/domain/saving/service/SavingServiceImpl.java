@@ -156,6 +156,7 @@ public class SavingServiceImpl implements SavingService {
         Long irpInterest = RandomCalculator.calIrp(myAssets.getIRPAsset());
         Long irpCost = game.getAnnualAsset().getIRPCost();
 
+        //TODO : 연간 자산 업데이트
         myAssets.increaseAsset(AssetType.IRP, irpInterest + irpCost);
     }
 
