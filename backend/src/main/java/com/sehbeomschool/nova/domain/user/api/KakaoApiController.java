@@ -50,4 +50,27 @@ public class KakaoApiController {
                     .build()));
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<ResponseDto<TokenResponseDto>> login(
+        @RequestParam("code") String code) {
+
+        log.info("kakao login");
+        KakaoUserInfoDto kakaoUserInfo = webClientService.getKakaoUserInfo(code);
+
+        if (!userService.isExistUser(kakaoUserInfo.getId())) {
+            userService.createUser(kakaoUserInfo);
+        }
+
+        User user = userService.readUserBySocialId(kakaoUserInfo.getId());
+
+        String accessToken = jwtUtil.createJwtToken(user.getId());
+        String refreshToken = jwtUtil.createRefreshToken(user.getId());
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+            .body(ResponseDto.create(LOGIN_SUCCESS.getMessage(),
+                TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken)
+                    .build()));
+    }
+
+
 }
