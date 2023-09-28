@@ -2,7 +2,6 @@ package com.sehbeomschool.nova.domain.saving.domain;
 
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,6 +50,10 @@ public class InstallmentSavings extends BaseEntity {
         this.totalAmount = totalAmount;
         this.startAge = startAge;
         this.endAge = endAge;
+    }
+
+    public void updateTotalAmountForNextYear() {
+        this.totalAmount += amount;
     }
 
 
