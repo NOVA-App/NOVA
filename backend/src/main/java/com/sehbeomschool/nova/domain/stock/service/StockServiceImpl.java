@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.stock.service;
 
+import static com.sehbeomschool.nova.domain.game.constant.AssetType.STOCK;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
 
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
@@ -146,7 +147,9 @@ public class StockServiceImpl implements StockService {
                     stocksInfo.getCurrentPrice());
 
                 game.getAnnualAsset().useUsableAsset(totalPrice);
-                // TODO 주식 자산 반영
+
+                game.getMyAssets().increaseAsset(STOCK, totalPrice);
+
                 game.getMyAssets().recalculateTotalAsset();
                 return;
             }
@@ -162,7 +165,7 @@ public class StockServiceImpl implements StockService {
 
         game.addMyStockAndSetThis(myStocks);
         game.getAnnualAsset().useUsableAsset(totalPrice);
-        // TODO 주식 자산 반영
+        game.getMyAssets().increaseAsset(STOCK, totalPrice);
         game.getMyAssets().recalculateTotalAsset();
     }
 
@@ -185,9 +188,8 @@ public class StockServiceImpl implements StockService {
             if (ms.getStock().getId() == tradeStockRequestDto.getStockId()) {
                 ms.updateQuantityAndInvestAmountBySell(tradeStockRequestDto.getPurchaseAmount());
 
-                // TODO 여유 자산 추가 메소드
                 game.getAnnualAsset().useUsableAsset(-totalPrice);
-                // TODO 주식 자산 반영
+                game.getMyAssets().decreaseAsset(STOCK, totalPrice);
                 game.getMyAssets().recalculateTotalAsset();
 
                 if (ms.getQuantity() == 0) {
