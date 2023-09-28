@@ -10,6 +10,7 @@ import com.sehbeomschool.nova.domain.saving.dao.SavingRepository;
 import com.sehbeomschool.nova.domain.saving.domain.InsInterest;
 import com.sehbeomschool.nova.domain.saving.domain.InstallmentSavings;
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentRequestDto;
+import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.UpdateIrpRequestDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.InstallmentSavingsDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.SavingInfoResponseDto;
 import java.util.List;
@@ -115,7 +116,7 @@ public class SavingServiceImpl implements SavingService {
     }
 
     @Override
-    public void updateInstallmentByNextYear(Long gameId) {
+    public void updateInstallmentForNextYear(Long gameId) {
         Game game = gameRepository.findById(gameId).orElseThrow();
         List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
             .orElseThrow();
@@ -130,5 +131,21 @@ public class SavingServiceImpl implements SavingService {
                 .increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSaving.getAmount());
         }
     }
+
+    @Override
+    public void updateIrpCost(UpdateIrpRequestDto updateIrpRequestDto) {
+        if (updateIrpRequestDto.getIrpCost() < 0) {
+            //예외처리
+        }
+        Game game = gameRepository.findById(updateIrpRequestDto.getGameId()).orElseThrow();
+        AnnualAsset annualAsset = game.getAnnualAsset();
+        //TODO : 연간 IRP 비용 업데이트
+        MyAssets myAssets = game.getMyAssets();
+        Long diff = updateIrpRequestDto.getIrpCost() - annualAsset.getIRPCost();
+
+        myAssets.increaseAsset(AssetType.IRP, diff);
+        myAssets.recalculateTotalAsset();
+    }
+
 
 }
