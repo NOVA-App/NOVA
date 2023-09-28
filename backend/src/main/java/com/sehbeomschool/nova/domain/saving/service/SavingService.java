@@ -18,4 +18,6 @@ public interface SavingService {
 
     void updateIrpCost(UpdateIrpRequestDto updateIrpRequestDto);
 
+    void updateIrpForNextYear(Long gameId);
+
 }
