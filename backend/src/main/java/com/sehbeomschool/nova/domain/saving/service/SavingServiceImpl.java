@@ -13,6 +13,7 @@ import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentR
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.UpdateIrpRequestDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.InstallmentSavingsDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.SavingInfoResponseDto;
+import com.sehbeomschool.nova.global.util.RandomCalculator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -147,5 +148,15 @@ public class SavingServiceImpl implements SavingService {
         myAssets.recalculateTotalAsset();
     }
 
+    @Override
+    public void updateIrpForNextYear(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow();
+        MyAssets myAssets = game.getMyAssets();
+
+        Long irpInterest = RandomCalculator.calIrp(myAssets.getIRPAsset());
+        Long irpCost = game.getAnnualAsset().getIRPCost();
+
+        myAssets.increaseAsset(AssetType.IRP, irpInterest + irpCost);
+    }
 
 }
