@@ -27,4 +27,14 @@ public class SavingRequestDto {
         }
 
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateIrpRequestDto {
+
+        private Long gameId;
+        private Long irpCost;
+
+    }
 }
