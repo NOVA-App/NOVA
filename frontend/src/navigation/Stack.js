@@ -7,8 +7,8 @@ const RootStack = createStackNavigator();
 const RootStackNavigator = () => {
   return (
     <RootStack.Navigator headerMode="none">
-      <RootStack.Screen name="Login" component={Login} />
       <RootStack.Screen name="Game" component={Game} />
+      <RootStack.Screen name="Login" component={Login} />
       <RootStack.Screen name="Main" component={Main} />
     </RootStack.Navigator>
   );
