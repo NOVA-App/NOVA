@@ -3,11 +3,11 @@ package com.sehbeomschool.nova.domain.saving.dto;
 import com.sehbeomschool.nova.domain.saving.domain.InstallmentSavings;
 import java.util.List;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 public class SavingResponseDto {
 
-    @Data
+    @Getter
     public static class SavingInfoResponseDto {
 
         private List<InstallmentSavingsDto> installmentSavings;
@@ -20,7 +20,7 @@ public class SavingResponseDto {
         }
     }
 
-    @Data
+    @Getter
     public static class InstallmentSavingsDto {
 
         private Long id;
@@ -29,17 +29,6 @@ public class SavingResponseDto {
         private Long amount;
         private int startAge;
         private int endAge;
-
-        @Builder
-        public InstallmentSavingsDto(Long id, String name, Long totalAmount,
-            Long amount, int startAge, int endAge) {
-            this.id = id;
-            this.name = name;
-            this.totalAmount = totalAmount;
-            this.amount = amount;
-            this.startAge = startAge;
-            this.endAge = endAge;
-        }
 
         @Builder
         public InstallmentSavingsDto(InstallmentSavings installmentSavings) {
