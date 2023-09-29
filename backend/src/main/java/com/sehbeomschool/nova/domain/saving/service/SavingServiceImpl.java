@@ -1,5 +1,7 @@
 package com.sehbeomschool.nova.domain.saving.service;
 
+import static com.sehbeomschool.nova.global.constant.FixedValues.INSTALLMENT_TAX_PERCENTAGE;
+
 import com.sehbeomschool.nova.domain.game.constant.AssetType;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
@@ -23,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class SavingServiceImpl implements SavingService {
-
-    private final static double TAX_PERCENTAGE = 0.154;
 
     private final SavingRepository savingRepository;
     private final GameRepository gameRepository;
@@ -92,7 +92,7 @@ public class SavingServiceImpl implements SavingService {
         double compoundInterest = calculateCompoundInterest(installmentSavings.getAmount(),
             (double) interest.getInterest() / 100,
             interest.getPeriod());
-        double tax = compoundInterest * TAX_PERCENTAGE;
+        double tax = compoundInterest * INSTALLMENT_TAX_PERCENTAGE.getValue() / 100;
 
         System.out.println("이자 : " + compoundInterest);
 
@@ -153,7 +153,7 @@ public class SavingServiceImpl implements SavingService {
         Game game = gameRepository.findById(gameId).orElseThrow();
         MyAssets myAssets = game.getMyAssets();
 
-        Long irpInterest = RandomCalculator.calIrp(myAssets.getIRPAsset());
+        Long irpInterest = RandomCalculator.calIrpInterest(myAssets.getIRPAsset());
         Long irpCost = game.getAnnualAsset().getIRPCost();
 
         //TODO : 연간 자산 업데이트
