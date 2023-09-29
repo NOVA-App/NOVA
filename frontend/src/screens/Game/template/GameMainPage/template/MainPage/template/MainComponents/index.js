@@ -1,12 +1,22 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import AgeBar from "../../../../../../../../components/mainpage/AgeBar";
 import AnnualAsset from "../../../../../../../../components/mainpage/AnnualAsset";
 import MyAsset from "../../../../../../../../components/mainpage/MyAsset";
 import { style } from "./style";
 import BabyButton from "../../../../../../../../components/buttons/EventButton/BabyButton";
 import MarriageButton from "../../../../../../../../components/buttons/EventButton/MarriageButton";
+import { useNavigation } from "@react-navigation/native"; 
+
 const MainComponents = () => {
+  const navigation = useNavigation();
+  const handleBabyButtonClick = () => {
+    navigation.navigate("EventPage", { screen: "ChildPage" });
+  };
+  const handleMarriageButtonClick = () => {
+    navigation.navigate("EventPage", { screen: "MarriagePage" });
+  };
+
   return (
     <View style={style.container}>
       <AgeBar />
@@ -18,13 +28,16 @@ const MainComponents = () => {
             source={{
               uri: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Raising%20Hand.png",
             }}
-            
             style={style.image}
           />
           <View style={style.buttonContainer}>
-            <BabyButton />
+            <TouchableOpacity style={{ position: 'relative' }}>
+              <BabyButton onPress={handleBabyButtonClick}/>
+            </TouchableOpacity>
             <View style={{ marginVertical: 15 }}>
-              <BabyButton />
+              <TouchableOpacity style={{ position: 'relative' }} >
+                <MarriageButton onPress={handleMarriageButtonClick} />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
