@@ -31,6 +31,7 @@ function NewsPage() {
     false,
     false,
     false,
+    false,
   ]);
 
   const toggleSwitch = (index) => {
@@ -45,7 +46,7 @@ function NewsPage() {
 
   useEffect(() => {
     axios
-      .get("http://192.168.56.200:8000/api/news/1") // 게임아이디 받아와서 주기
+      .get("http://192.168.56.200:8080/api/news/1") // 게임아이디 받아와서 주기
       .then((response) => {
         setData(response.data.data.news);
       })
