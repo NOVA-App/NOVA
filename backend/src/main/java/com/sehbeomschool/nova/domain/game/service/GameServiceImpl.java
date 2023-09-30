@@ -1,6 +1,8 @@
 package com.sehbeomschool.nova.domain.game.service;
 
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_FINISHED;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.IN_PROGRESS_GAME_ALREADY_EXIST;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.IN_PROGRESS_GAME_NOT_FOUND;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
 
@@ -27,7 +29,9 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.InProgressGameResp
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.RankingListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
+import com.sehbeomschool.nova.domain.game.exception.GameFinishedException;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.domain.game.exception.InProgressGameAlreadyExistException;
 import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
 import com.sehbeomschool.nova.domain.news.service.NewsService;
 import com.sehbeomschool.nova.domain.realty.domain.MyRealty;
@@ -59,6 +63,15 @@ public class GameServiceImpl implements GameService {
     @Override
     @Transactional
     public GameStartResponseDto createGame(GameStartRequestDto gameStartRequestDto) {
+        // TODO : User pk 받아오는 로직 추가
+        Long userId = 1L;
+        int numOfInProgressGames = gameRepository.countInProgressGame(userId);
+
+        if (numOfInProgressGames >= 1) {
+            throw new InProgressGameAlreadyExistException(
+                IN_PROGRESS_GAME_ALREADY_EXIST.getMessage());
+        }
+
         AnnualAsset annualAsset = AnnualAsset.createStartAnnualAsset(
             gameStartRequestDto.getStartSalary());
 
@@ -90,6 +103,10 @@ public class GameServiceImpl implements GameService {
     public GameStatus updateForNextYear(NextYearRequestDto nextYearRequestDto) {
         Game game = gameRepository.findById(nextYearRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        if (game.getCurrentAge() == FixedValues.END_AGE.getValue().intValue()) {
+            throw new GameFinishedException(GAME_FINISHED.getMessage());
+        }
 
         // 생활비, 고정 지출 지불된 현재 해 총 자산 Ages에 반영
         Ages currentAge = payAllCostsAndSetToCurrentAge(game);
