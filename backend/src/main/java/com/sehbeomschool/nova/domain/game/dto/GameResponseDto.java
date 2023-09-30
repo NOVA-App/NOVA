@@ -10,6 +10,7 @@ import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
 import com.sehbeomschool.nova.domain.game.domain.OldAgeMonthlyAssets;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
@@ -240,6 +241,40 @@ public class GameResponseDto {
             this.carComment = analysisComment.getCarComment();
             this.hobbyComment = analysisComment.getHobbyComment();
             this.generalComment = analysisComment.getGeneralComment();
+        }
+    }
+
+    @Getter
+    public static class MyResultsListResponseDto {
+
+        private List<MyResultsInfoResponseDto> myResults = new ArrayList<>();
+
+        @Builder
+        public MyResultsListResponseDto(List<Game> games) {
+            games.forEach(g -> this.myResults.add(
+                MyResultsInfoResponseDto.builder()
+                    .game(g)
+                    .build()
+            ));
+        }
+    }
+
+    @Getter
+    public static class MyResultsInfoResponseDto {
+
+        private Long gameId;
+        private Integer startSalary;
+        private Long resultAssets;
+        private Double assetGrowthRate;
+        private LocalDateTime createdAt;
+
+        @Builder
+        public MyResultsInfoResponseDto(Game game) {
+            this.gameId = game.getId();
+            this.startSalary = game.getStartSalary();
+            this.resultAssets = game.getResultAssets();
+            this.assetGrowthRate = game.getAssetGrowthRate();
+            this.createdAt = game.getCreatedAt();
         }
     }
 
