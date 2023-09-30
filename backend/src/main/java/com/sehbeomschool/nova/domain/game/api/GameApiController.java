@@ -6,6 +6,7 @@ import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.MA
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.NEXT_YEAR_UPDATE_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_CURRENT_YEAR_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_FIXED_COST_SUCCESS;
+import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_GAME_RESULT_DETAIL_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.UPDATE_LIVING_COST_SUCCESS;
 
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
@@ -14,6 +15,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.UpdateLivingCostRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.service.GameService;
@@ -100,6 +102,18 @@ public class GameApiController {
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(
                 GIVE_UP_GAME_SUCCESS.getMessage()
+            )
+        );
+    }
+
+    @GetMapping("/result/{gameId}")
+    public ResponseEntity<ResponseDto<GameResultDetailResponseDto>> readGameResultDetail(
+        @PathVariable("gameId") Long gameId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(
+                READ_GAME_RESULT_DETAIL_SUCCESS.getMessage(),
+                gameService.readGameResultDetail(gameId)
             )
         );
     }
