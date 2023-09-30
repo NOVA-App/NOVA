@@ -36,4 +36,14 @@ public class GameRequestDto {
         private Long gameId;
         private Long livingCost;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class NextYearRequestDto {
+
+        private Long gameId;
+        private Boolean isChildBirth;
+    }
 }

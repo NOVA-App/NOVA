@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import { Ionicons } from "@expo/vector-icons";
 import {
   PageContainer,
   ToggleButton,
   TextContainer,
   DescriptionText,
-} from './style';
-
+} from "./style";
+import axios from "axios";
 function Toggle({ description, isExpanded, toggleSwitch }) {
   return (
     <ToggleButton onPress={toggleSwitch}>
       <Ionicons
-        name={isExpanded ? 'chevron-up' : 'chevron-down'}
+        name={isExpanded ? "chevron-up" : "chevron-down"}
         size={24}
         color="black"
       />
@@ -25,7 +25,13 @@ function Toggle({ description, isExpanded, toggleSwitch }) {
 }
 
 function NewsPage() {
-  const [isExpanded, setIsExpanded] = useState([false, false, false, false, false]);
+  const [isExpanded, setIsExpanded] = useState([
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
 
   const toggleSwitch = (index) => {
     setIsExpanded((prevStates) => {
@@ -35,17 +41,22 @@ function NewsPage() {
     });
   };
 
-  const descriptions = [
-    '토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 ',
-    '토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 ',
-    '토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 ',
-    '토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 ',
-    '토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 토글 ',
-  ];
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://192.168.56.200:8000/api/news/1") // 게임아이디 받아와서 주기
+      .then((response) => {
+        setData(response.data.data.news);
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 동안 오류 발생: ", error);
+      });
+  }, []);
 
   return (
     <PageContainer>
-      {descriptions.map((description, index) => (
+      {data.map((description, index) => (
         <Toggle
           key={index}
           description={description}

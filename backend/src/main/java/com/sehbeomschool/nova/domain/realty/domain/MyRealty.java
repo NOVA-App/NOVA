@@ -64,4 +64,12 @@ public class MyRealty extends BaseEntity {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public void repaymentLoan(Long principalAmount) {
+        this.loan.repayment(principalAmount);
+
+        if (this.loan.getPrincipal() == 0) {
+            this.loan = null;
+        }
+    }
 }

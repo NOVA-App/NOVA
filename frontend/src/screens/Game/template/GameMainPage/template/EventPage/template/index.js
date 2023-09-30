@@ -7,10 +7,9 @@ const EventPageStack = createStackNavigator();
 
 export function EventPage() {
   return (
-    <EventPageStack.Navigator
-      initialRouteName="ChattingMain">
-      <EventPageStack.Screen name="MarriagePage" component={MarriagePage} />
-      <EventPageStack.Screen name="ChildPage" component={ChildPage} />
+    <EventPageStack.Navigator>
+      <EventPageStack.Screen name="MarriagePage" component={MarriagePage} options={{headerShown: false}}/>
+      <EventPageStack.Screen name="ChildPage" component={ChildPage} options={{headerShown: false}}/>
     </EventPageStack.Navigator>
   );
 }

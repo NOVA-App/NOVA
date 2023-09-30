@@ -3,6 +3,7 @@ import { Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { GameMainPage, Banking, RealEstatePage, NewsPage } from "./template";
+import Budget from "../../components/budget";
 
 const GameStack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,8 +91,11 @@ function BottomNav() {
 }
 export default function Game() {
   return (
+    <>
+    <Budget/>
     <GameStack.Navigator initialRouteName="BottomNav">
-      <GameStack.Screen name="BottomNav" component={BottomNav} />
+      <GameStack.Screen name="BottomNav" component={BottomNav} options={{ headerShown: false }}/>
     </GameStack.Navigator>
+    </>
   );
 }

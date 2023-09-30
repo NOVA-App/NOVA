@@ -3,11 +3,8 @@ package com.sehbeomschool.nova.domain.realty.domain;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,5 +26,9 @@ public class Loan extends BaseEntity {
     public Loan(Long id, Long principal) {
         this.id = id;
         this.principal = principal;
+    }
+
+    public void repayment(Long principalAmount) {
+        this.principal -= principalAmount;
     }
 }

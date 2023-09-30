@@ -7,9 +7,9 @@ export default function Banking() {
     return (
         
         <BankingPageStack.Navigator>
-            <BankingPageStack.Screen name="BankingMainPage" component={BankingMainPage} initialParams={BankingMainPage}/>
-            <BankingPageStack.Screen name="Account" component={Account}/>
-            <BankingPageStack.Screen name="FinancialProduct" component={FinancialProduct}/>
+            <BankingPageStack.Screen name="BankingMainPage" component={BankingMainPage} initialParams={BankingMainPage} options={{headerShown: false}}/>
+            <BankingPageStack.Screen name="Account" component={Account} options={{headerShown: false}}/>
+            <BankingPageStack.Screen name="FinancialProduct" component={FinancialProduct} options={{headerShown: false}}/>
         </BankingPageStack.Navigator>
     )
 }
