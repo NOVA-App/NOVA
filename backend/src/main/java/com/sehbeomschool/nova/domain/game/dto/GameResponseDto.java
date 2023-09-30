@@ -278,4 +278,41 @@ public class GameResponseDto {
         }
     }
 
+    @Getter
+    public static class RankingListResponseDto {
+
+        List<RankingInfoResponseDto> rankResults = new ArrayList<>();
+
+        @Builder
+        public RankingListResponseDto(List<Game> games) {
+            games.forEach(
+                g -> this.rankResults.add(RankingInfoResponseDto.builder().game(g).build()));
+        }
+    }
+
+    @Getter
+    public static class RankingInfoResponseDto {
+
+        private UserInfoResponseDto userInfo;
+        private RankingResultInfoResponseDto resultInfo;
+
+        @Builder
+        public RankingInfoResponseDto(Game game) {
+            this.userInfo = UserInfoResponseDto.builder().user(game.getUser()).build();
+            this.resultInfo = RankingResultInfoResponseDto.builder().game(game).build();
+        }
+    }
+
+    @Getter
+    public static class RankingResultInfoResponseDto {
+
+        private Long gameId;
+        private Double assetGrowthRate;
+
+        @Builder
+        public RankingResultInfoResponseDto(Game game) {
+            this.gameId = game.getId();
+            this.assetGrowthRate = game.getAssetGrowthRate();
+        }
+    }
 }
