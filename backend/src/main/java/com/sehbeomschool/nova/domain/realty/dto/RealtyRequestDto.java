@@ -1,37 +1,31 @@
 package com.sehbeomschool.nova.domain.realty.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public class RealtyRequestDto {
 
-    @Getter
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class TradeRealtyRequestDto {
 
         private Long gameId;
         private Long realtyId;
         private Long principalAmount;
-
-        @Builder
-        public TradeRealtyRequestDto(Long gameId, Long realtyId, Long principalAmount) {
-            this.gameId = gameId;
-            this.realtyId = realtyId;
-            this.principalAmount = principalAmount;
-        }
     }
 
-    @Getter
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class RepaymentLoanRequestDto {
 
         private Long gameId;
         private Long realtyId;
         private Long principalAmount;
-
-        @Builder
-        public RepaymentLoanRequestDto(Long gameId, Long loanId, Long principalAmount) {
-            this.gameId = gameId;
-            this.realtyId = loanId;
-            this.principalAmount = principalAmount;
-        }
     }
 }
