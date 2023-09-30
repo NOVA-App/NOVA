@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.global.sampledata;
 
+import com.sehbeomschool.nova.domain.game.domain.AnalysisComment;
 import com.sehbeomschool.nova.domain.news.domain.Prediction;
 import com.sehbeomschool.nova.domain.news.domain.RealtyNews;
 import com.sehbeomschool.nova.domain.news.domain.StockNews;
@@ -42,6 +43,7 @@ public class InitDb {
         public void dbInit() {
             makeStockAndNews();
             makeRealtyAndNews();
+            makeAnalysisComments();
         }
 
         public void makeStockAndNews() {
@@ -139,6 +141,68 @@ public class InitDb {
 
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+
+        private void makeAnalysisComments() {
+            String[] eatOutComments = new String[]{
+                "외식 월 1~2회",
+                "외식 월 2~4회",
+                "외식 월 4~6회",
+                "외식 월 6~8회",
+                "외식 월 8회 이상"
+            };
+
+            String[] tripComments = new String[]{
+                "여행 년 1회",
+                "여행 년 2회",
+                "여행 년 2~4회",
+                "여행 년 4회 이상",
+                "여행 년 6회 이상"
+            };
+
+            String[] carComments = new String[]{
+                "자동차는 추천하지 않아요.",
+                "중고 차량을 운영할 수 있어요.",
+                "신차 혹은 중고 차량을 운영할 수 있어요.",
+                "신차 혹은 중고 차량에 높은 수준의 편의 기능을 추가할 수 있어요.",
+                "여러 대의 고급 자동차를 운영할 수 있어요."
+            };
+
+            String[] hobbyComments = new String[]{
+                "취미는 저렴하고 간단한 독서, 자전거 타기 등을 추천해요.",
+                "취미는 요리, 등산 등을 즐길 수 있어요.",
+                "취미는 테니스, 음악 등을 즐길 수 있어요.",
+                "취미는 골프, 예술 수업 등을 즐길 수 있어요.",
+                "취미는 골프, 요리 레슨 등을 즐길 수 있어요."
+            };
+
+            String[] generalComments = new String[]{
+                "생활 수준을 절약적으로 조절해야 해요!",
+                "편안한 노후 생활을 계획할 수 있어요!",
+                "편안하고 안정적인 노후 생활을 즐길 수 있어요!",
+                "안정적으로 다양한 활동을 즐길 수 있어요!",
+                "풍족하고 편안한 노후를 즐길 수 있어요!"
+            };
+
+            int[][] assetRange = new int[][]{
+                {Integer.MIN_VALUE, 2_000_000},
+                {2_000_001, 4_000_000},
+                {4_000_001, 6_000_000},
+                {6_000_001, 8_000_000},
+                {8_000_000, Integer.MAX_VALUE}
+            };
+
+            for (int i = 0; i < 5; i++) {
+                em.persist(AnalysisComment.builder()
+                    .eatOutComment(eatOutComments[i])
+                    .tripComment(tripComments[i])
+                    .carComment(carComments[i])
+                    .hobbyComment(hobbyComments[i])
+                    .generalComment(generalComments[i])
+                    .minAsset(assetRange[i][0])
+                    .maxAsset(assetRange[i][1])
+                    .build());
             }
         }
     }
