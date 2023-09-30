@@ -4,13 +4,16 @@ import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.G
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
 
 import com.sehbeomschool.nova.domain.game.constant.EventType;
+import com.sehbeomschool.nova.domain.game.constant.GameStatus;
 import com.sehbeomschool.nova.domain.game.dao.AgesRepository;
+import com.sehbeomschool.nova.domain.game.dao.AnalysisCommentRepository;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.domain.Ages;
 import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Event;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
+import com.sehbeomschool.nova.domain.game.domain.OldAgeMonthlyAssets;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
@@ -39,6 +42,7 @@ public class GameServiceImpl implements GameService {
 
     private final AgesRepository agesRepository;
     private final GameRepository gameRepository;
+    private final AnalysisCommentRepository analysisCommentRepository;
 
     private final RealtyManagerService realtyManagerService;
     private final StockManagerService stockManagerService;
@@ -75,12 +79,24 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
-    public void updateForNextYear(NextYearRequestDto nextYearRequestDto) {
+    public GameStatus updateForNextYear(NextYearRequestDto nextYearRequestDto) {
         Game game = gameRepository.findById(nextYearRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
         // 생활비, 고정 지출 지불된 현재 해 총 자산 Ages에 반영
         Ages currentAge = payAllCostsAndSetToCurrentAge(game);
+
+        if ((currentAge.getAge() + 1) == FixedValues.END_AGE.getValue().intValue()) {
+            OldAgeMonthlyAssets oldAgeMonthlyAssets = OldAgeMonthlyAssets.builder().game(game)
+                .build();
+            game.setOldAgeMonthlyAssets(oldAgeMonthlyAssets);
+            game.setAnalysisComment(analysisCommentRepository.findBetweenMinAndMaxAsset(
+                oldAgeMonthlyAssets.getTotalMonthlyAsset()));
+            game.setResultAssets();
+            game.increaseCurrentAge();
+
+            return GameStatus.FINISHED;
+        }
 
         // 다음 해 Ages 생성 및 추가
         Ages nextAge = makeNextAge(game);
@@ -110,6 +126,8 @@ public class GameServiceImpl implements GameService {
         // 다음 해 총 자산 저장 및 다음 해 Ages에 반영
         game.getMyAssets().recalculateTotalAsset();
         nextAge.setTotalAsset(game.getMyAssets().getTotalAsset());
+
+        return GameStatus.IN_PROGRESS;
     }
 
     @Override
