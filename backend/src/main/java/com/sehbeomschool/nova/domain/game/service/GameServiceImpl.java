@@ -23,6 +23,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseD
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.RankingListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
 import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
@@ -33,6 +34,9 @@ import com.sehbeomschool.nova.domain.stock.service.StockManagerService;
 import com.sehbeomschool.nova.global.constant.FixedValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -196,6 +200,14 @@ public class GameServiceImpl implements GameService {
     public MyResultsListResponseDto readAllMyGames() {
         return MyResultsListResponseDto.builder()
             .games(gameRepository.findFinishedGameByUserId(1L))
+            .build();
+    }
+
+    @Override
+    public RankingListResponseDto readRankingList() {
+        return RankingListResponseDto.builder()
+            .games(gameRepository.findRankList(
+                PageRequest.of(0, 30, Sort.by(Direction.DESC, "assetGrowthRate"))))
             .build();
     }
 
