@@ -70,6 +70,36 @@ public class AnnualAsset extends BaseEntity {
             .build();
     }
 
+    public void addMonthlyRentCost() {
+        this.monthlyRentCost = FixedValues.MONTHLY_RENT_COST.getValue().longValue();
+        recalculateUsableAsset();
+    }
+
+    public void removeMonthlyRentCost() {
+        this.monthlyRentCost = 0L;
+        recalculateUsableAsset();
+    }
+
+    public void updateIRPCost(Long value) {
+        this.IRPCost = value;
+        recalculateUsableAsset();
+    }
+
+    public void updateLoanCost(Long value) {
+        this.loansCost = value;
+        recalculateUsableAsset();
+    }
+
+    public void increaseInstallmentSavingCost(Long value) {
+        this.installmentSavingCost += value;
+        recalculateUsableAsset();
+    }
+
+    public void decreaseInstallmentSavingCost(Long value) {
+        this.installmentSavingCost -= value;
+        recalculateUsableAsset();
+    }
+
     public Long sumOfFixedCost() {
         Long fixedCost = 0L;
         fixedCost += this.monthlyRentCost;
