@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Dimensions, View, Text, ScrollView } from "react-native";
 import HouseCard from "./HouseCard";
 import * as S from "./style";
-
-const { height } = Dimensions.get("window");
+import axios from "axios";
 
 const ForSaleEstate = () => {
+  const [realtyData, setRealtyData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://192.168.56.200:8080/api/realty/list/1") // 게임아이디 받아와서 주기
+      .then((response) => {
+        setRealtyData(response.data.data);
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 동안 오류 발생: ", error);
+      });
+  }, []);
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, minWidth: "90%" }}>
       <S.Container style={{ flex: 8.5 }}>
         <View
           style={{
@@ -23,14 +35,16 @@ const ForSaleEstate = () => {
         <View style={{ flex: 8 }}>
           <View style={{ marginTop: "5%" }}>
             <ScrollView>
-              <S.CenterView>
-                <HouseCard height={height} />
-              </S.CenterView>
-              <HouseCard height={height} />
-              <HouseCard height={height} />
-              <HouseCard height={height} />
-              <HouseCard height={height} />
-              <HouseCard height={height} />
+              {realtyData.map((realtyItem, index) => (
+                <HouseCard
+                  key={index}
+                  realtyId={realtyItem.realtyId}
+                  realtyName={realtyItem.realtyName}
+                  realtyAmount={realtyItem.evaluationAmount}
+                  percent={realtyItem.depreciationPercent}
+                  predictIncome={realtyItem.predictedRentIncome}
+                />
+              ))}
             </ScrollView>
           </View>
         </View>
