@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.game.api;
 
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.GAME_START_SUCCESS;
+import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.GIVE_UP_GAME_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.MARRY_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.NEXT_YEAR_UPDATE_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_CURRENT_YEAR_SUCCESS;
@@ -20,6 +21,7 @@ import com.sehbeomschool.nova.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +40,7 @@ public class GameApiController {
 
     @PostMapping("")
     public ResponseEntity<ResponseDto<GameStartResponseDto>> createGame(@RequestBody
-    GameStartRequestDto gameStartRequestDto) {
+        GameStartRequestDto gameStartRequestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ResponseDto.create(
                 GAME_START_SUCCESS.getMessage(),
@@ -87,6 +89,17 @@ public class GameApiController {
             ResponseDto.create(
                 READ_FIXED_COST_SUCCESS.getMessage(),
                 gameService.readFixedCost(gameId)
+            )
+        );
+    }
+
+    @DeleteMapping("/{gameId}")
+    public ResponseEntity<ResponseDto<?>> deleteGame(@PathVariable("gameId") Long gameId) {
+        gameService.deleteGame(gameId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(
+                GIVE_UP_GAME_SUCCESS.getMessage()
             )
         );
     }
