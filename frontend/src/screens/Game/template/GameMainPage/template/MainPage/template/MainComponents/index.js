@@ -6,7 +6,7 @@ import MyAsset from "../../../../../../../../components/mainpage/MyAsset";
 import { style } from "./style";
 import BabyButton from "../../../../../../../../components/buttons/EventButton/BabyButton";
 import MarriageButton from "../../../../../../../../components/buttons/EventButton/MarriageButton";
-import { useNavigation } from "@react-navigation/native"; 
+import { useNavigation } from "@react-navigation/native";
 
 const MainComponents = () => {
   const navigation = useNavigation();
@@ -31,12 +31,12 @@ const MainComponents = () => {
             style={style.image}
           />
           <View style={style.buttonContainer}>
-            <TouchableOpacity style={{ position: 'relative' }}>
-              <BabyButton onPress={handleBabyButtonClick}/>
+            <TouchableOpacity style={{ position: "relative" }}>
+              <MarriageButton onPress={handleMarriageButtonClick} />
             </TouchableOpacity>
             <View style={{ marginVertical: 15 }}>
-              <TouchableOpacity style={{ position: 'relative' }} >
-                <MarriageButton onPress={handleMarriageButtonClick} />
+              <TouchableOpacity style={{ position: "relative" }}>
+                <BabyButton onPress={handleBabyButtonClick} />
               </TouchableOpacity>
             </View>
           </View>
