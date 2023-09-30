@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.game.service;
 
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.IN_PROGRESS_GAME_NOT_FOUND;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
 
 import com.sehbeomschool.nova.domain.game.constant.EventType;
@@ -22,6 +23,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearRespons
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.InProgressGameResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.RankingListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
@@ -223,6 +225,16 @@ public class GameServiceImpl implements GameService {
             .build());
 
         game.getMyAssets().recalculateTotalAsset();
+    }
+
+    @Override
+    public InProgressGameResponseDto readInProgressGame() {
+        // TODO: 현재 로그인 중인 사용자의 pk 받아오기
+        Long userId = 1L;
+        Game game = gameRepository.findInProgressGame(userId)
+            .orElseThrow(() -> new GameNotFoundException(IN_PROGRESS_GAME_NOT_FOUND.getMessage()));
+
+        return InProgressGameResponseDto.builder().game(game).build();
     }
 
     private void addChildBirthEvent(Game game, Ages nextAge) {
