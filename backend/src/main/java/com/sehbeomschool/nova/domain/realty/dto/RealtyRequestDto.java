@@ -20,4 +20,18 @@ public class RealtyRequestDto {
         }
     }
 
+    @Getter
+    public static class RepaymentLoanRequestDto {
+
+        private Long gameId;
+        private Long realtyId;
+        private Long principalAmount;
+
+        @Builder
+        public RepaymentLoanRequestDto(Long gameId, Long loanId, Long principalAmount) {
+            this.gameId = gameId;
+            this.realtyId = loanId;
+            this.principalAmount = principalAmount;
+        }
+    }
 }
