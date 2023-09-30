@@ -7,6 +7,7 @@ public enum GameResponseMessage {
     UPDATE_LIVING_COST_SUCCESS("생활비 수정 완료"),
     READ_FIXED_COST_SUCCESS("고정 지출 내역 조회 완료"),
     GIVE_UP_GAME_SUCCESS("게임 포기 처리 완료"),
+    READ_GAME_RESULT_DETAIL_SUCCESS("게임 결과 상세 조회 완료"),
     MARRY_SUCCESS("결혼 완료");
 
     private final String message;
