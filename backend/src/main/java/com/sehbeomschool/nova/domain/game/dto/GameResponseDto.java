@@ -2,10 +2,15 @@ package com.sehbeomschool.nova.domain.game.dto;
 
 import com.sehbeomschool.nova.domain.game.constant.EventType;
 import com.sehbeomschool.nova.domain.game.constant.Gender;
+import com.sehbeomschool.nova.domain.game.domain.Ages;
+import com.sehbeomschool.nova.domain.game.domain.AnalysisComment;
 import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Event;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
+import com.sehbeomschool.nova.domain.game.domain.OldAgeMonthlyAssets;
+import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -118,4 +123,124 @@ public class GameResponseDto {
             this.loanAsset = myAssets.getLoanAsset();
         }
     }
+
+    @Getter
+    public static class GameResultDetailResponseDto {
+
+        private Long totalAssets;
+        private Integer oldAgeMonthlyAssets;
+        private UserInfoResponseDto userInfo;
+        private GraphInfoResponseDto graphInfo;
+        private AssetsInfoResponseDto assetsInfo;
+        private OldAgeAssetsInfoResponseDto oldAgeAssetsInfo;
+        private AnalysisCommentResponseDto analysisComment;
+
+        @Builder
+        public GameResultDetailResponseDto(Game game) {
+            this.totalAssets = game.getResultAssets();
+            this.oldAgeMonthlyAssets = game.getOldAgeMonthlyAssets().getTotalMonthlyAsset();
+            this.userInfo = UserInfoResponseDto.builder().user(game.getUser()).build();
+            this.graphInfo = GraphInfoResponseDto.builder()
+                .events(game.getEvents())
+                .ages(game.getAges())
+                .build();
+            this.assetsInfo = AssetsInfoResponseDto.builder()
+                .annualAsset(game.getAnnualAsset())
+                .myAssets(game.getMyAssets())
+                .build();
+            this.oldAgeAssetsInfo = OldAgeAssetsInfoResponseDto.builder()
+                .oldAgeMonthlyAssets(game.getOldAgeMonthlyAssets())
+                .build();
+            this.analysisComment = AnalysisCommentResponseDto.builder()
+                .analysisComment(game.getAnalysisComment())
+                .build();
+        }
+    }
+
+    @Getter
+    public static class GraphInfoResponseDto {
+
+        private Integer marriedAge;
+        private List<Integer> childBirthAges = new ArrayList<>();
+        private List<Long> totalAssetsPerAge = new ArrayList<>();
+
+        @Builder
+        public GraphInfoResponseDto(List<Event> events, List<Ages> ages) {
+            for (Event e : events) {
+                if (e.getEventType() == EventType.MARRIAGE) {
+                    this.marriedAge = e.getAge().getAge();
+                }
+
+                if (e.getEventType() == EventType.CHILD_BIRTH) {
+                    this.childBirthAges.add(e.getAge().getAge());
+                }
+            }
+
+            for (Ages a : ages) {
+                this.totalAssetsPerAge.add(a.getTotalAsset());
+            }
+        }
+    }
+
+    @Getter
+    public static class AssetsInfoResponseDto {
+
+        private Long usableAsset;
+        private Long IRPAsset;
+        private Long installmentSavingAsset;
+        private Long stockAsset;
+        private Long realtyAsset;
+        private Long loanAsset;
+        private Long totalTax;
+
+        @Builder
+        public AssetsInfoResponseDto(AnnualAsset annualAsset, MyAssets myAssets) {
+            this.usableAsset = annualAsset.getUsableAsset();
+            this.IRPAsset = myAssets.getIRPAsset();
+            this.installmentSavingAsset = myAssets.getInstallmentSavingAsset();
+            this.stockAsset = myAssets.getStockAsset();
+            this.realtyAsset = myAssets.getRealtyAsset();
+            this.loanAsset = myAssets.getLoanAsset();
+            this.totalTax = myAssets.getTotalTax();
+        }
+    }
+
+    @Getter
+    public static class OldAgeAssetsInfoResponseDto {
+
+        private Integer monthlyAmount;
+        private Integer childAllowance;
+        private Integer realtyRentIncome;
+        private Integer nationalPension;
+        private Integer totalMonthlyAsset;
+
+        @Builder
+        public OldAgeAssetsInfoResponseDto(OldAgeMonthlyAssets oldAgeMonthlyAssets) {
+            this.monthlyAmount = oldAgeMonthlyAssets.getMonthlyAmount();
+            this.childAllowance = oldAgeMonthlyAssets.getChildAllowance();
+            this.realtyRentIncome = oldAgeMonthlyAssets.getRealtyRentIncome();
+            this.nationalPension = oldAgeMonthlyAssets.getNationalPension();
+            this.totalMonthlyAsset = oldAgeMonthlyAssets.getTotalMonthlyAsset();
+        }
+    }
+
+    @Getter
+    public static class AnalysisCommentResponseDto {
+
+        private String eatOutComment;
+        private String tripComment;
+        private String carComment;
+        private String hobbyComment;
+        private String generalComment;
+
+        @Builder
+        public AnalysisCommentResponseDto(AnalysisComment analysisComment) {
+            this.eatOutComment = analysisComment.getEatOutComment();
+            this.tripComment = analysisComment.getTripComment();
+            this.carComment = analysisComment.getCarComment();
+            this.hobbyComment = analysisComment.getHobbyComment();
+            this.generalComment = analysisComment.getGeneralComment();
+        }
+    }
+
 }
