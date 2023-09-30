@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 // import * as S from './style';
 import { useNavigation } from '@react-navigation/native'; // useNavigation 추가
 import Button from '../../../../../../../../components/buttons/SmallButton';
-import Budget from '../../../../../../../../components/budget/index'
 import Baby from  '../../../../../../../../assets/Baby.png'
 
 
@@ -22,7 +21,6 @@ export default function ChildPage() {
 
   return (
     <View style={styles.container}>
-      <Budget />
       <View style={styles.content1}>
         <Text style={{fontSize: 23, fontWeight: 'bold'}}>자녀 낳기</Text>
         <Text style={{fontSize: 20}}>매월 70만원 생활비 추가 소비</Text>
