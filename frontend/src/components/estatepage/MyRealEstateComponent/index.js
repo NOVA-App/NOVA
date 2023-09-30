@@ -3,7 +3,7 @@ import { Dimensions, View, Text, ScrollView } from "react-native";
 import HouseCard from "./HouseCard";
 import * as S from "./style";
 import axios from "axios";
-
+import API_URL from "../../../../config";
 const { height } = Dimensions.get("window");
 
 const MyRealEstate = () => {
@@ -11,7 +11,7 @@ const MyRealEstate = () => {
   const [myHouseData, setMyHouseData] = useState([]);
   useEffect(() => {
     axios
-      .get("http://192.168.56.200:8080/api/realty/mine/1") // 게임아이디 받아와서 주기
+      .get(API_URL + "/api/realty/mine/1") // 게임아이디 받아와서 주기
       .then((response) => {
         setMyRealtyData(response.data.data);
         setMyHouseData(response.data.data.myRealties);
