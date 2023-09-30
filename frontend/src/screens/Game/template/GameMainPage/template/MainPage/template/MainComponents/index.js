@@ -18,11 +18,10 @@ const MainComponents = () => {
             source={{
               uri: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Raising%20Hand.png",
             }}
-            
             style={style.image}
           />
           <View style={style.buttonContainer}>
-            <BabyButton />
+            <MarriageButton />
             <View style={{ marginVertical: 15 }}>
               <BabyButton />
             </View>
