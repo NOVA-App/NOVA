@@ -36,7 +36,7 @@ const MainComponents = () => {
             </TouchableOpacity>
             <View style={{ marginVertical: 15 }}>
               <TouchableOpacity style={{ position: "relative" }}>
-                <MarriageButton onPress={handleMarriageButtonClick} />
+                <BabyButton onPress={handleBabyButtonClick} />
               </TouchableOpacity>
             </View>
           </View>
