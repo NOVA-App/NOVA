@@ -4,14 +4,15 @@ import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.FileUploadResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
-import org.springframework.web.multipart.MultipartFile;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
     Long createUser(KakaoUserInfoDto user);
 
     UserInfoResponseDto readUser(Long userId);
+
     User readUserBySocialId(Long socialId);
 
     FileUploadResponseDto updateUserProfileImg(Long userId, MultipartFile profileImg);
@@ -22,5 +23,5 @@ public interface UserService {
 
     boolean isExistUser(Long socialId);
 
-    TokenResponseDto login(Long userId);
+    TokenResponseDto kakaoLogin(KakaoUserInfoDto kakaoUserInfoDto);
 }
