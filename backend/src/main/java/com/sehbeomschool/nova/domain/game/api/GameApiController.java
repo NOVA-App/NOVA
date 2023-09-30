@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.game.api;
 
+import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.GAME_FINISHED_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.GAME_START_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.GIVE_UP_GAME_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.MARRY_SUCCESS;
@@ -8,6 +9,7 @@ import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.RE
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_FIXED_COST_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.UPDATE_LIVING_COST_SUCCESS;
 
+import com.sehbeomschool.nova.domain.game.constant.GameStatus;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
@@ -52,10 +54,16 @@ public class GameApiController {
     @PutMapping("")
     public ResponseEntity<ResponseDto<?>> updateForNextYear(
         @RequestBody NextYearRequestDto nextYearRequestDto) {
-        gameService.updateForNextYear(nextYearRequestDto);
+        GameStatus gameStatus = gameService.updateForNextYear(nextYearRequestDto);
+
+        if (gameStatus == GameStatus.IN_PROGRESS) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseDto.create(NEXT_YEAR_UPDATE_SUCCESS.getMessage())
+            );
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(
-            ResponseDto.create(NEXT_YEAR_UPDATE_SUCCESS.getMessage())
+            ResponseDto.create(GAME_FINISHED_SUCCESS.getMessage())
         );
     }
 

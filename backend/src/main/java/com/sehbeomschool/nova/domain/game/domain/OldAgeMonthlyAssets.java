@@ -1,6 +1,10 @@
 package com.sehbeomschool.nova.domain.game.domain;
 
+import com.sehbeomschool.nova.domain.game.constant.EventType;
+import com.sehbeomschool.nova.domain.realty.domain.MyRealty;
+import com.sehbeomschool.nova.global.constant.FixedValues;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,13 +36,45 @@ public class OldAgeMonthlyAssets extends BaseEntity {
     private Integer totalMonthlyAsset;
 
     @Builder
-    public OldAgeMonthlyAssets(Long id, Integer monthlyAmount, Integer childAllowance,
-        Integer realtyRentIncome, Integer nationalPension, Integer totalMonthlyAsset) {
-        this.id = id;
-        this.monthlyAmount = monthlyAmount;
-        this.childAllowance = childAllowance;
-        this.realtyRentIncome = realtyRentIncome;
-        this.nationalPension = nationalPension;
-        this.totalMonthlyAsset = totalMonthlyAsset;
+    public OldAgeMonthlyAssets(Game game) {
+        setMonthlyAmount(game.getMyAssets().getTotalAssetsExceptRealty());
+        setChildAllowance(game.getEvents());
+        setRealtyRentIncome(game.getMyRealties());
+        setNationalPension(game.getStartSalary());
+        setTotalMonthlyAsset();
+    }
+
+    private void setMonthlyAmount(Long totalAssetExceptRealty) {
+        this.monthlyAmount = (int) (totalAssetExceptRealty
+            / FixedValues.NUM_OF_MONTHS_OF_OLD_AGE.getValue().longValue());
+    }
+
+    private void setChildAllowance(List<Event> events) {
+        this.childAllowance = 0;
+        for (Event e : events) {
+            if (e.getEventType() == EventType.CHILD_BIRTH) {
+                this.childAllowance += FixedValues.CHILD_ALLOWANCE.getValue().intValue();
+            }
+        }
+    }
+
+    private void setRealtyRentIncome(List<MyRealty> myRealties) {
+        this.realtyRentIncome = 0;
+        int year = 12;
+        for (MyRealty mr : myRealties) {
+            this.realtyRentIncome += mr.getRentIncome().intValue() / year;
+        }
+    }
+
+    private void setNationalPension(int startSalary) {
+        this.nationalPension = 0;
+    }
+
+    private void setTotalMonthlyAsset() {
+        this.totalMonthlyAsset = 0;
+        this.totalMonthlyAsset += this.monthlyAmount;
+        this.totalMonthlyAsset += this.childAllowance;
+        this.totalMonthlyAsset += this.realtyRentIncome;
+        this.totalMonthlyAsset += this.nationalPension;
     }
 }
