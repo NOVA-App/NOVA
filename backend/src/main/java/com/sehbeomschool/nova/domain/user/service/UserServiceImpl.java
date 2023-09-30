@@ -10,6 +10,7 @@ import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
 import com.sehbeomschool.nova.domain.user.exception.UserNotFoundException;
 import com.sehbeomschool.nova.global.file.FileStore;
+import com.sehbeomschool.nova.global.util.JwtUtil;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final FileStore fileStore;
+    private final JwtUtil jwtUtil;
 
     @Override
     public Long createUser(KakaoUserInfoDto user) {
@@ -76,9 +78,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TokenResponseDto login(Long socialId) {
-        User bySocialId = userRepository.findBySocialId(socialId).orElse(null);
+    public TokenResponseDto kakaoLogin(KakaoUserInfoDto kakaoUserInfoDto) {
+        if (!isExistUser(kakaoUserInfoDto.getId())) {
+            createUser(kakaoUserInfoDto);
+        }
 
-        return null;
+        User user = readUserBySocialId(kakaoUserInfoDto.getId());
+
+        String accessToken = jwtUtil.createJwtToken(user.getId());
+        String refreshToken = jwtUtil.createRefreshToken(user.getId());
+
+        return TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken)
+            .build();
     }
 }

@@ -29,7 +29,7 @@ public class InstallmentSavings extends BaseEntity {
     @JoinColumn(name = "GAME_ID")
     private Game game;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INS_INTEREST_ID")
     private InsInterest interest;
 
@@ -50,6 +50,10 @@ public class InstallmentSavings extends BaseEntity {
         this.totalAmount = totalAmount;
         this.startAge = startAge;
         this.endAge = endAge;
+    }
+
+    public void updateTotalAmountForNextYear() {
+        this.totalAmount += amount;
     }
 
 
