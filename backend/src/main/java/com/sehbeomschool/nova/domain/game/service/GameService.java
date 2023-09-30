@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.game.service;
 
+import com.sehbeomschool.nova.domain.game.constant.GameStatus;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
@@ -14,7 +15,7 @@ public interface GameService {
 
     GameStartResponseDto createGame(GameStartRequestDto gameStartRequestDto);
 
-    void updateForNextYear(NextYearRequestDto nextYearRequestDto);
+    GameStatus updateForNextYear(NextYearRequestDto nextYearRequestDto);
 
     CurrentYearResponseDto readCurrentYear(Long gameId);
 
