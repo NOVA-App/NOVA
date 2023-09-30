@@ -16,9 +16,9 @@ public class KakaoUserInfoDto {
 
     @Builder
     public KakaoUserInfoDto(Map<String, Object> info) {
-        this.id = (Long) info.get("id");
+        this.id = ((Integer) info.get("id")).longValue();
         this.name = String.valueOf(((Map<?, ?>) info.get("properties")).get("nickname"));
-        this.profileImg = String.valueOf(info.get("profile_image_url"));
+        this.profileImg = String.valueOf(((Map<?, ?>) info.get("properties")).get("profile_image"));
     }
 
     public User toEntity() {

@@ -6,8 +6,8 @@ public enum FixedValues {
     START_AGE(27D),
     SALARY_INCREASE_RATE(1.05),
     MARRIAGE_COST(20_000_000D),
-    CHILD_COST(8_400_000D);
-
+    CHILD_COST(8_400_000D),
+    INSTALLMENT_TAX_PERCENTAGE(15.4);
 
     private final Double value;
 

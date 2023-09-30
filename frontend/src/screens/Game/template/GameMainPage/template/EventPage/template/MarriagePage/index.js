@@ -36,7 +36,7 @@ export default function MarriagePage() {
   // const { width, height } = Dimensions.get('window');
   return (
     <View style={styles.container}>
-      <Budget />
+      <Budget /> 
       <View style={styles.content1}>
         <Text style={{ fontSize: 23, fontWeight: "bold" }}>결혼하기</Text>
         <Text style={{ fontSize: 15 }}>소요금액: 2000만원</Text>
