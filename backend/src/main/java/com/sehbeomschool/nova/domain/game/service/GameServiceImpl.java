@@ -151,6 +151,20 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
+    public void deleteGame(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+            .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        // TODO: Ages.id 의 StocksInfo 제거 로직 추가
+        // TODO : Game.id 의 RealtyInfo 제거 로직 추가
+        // TODO : Game.id 의 NewsInfo 제거 로직 추가
+        // TODO : Game.id 의 InstallmentSavings 제거 로직 추가
+
+        gameRepository.delete(game);
+    }
+
+    @Override
+    @Transactional
     public void marry(MarryRequestDto marryRequestDto) {
         Game game = gameRepository.findById(marryRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
