@@ -1,5 +1,5 @@
 kakao:
-  client_id: ad1df559dc905b03ec9d59ad4afbe212
+  client_id: 9338dac6db9d9162c95333adbcb97200
   redirect: "https://nohoo.site/api/oauth/kakao/callback"
   url:
     token:

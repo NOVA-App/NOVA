@@ -1,22 +1,20 @@
 package com.sehbeomschool.nova.domain.stock.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 public class StockRequestDto {
 
-    @Getter
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class TradeStockRequestDto {
 
         private Long gameId;
         private Long stockId;
         private Long purchaseAmount;
-
-        @Builder
-        public TradeStockRequestDto(Long gameId, Long stockId, Long purchaseAmount) {
-            this.gameId = gameId;
-            this.stockId = stockId;
-            this.purchaseAmount = purchaseAmount;
-        }
     }
 }
