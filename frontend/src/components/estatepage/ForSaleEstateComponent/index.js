@@ -3,13 +3,14 @@ import { Dimensions, View, Text, ScrollView } from "react-native";
 import HouseCard from "./HouseCard";
 import * as S from "./style";
 import axios from "axios";
+import API_URL from "../../../../config";
 
 const ForSaleEstate = () => {
   const [realtyData, setRealtyData] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://192.168.56.200:8080/api/realty/list/1") // 게임아이디 받아와서 주기
+      .get(API_URL + "/api/realty/list/1") // 게임아이디 받아와서 주기
       .then((response) => {
         setRealtyData(response.data.data);
       })

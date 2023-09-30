@@ -7,6 +7,7 @@ import {
   DescriptionText,
 } from "./style";
 import axios from "axios";
+import API_URL from "../../../../../config";
 function Toggle({ description, isExpanded, toggleSwitch }) {
   return (
     <ToggleButton onPress={toggleSwitch}>
@@ -46,7 +47,7 @@ function NewsPage() {
 
   useEffect(() => {
     axios
-      .get("http://192.168.56.200:8080/api/news/1") // 게임아이디 받아와서 주기
+      .get(API_URL + "/api/news/1") // 게임아이디 받아와서 주기
       .then((response) => {
         setData(response.data.data.news);
       })
