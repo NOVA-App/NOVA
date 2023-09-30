@@ -9,6 +9,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearRespons
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.InProgressGameResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.RankingListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
@@ -35,4 +36,6 @@ public interface GameService {
     RankingListResponseDto readRankingList();
 
     void marry(MarryRequestDto marryRequestDto);
+
+    InProgressGameResponseDto readInProgressGame();
 }
