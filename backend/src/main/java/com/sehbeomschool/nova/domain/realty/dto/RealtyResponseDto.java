@@ -77,6 +77,7 @@ public class RealtyResponseDto {
 
     @Getter
     public static class ReadRealtyResponseDto {
+
         private Long realtyId;
         private String realtyName;
         private String realtyImg;
@@ -101,6 +102,7 @@ public class RealtyResponseDto {
 
     @Getter
     public static class ReadRealtyDetailResponseDto {
+
         private Long realtyId;
         private String realtyName;
         private String realtyImg;
@@ -126,6 +128,27 @@ public class RealtyResponseDto {
             this.evaluationAmount = evaluationAmount;
             this.acquistionTax = acquistionTax;
             this.enableLoanAmount = enableLoanAmount;
+        }
+    }
+
+    @Getter
+    public static class ReadLoanListResponseDto {
+
+        private Long realtyId;
+        private Long loanId;
+        private String realtyName;
+        private Long realtyPrice;
+        private Long principal;
+
+        @Builder
+        public ReadLoanListResponseDto(Long realtyId, Long loanId, String realtyName,
+            Long realtyPrice,
+            Long principal) {
+            this.realtyId = realtyId;
+            this.loanId = loanId;
+            this.realtyName = realtyName;
+            this.realtyPrice = realtyPrice;
+            this.principal = principal;
         }
     }
 }

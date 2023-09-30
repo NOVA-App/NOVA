@@ -18,8 +18,10 @@ import com.sehbeomschool.nova.domain.realty.dao.RealtyRepository;
 import com.sehbeomschool.nova.domain.realty.domain.Loan;
 import com.sehbeomschool.nova.domain.realty.domain.MyRealty;
 import com.sehbeomschool.nova.domain.realty.domain.RealtyInfo;
+import com.sehbeomschool.nova.domain.realty.dto.RealtyRequestDto.RepaymentLoanRequestDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyRequestDto.TradeRealtyRequestDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.MyRealtyResponseDto;
+import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadLoanListResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyDetailResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadMyRealtyResponseDto;
 import com.sehbeomschool.nova.domain.realty.dto.RealtyResponseDto.ReadRealtyDetailResponseDto;
@@ -237,5 +239,47 @@ public class RealtyServiceImpl implements RealtyService {
                 return;
             }
         }
+    }
+
+    @Override
+    public List<ReadLoanListResponseDto> readLoan(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+            .orElseThrow(() -> new GameNotFoundException(
+                GAME_NOT_FOUND.getMessage()));
+
+        List<ReadLoanListResponseDto> list = new ArrayList<>();
+
+        for (MyRealty mr : game.getMyRealties()) {
+            RealtyInfo ri = realtyInfoRepository.findRealtyInfoByGameIdAndRealtyId(gameId,
+                mr.getRealty().getId());
+
+            if (mr.getLoan() != null) {
+                ReadLoanListResponseDto dto = ReadLoanListResponseDto.builder()
+                    .realtyId(mr.getRealty().getId())
+                    .loanId(mr.getLoan().getId())
+                    .realtyName(mr.getRealty().getName())
+                    .realtyPrice(ri.getCurrentPrice())
+                    .principal(mr.getLoan().getPrincipal())
+                    .build();
+
+                list.add(dto);
+            }
+        }
+
+        return list;
+    }
+
+    @Override
+    @Transactional
+    public void repaymentLoan(RepaymentLoanRequestDto repaymentLoanRequestDto) {
+        MyRealty myRealty = myRealtyRepository.findMyRealtyByGameIdAndRealtyId(
+            repaymentLoanRequestDto.getGameId(), repaymentLoanRequestDto.getRealtyId());
+
+        Game game = myRealty.getGame();
+
+        myRealty.repaymentLoan(repaymentLoanRequestDto.getPrincipalAmount());
+
+        game.getAnnualAsset().useUsableAsset(repaymentLoanRequestDto.getPrincipalAmount());
+        game.getMyAssets().decreaseAsset(LOAN, repaymentLoanRequestDto.getPrincipalAmount());
     }
 }
