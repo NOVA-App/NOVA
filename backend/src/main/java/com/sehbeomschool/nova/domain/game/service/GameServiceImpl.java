@@ -22,6 +22,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearRespons
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
 import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
@@ -189,6 +190,13 @@ public class GameServiceImpl implements GameService {
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
         return GameResultDetailResponseDto.builder().game(game).build();
+    }
+
+    @Override
+    public MyResultsListResponseDto readAllMyGames() {
+        return MyResultsListResponseDto.builder()
+            .games(gameRepository.findFinishedGameByUserId(1L))
+            .build();
     }
 
     @Override
