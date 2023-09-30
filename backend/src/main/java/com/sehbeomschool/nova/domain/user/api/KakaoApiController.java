@@ -2,7 +2,6 @@ package com.sehbeomschool.nova.domain.user.api;
 
 import static com.sehbeomschool.nova.domain.user.constant.UserResponseMessage.LOGIN_SUCCESS;
 
-import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
 import com.sehbeomschool.nova.domain.user.service.UserService;
@@ -29,47 +28,19 @@ public class KakaoApiController {
     private final JwtUtil jwtUtil;
 
     @GetMapping("/callback")
-    public ResponseEntity<ResponseDto<TokenResponseDto>> kakaoLogin(
-        @RequestParam("code") String code) {
-
+    public void kakaoLogin(@RequestParam("code") String code) {
         log.info("kakao callback");
-        KakaoUserInfoDto kakaoUserInfo = webClientService.getKakaoUserInfo(code);
-
-        if (!userService.isExistUser(kakaoUserInfo.getId())) {
-            userService.createUser(kakaoUserInfo);
-        }
-
-        User user = userService.readUserBySocialId(kakaoUserInfo.getId());
-
-        String accessToken = jwtUtil.createJwtToken(user.getId());
-        String refreshToken = jwtUtil.createRefreshToken(user.getId());
-
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-            .body(ResponseDto.create(LOGIN_SUCCESS.getMessage(),
-                TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken)
-                    .build()));
     }
 
     @GetMapping("/login")
     public ResponseEntity<ResponseDto<TokenResponseDto>> login(
         @RequestParam("code") String code) {
 
-        log.info("kakao login");
         KakaoUserInfoDto kakaoUserInfo = webClientService.getKakaoUserInfo(code);
-
-        if (!userService.isExistUser(kakaoUserInfo.getId())) {
-            userService.createUser(kakaoUserInfo);
-        }
-
-        User user = userService.readUserBySocialId(kakaoUserInfo.getId());
-
-        String accessToken = jwtUtil.createJwtToken(user.getId());
-        String refreshToken = jwtUtil.createRefreshToken(user.getId());
 
         return ResponseEntity.status(HttpStatus.ACCEPTED)
             .body(ResponseDto.create(LOGIN_SUCCESS.getMessage(),
-                TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken)
-                    .build()));
+                userService.kakaoLogin(kakaoUserInfo)));
     }
 
 
