@@ -21,4 +21,7 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     @EntityGraph(attributePaths = {"user"})
     @Query("SELECT g FROM Game g WHERE g.currentAge = 60")
     List<Game> findRankList(Pageable pageable);
+
+    @Query("SELECT g FROM Game g WHERE g.currentAge < 60 AND g.user.id = :userId")
+    Optional<Game> findInProgressGame(@Param("userId") Long userId);
 }
