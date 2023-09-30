@@ -95,6 +95,7 @@ public class GameServiceImpl implements GameService {
                 oldAgeMonthlyAssets.getTotalMonthlyAsset()));
             game.setResultAssets();
             game.increaseCurrentAge();
+            game.setAssetGrowthRate();
 
             return GameStatus.FINISHED;
         }
