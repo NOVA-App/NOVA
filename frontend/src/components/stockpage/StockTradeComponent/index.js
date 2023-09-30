@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions, View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import StockCard from "./StockCard";
 import * as S from "./style";
 import axios from "axios";
-
-const { height } = Dimensions.get("window");
 
 const StockTrade = () => {
   const [stockData, setStockData] = useState([]);
@@ -20,7 +18,6 @@ const StockTrade = () => {
       });
   }, []);
 
-  console.log(stockData);
   return (
     <View style={{ flex: 1, minWidth: "90%" }}>
       <S.Container style={{ flex: 8.5 }}>

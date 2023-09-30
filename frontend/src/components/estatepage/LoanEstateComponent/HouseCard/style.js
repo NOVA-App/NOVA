@@ -16,7 +16,13 @@ export const MiddleText = styled.Text`
   font-size: 16px;
 `;
 
+export const PercentText = styled.Text`
+  font-size: 16px;
+  color: #d90452;
+`;
+
 export const ImgBox = styled.Image`
+  width: 35%;
   height: 100%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -24,5 +30,10 @@ export const ImgBox = styled.Image`
 
 export const ContentContainer = styled.View`
   flex-direction: column;
-  width: 60%;
+  width: 65%;
+`;
+
+export const TextContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
 `;
