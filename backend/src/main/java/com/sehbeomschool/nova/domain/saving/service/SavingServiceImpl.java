@@ -166,16 +166,18 @@ public class SavingServiceImpl implements SavingService {
         Game game = gameRepository.findById(updateIrpRequestDto.getGameId()).orElseThrow(
             () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
         );
-        AnnualAsset annualAsset = game.getAnnualAsset();
-        annualAsset.updateIRPCost(updateIrpRequestDto.getIrpCost());
 
         MyAssets myAssets = game.getMyAssets();
+        AnnualAsset annualAsset = game.getAnnualAsset();
         Long diff = updateIrpRequestDto.getIrpCost() - annualAsset.getIRPCost();
 
         checkAsset(annualAsset, diff);
+        annualAsset.updateIRPCost(updateIrpRequestDto.getIrpCost());
+
         myAssets.increaseAsset(AssetType.IRP, diff);
         myAssets.recalculateTotalAsset();
     }
+
 
     @Override
     public void updateIrpForNextYear(Long gameId) {
