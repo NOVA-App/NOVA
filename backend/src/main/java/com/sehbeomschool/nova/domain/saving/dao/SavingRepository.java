@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SavingRepository extends JpaRepository<InstallmentSavings, Long> {
 
     Optional<List<InstallmentSavings>> findByGameId(Long gameId);
+
+    void deleteByGameId(Long gameId);
 }

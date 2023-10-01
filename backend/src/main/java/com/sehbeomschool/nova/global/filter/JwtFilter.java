@@ -31,18 +31,24 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (authorization == null) {
-            throw new NotFoundException(NOT_VALID_TOKEN.getMessage());
-        }
+        String token = null;
+        try {
+            if (authorization == null) {
+                throw new NotFoundException(NOT_VALID_TOKEN.getMessage());
+            }
 
-        if (!authorization.startsWith("Bearer ")) {
-            throw new NotFoundException(NOT_VALID_TOKEN.getMessage());
-        }
+            if (!authorization.startsWith("Bearer ")) {
+                throw new NotFoundException(NOT_VALID_TOKEN.getMessage());
+            }
 
-        String token = authorization.substring(7);
+            token = authorization.substring(7);
 
-        if (!jwtUtil.isValidToken(token)) {
-            throw new NotFoundException(NOT_VALID_TOKEN.getMessage());
+            if (!jwtUtil.isValidToken(token)) {
+                throw new NotFoundException(NOT_VALID_TOKEN.getMessage());
+            }
+        } catch (NotFoundException e) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
         Long userId = jwtUtil.getUserId(token);
