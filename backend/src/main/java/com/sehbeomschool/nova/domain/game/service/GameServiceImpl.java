@@ -38,6 +38,9 @@ import com.sehbeomschool.nova.domain.realty.domain.MyRealty;
 import com.sehbeomschool.nova.domain.realty.service.RealtyManagerService;
 import com.sehbeomschool.nova.domain.saving.service.SavingService;
 import com.sehbeomschool.nova.domain.stock.service.StockManagerService;
+import com.sehbeomschool.nova.domain.user.constant.UserExceptionMessage;
+import com.sehbeomschool.nova.domain.user.dao.UserRepository;
+import com.sehbeomschool.nova.domain.user.exception.UserNotFoundException;
 import com.sehbeomschool.nova.global.constant.FixedValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +59,7 @@ public class GameServiceImpl implements GameService {
     private final AgesRepository agesRepository;
     private final GameRepository gameRepository;
     private final AnalysisCommentRepository analysisCommentRepository;
-
+    private final UserRepository userRepository;
     private final RealtyManagerService realtyManagerService;
     private final StockManagerService stockManagerService;
     private final NewsService newsService;
@@ -64,9 +67,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
-    public GameStartResponseDto createGame(GameStartRequestDto gameStartRequestDto) {
-        // TODO : User pk 받아오는 로직 추가
-        Long userId = 1L;
+    public GameStartResponseDto createGame(GameStartRequestDto gameStartRequestDto, Long userId) {
         int numOfInProgressGames = gameRepository.countInProgressGame(userId);
 
         if (numOfInProgressGames >= 1) {
@@ -77,8 +78,9 @@ public class GameServiceImpl implements GameService {
         AnnualAsset annualAsset = AnnualAsset.createStartAnnualAsset(
             gameStartRequestDto.getStartSalary());
 
-        // TODO: 2023-09-19 User 객체 추가 
         Game game = Game.builder()
+            .user(userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(
+                UserExceptionMessage.NOT_EXIST_USER.getMessage())))
             .myAssets(
                 MyAssets.createStartMyAsset(gameStartRequestDto.getStartSalary(), annualAsset))
             .annualAsset(annualAsset)
@@ -247,9 +249,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public InProgressGameResponseDto readInProgressGame() {
-        // TODO: 현재 로그인 중인 사용자의 pk 받아오기
-        Long userId = 1L;
+    public InProgressGameResponseDto readInProgressGame(Long userId) {
         Game game = gameRepository.findInProgressGame(userId)
             .orElseThrow(() -> new GameNotFoundException(IN_PROGRESS_GAME_NOT_FOUND.getMessage()));
 
