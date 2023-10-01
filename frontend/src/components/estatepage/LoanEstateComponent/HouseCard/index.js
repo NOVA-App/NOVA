@@ -5,6 +5,8 @@ import HouseImg from "../../../../assets/House.png";
 import SmallButton from "../../../buttons/SmallButton";
 
 const HouseCard = (props) => {
+
+  
   return (
     <S.Container height={props.height}>
       <S.ImgBox source={HouseImg} />

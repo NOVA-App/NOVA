@@ -4,6 +4,7 @@ import * as S from "./style";
 import HouseImg from "../../../../assets/House.png";
 import SmallButton from "../../../buttons/SmallButton";
 const HouseCard = (props) => {
+
   return (
     <S.Container height={props.height}>
       <S.ImgBox source={HouseImg} />
@@ -30,7 +31,7 @@ const HouseCard = (props) => {
             justifyContent: "flex-end",
           }}
         >
-          <SmallButton title="매수하기" bgColor="#0046FF" />
+          <SmallButton title="매수하기" bgColor="#0046FF" realtyId={props.realtyId}/>
         </View>
       </S.ContentContainer>
     </S.Container>
