@@ -67,4 +67,10 @@ public class RealtyManagerServiceImpl implements RealtyManagerService {
             mr.setRentIncome(ri.getCurrentPrice());
         }
     }
+
+    @Override
+    @Transactional
+    public void deleteRealtyInfo(Long gameId) {
+        realtyInfoRepository.deleteRealtyInfoByGameIdInQuery(gameId);
+    }
 }
