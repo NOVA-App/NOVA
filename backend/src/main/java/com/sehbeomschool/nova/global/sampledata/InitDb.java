@@ -5,6 +5,7 @@ import com.sehbeomschool.nova.domain.news.domain.Prediction;
 import com.sehbeomschool.nova.domain.news.domain.RealtyNews;
 import com.sehbeomschool.nova.domain.news.domain.StockNews;
 import com.sehbeomschool.nova.domain.realty.domain.Realty;
+import com.sehbeomschool.nova.domain.saving.domain.InsInterest;
 import com.sehbeomschool.nova.domain.stock.domain.Stock;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class InitDb {
             makeStockAndNews();
             makeRealtyAndNews();
             makeAnalysisComments();
+            makeInsInterest();
         }
 
         public void makeStockAndNews() {
@@ -204,6 +206,17 @@ public class InitDb {
                     .maxAsset(assetRange[i][1])
                     .build());
             }
+        }
+
+        private void makeInsInterest() {
+            em.persist(InsInterest.builder()
+                .period(1).interest(5).build());
+
+            em.persist(InsInterest.builder()
+                .period(2).interest(7).build());
+
+            em.persist(InsInterest.builder()
+                .period(3).interest(10).build());
         }
     }
 
