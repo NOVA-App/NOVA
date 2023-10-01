@@ -315,4 +315,15 @@ public class GameResponseDto {
             this.assetGrowthRate = game.getAssetGrowthRate();
         }
     }
+
+    @Getter
+    public static class InProgressGameResponseDto {
+
+        private Long gameId;
+
+        @Builder
+        public InProgressGameResponseDto(Game game) {
+            this.gameId = game.getId();
+        }
+    }
 }

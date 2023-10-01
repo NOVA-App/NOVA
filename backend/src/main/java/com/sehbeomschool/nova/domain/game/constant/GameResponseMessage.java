@@ -11,7 +11,8 @@ public enum GameResponseMessage {
     READ_GAME_RESULT_DETAIL_SUCCESS("게임 결과 상세 조회 완료"),
     READ_ALL_MY_GAMES_SUCCESS("결과 목록 조회 완료"),
     READ_RANKING_LIST_SUCCESS("랭킹 목록 조회 완료"),
-    MARRY_SUCCESS("결혼 완료");
+    MARRY_SUCCESS("결혼 완료"),
+    READ_IN_PROGRESS_GAME_SUCCESS("진행 중 게임 조회 완료");
 
     private final String message;
 
