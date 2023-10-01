@@ -32,5 +32,5 @@ public interface StocksInfoRepository extends JpaRepository<StocksInfo, Long> {
     @Transactional
     @Modifying
     @Query("DELETE FROM StocksInfo si WHERE si.age in :ages")
-    void deleteStocksInfosByGameIdInQuery(@Param("gameId") List<Ages> ages);
+    void deleteStocksInfosByGameIdInQuery(@Param("ages") List<Ages> ages);
 }
