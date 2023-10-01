@@ -9,6 +9,7 @@ import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.RE
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_CURRENT_YEAR_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_FIXED_COST_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_GAME_RESULT_DETAIL_SUCCESS;
+import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.READ_RANKING_LIST_SUCCESS;
 import static com.sehbeomschool.nova.domain.game.constant.GameResponseMessage.UPDATE_LIVING_COST_SUCCESS;
 
 import com.sehbeomschool.nova.domain.game.constant.GameStatus;
@@ -21,6 +22,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseD
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.RankingListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.service.GameService;
 import com.sehbeomschool.nova.global.dto.ResponseDto;
@@ -134,6 +136,16 @@ public class GameApiController {
             ResponseDto.create(
                 READ_ALL_MY_GAMES_SUCCESS.getMessage(),
                 gameService.readAllMyGames()
+            )
+        );
+    }
+
+    @GetMapping("/rank")
+    public ResponseEntity<ResponseDto<RankingListResponseDto>> readRankingList() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            ResponseDto.create(
+                READ_RANKING_LIST_SUCCESS.getMessage(),
+                gameService.readRankingList()
             )
         );
     }
