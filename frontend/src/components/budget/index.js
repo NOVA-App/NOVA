@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, StatusBar, Dimensions, TouchableOpacity, Image } from 'react-native';
-import Logo from '../../assets/nova_logo.png'
-import styled from 'styled-components/native';
-
-// const { width, height } = Dimensions.get('window');
-// const windowWidth = Dimensions.get('window').width
-// const windowHeight = Dimensions.get('window').Height
-
+import React from "react";
+import { Text, View, Image } from "react-native";
+import Logo from "../../assets/nova_logo.png";
+import styled from "styled-components/native";
 
 const Budget = (props) => {
   return (
     <StyledUpper>
-      <View style={{ flex: 1, alignItems: 'flex-start' }}>
-        <Image style={{ resizeMode: 'contain', width: '100%', marginLeft: 5 }} source={Logo} />
+      <View style={{ flex: 1, alignItems: "flex-start" }}>
+        <Image
+          style={{ resizeMode: "contain", width: "100%", marginLeft: 5 }}
+          source={Logo}
+        />
       </View>
-      <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold' }}>여유자금</Text>
-        <Text style={{ fontSize: 20, color: '#F5B700' }}>2,000,000원</Text>
+      <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>여유자금</Text>
+        <Text style={{ fontSize: 20, color: "#F5B700" }}>2,000,000원</Text>
       </View>
-      <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
+      <View
+        style={{ flex: 1, alignItems: "flex-end", justifyContent: "center" }}
+      >
         <Text style={{ fontSize: 17 }}>메뉴</Text>
       </View>
     </StyledUpper>
@@ -26,8 +26,6 @@ const Budget = (props) => {
 };
 
 export default Budget;
-
-
 
 // const styles = StyleSheet.create({
 //   upper:{
@@ -41,10 +39,10 @@ export default Budget;
 // });
 
 const StyledUpper = styled.View`
-flex-direction: row;
-background-color: white;
-padding:10px;
-align-items: center;
-justify-content: space-between;
-height: 100px; /* 원하는 높이로 조절 */
+  flex-direction: row;
+  background-color: white;
+  padding: 10px;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px; /* 원하는 높이로 조절 */
 `;
