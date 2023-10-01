@@ -27,7 +27,7 @@ const HouseCard = (props) => {
             justifyContent: "flex-end",
           }}
         >
-          <SmallButton title="상세보기" bgColor="#0046FF" />
+          <SmallButton title="상세보기" bgColor="#0046FF" realtyId={props.realtyId}/>
         </View>
       </S.ContentContainer>
     </S.Container>

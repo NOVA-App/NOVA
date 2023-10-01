@@ -4,6 +4,7 @@ import * as S from "./style";
 import SmallButton from "../buttons/SmallButton/index";
 import InputSmall from "../input/SmallInput";
 import axios from "axios"; // axios 라이브러리 추가
+import API_URL from "../../../config";
 
 const { height, width } = Dimensions.get("window");
 
@@ -17,11 +18,12 @@ const IRPCard = (props) => {
 
       axios
         .put(API_URL + "/api/saving", {
-          gameId: 1, 
-          irpCost: irpCost, 
+          'gameId': 1, 
+          'irpCost': irpCost, 
         })
         .then((response) => {
-          console.log("PUT 요청 성공:", response.data);
+          console.log("PUT 요청 성공11:", response.data);
+          console.log("PUT 요청 성공22:", irpCost);
         })
         .catch((error) => {
           console.error("PUT 요청 오류:", error);

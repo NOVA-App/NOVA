@@ -13,7 +13,8 @@ const MyIRP = () => {
     axios
       .get(API_URL + "/api/saving/1")
       .then((response) => {
-        setCostData(response.data.data);
+        console.log(response.data.data.irpCost)
+        setCostData(response.data.data.irpCost);
       })
       .catch((error) => {
         console.error(error);
@@ -29,7 +30,7 @@ const MyIRP = () => {
 
         <S.SmallContainer>
           <S.MiddleText>현재금액</S.MiddleText>
-            <Text>{costData.irpCost}원</Text>
+            <Text>{costData}원</Text>
         </S.SmallContainer >
         
 
