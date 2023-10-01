@@ -36,6 +36,7 @@ import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughExceptio
 import com.sehbeomschool.nova.domain.news.service.NewsService;
 import com.sehbeomschool.nova.domain.realty.domain.MyRealty;
 import com.sehbeomschool.nova.domain.realty.service.RealtyManagerService;
+import com.sehbeomschool.nova.domain.saving.service.SavingService;
 import com.sehbeomschool.nova.domain.stock.service.StockManagerService;
 import com.sehbeomschool.nova.global.constant.FixedValues;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,7 @@ public class GameServiceImpl implements GameService {
     private final RealtyManagerService realtyManagerService;
     private final StockManagerService stockManagerService;
     private final NewsService newsService;
+    private final SavingService savingService;
 
     @Override
     @Transactional
@@ -199,10 +201,10 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        // TODO: Ages.id 의 StocksInfo 제거 로직 추가
-        // TODO : Game.id 의 RealtyInfo 제거 로직 추가
-        // TODO : Game.id 의 NewsInfo 제거 로직 추가
-        // TODO : Game.id 의 InstallmentSavings 제거 로직 추가
+        stockManagerService.deleteStocksInfo(game.getAges());
+        realtyManagerService.deleteRealtyInfo(game.getId());
+        newsService.deleteNewsInfo(game.getId());
+        savingService.deleteInstallmentByGameId(game.getId());
 
         gameRepository.delete(game);
     }
