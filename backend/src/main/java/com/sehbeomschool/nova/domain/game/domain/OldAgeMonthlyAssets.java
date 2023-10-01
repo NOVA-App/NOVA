@@ -66,8 +66,21 @@ public class OldAgeMonthlyAssets extends BaseEntity {
         }
     }
 
-    private void setNationalPension(int startSalary) {
+    private void setNationalPension(Integer startSalary) {
         this.nationalPension = 0;
+
+        int startAge = FixedValues.START_AGE.getValue().intValue();
+        int endAge = FixedValues.END_AGE.getValue().intValue();
+
+        Long nextSalary = startSalary.longValue();
+        for (int j = startAge; j < endAge; j++) {
+            this.nationalPension += (int) (nextSalary
+                * FixedValues.NATIONAL_PENSION_PERCENTAGE.getValue() * 2);
+            nextSalary = (long) (nextSalary * FixedValues.SALARY_INCREASE_RATE.getValue());
+        }
+
+        this.nationalPension = (int) (this.nationalPension
+            / FixedValues.NUM_OF_MONTHS_OF_OLD_AGE.getValue());
     }
 
     private void setTotalMonthlyAsset() {
