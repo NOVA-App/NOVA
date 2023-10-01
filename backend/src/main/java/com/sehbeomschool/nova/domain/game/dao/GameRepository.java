@@ -24,4 +24,7 @@ public interface GameRepository extends JpaRepository<Game, Long> {
 
     @Query("SELECT g FROM Game g WHERE g.currentAge < 60 AND g.user.id = :userId")
     Optional<Game> findInProgressGame(@Param("userId") Long userId);
+
+    @Query("SELECT COUNT(g) FROM Game g WHERE g.currentAge < 60 AND g.user.id = :userId")
+    int countInProgressGame(@Param("userId") Long userId);
 }
