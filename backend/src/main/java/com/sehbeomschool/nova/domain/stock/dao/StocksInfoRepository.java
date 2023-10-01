@@ -3,8 +3,10 @@ package com.sehbeomschool.nova.domain.stock.dao;
 import com.sehbeomschool.nova.domain.stock.domain.StocksInfo;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface StocksInfoRepository extends JpaRepository<StocksInfo, Long> {
 
@@ -26,6 +28,8 @@ public interface StocksInfoRepository extends JpaRepository<StocksInfo, Long> {
 
     StocksInfo findStocksInfoByAgeIdAndStockId(Long ageId, Long stockId);
 
-    @Query("DELETE FROM StocksInfo si WHERE si.age.id = :ageId")
-    void deleteStocksInfosByAgeIdInQuery(@Param("ageId") Long ageId);
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM StocksInfo si WHERE si.age.game.id = :gameId")
+    void deleteStocksInfosByGameIdInQuery(@Param("gameId") Long gameId);
 }
