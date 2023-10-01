@@ -11,4 +11,6 @@ public interface NewsService {
     void createNewsInfoByGameStart(Game game, Ages age);
 
     void updateNewsInfoByNextYear(Game game, Ages age);
+
+    void deleteNewsInfo(Long gameId);
 }
