@@ -2,7 +2,7 @@ import React from "react";
 import { Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { GameMainPage, Banking, RealEstatePage, NewsPage } from "./template";
+import { GameMainPage, Banking, RealEstatePage, NewsPage, StockPage } from "./template";
 import Budget from "../../components/budget";
 
 const GameStack = createStackNavigator();
@@ -83,9 +83,24 @@ function BottomNav() {
           ),
         }}
       />
-      {/* <Tab.Screen name="NewsPage" component={NewsPage}/>
-      <Tab.Screen name="StockPage" component={StockPage}/> */}
-      {/* {{ headerShown: false }} */}
+      <Tab.Screen
+        name="StockPage"
+        component={StockPage}
+        options={{
+          tabBarLabel: "주식",
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => (
+            <Image
+              source={
+                focused
+                  ? require("../../assets/BottomNav/Stock.png")
+                  : require("../../assets/BottomNav/Stock.png")
+              }
+              style={{ width: 30, height: 30 }}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
