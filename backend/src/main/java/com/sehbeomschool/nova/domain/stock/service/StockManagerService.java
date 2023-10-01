@@ -8,4 +8,5 @@ public interface StockManagerService {
 
     public void createStocksInfoByNextYear(Ages prevAge, Ages nextAge);
 
+    public void deleteStocksInfo(Long ageId);
 }
