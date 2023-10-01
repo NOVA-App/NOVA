@@ -60,7 +60,7 @@ public class StockManagerServiceImpl implements StockManagerService {
 
     @Override
     @Transactional
-    public void deleteStocksInfo(Long ageId) {
-        stocksInfoRepository.deleteStocksInfosByAgeIdInQuery(ageId);
+    public void deleteStocksInfo(Long gameId) {
+        stocksInfoRepository.deleteStocksInfosByGameIdInQuery(gameId);
     }
 }
