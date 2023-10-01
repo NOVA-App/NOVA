@@ -57,4 +57,10 @@ public class StockManagerServiceImpl implements StockManagerService {
             stocksInfoRepository.save(newStocksInfo);
         }
     }
+
+    @Override
+    @Transactional
+    public void deleteStocksInfo(Long ageId) {
+        stocksInfoRepository.deleteStocksInfosByAgeIdInQuery(ageId);
+    }
 }
