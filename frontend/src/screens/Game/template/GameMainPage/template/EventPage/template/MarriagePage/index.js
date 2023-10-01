@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native"; // useNavigation 추�
 import Button from "../../../../../../../../components/buttons/SmallButton";
 import Marriage from "../../../../../../../../assets/Marriage.png";
 import axios from "axios";
+import API_URL from "../../../../../../../../../config";
 
 export default function MarriagePage() {
   const navigation = useNavigation(); // 네비게이션 객체 생성
@@ -11,12 +12,9 @@ export default function MarriagePage() {
   const handleMarry = async () => {
     try {
       // POST 요청 보내기
-      const response = await axios.post(
-        "http://192.168.56.200:8080/api/game/marry",
-        {
-          gameId: 2,
-        }
-      );
+      const response = await axios.post(API_URL + "/api/game/marry", {
+        gameId: 2,
+      });
       if (response.status === 201) {
         console.log("결혼 성공");
       } else {

@@ -6,7 +6,6 @@ export const Container = styled.View`
   height: 98%;
   border-radius: 10px;
   margin-left: 1%;
-  margin-bottom: 1%;
 `;
 
 export const TagContainer = styled.View`
