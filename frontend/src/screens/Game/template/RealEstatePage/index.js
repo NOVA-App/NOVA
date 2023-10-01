@@ -4,7 +4,7 @@ import TabSelect from "./TabSelect";
 import styled from "styled-components/native";
 
 const RealEstatePage = () => {
-  const [selectedTab, setSelectedTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const changeTabFirst = () => {
     setSelectedTab(0);
@@ -65,7 +65,7 @@ const RealEstatePage = () => {
   );
 };
 
-export {RealEstatePage};
+export { RealEstatePage };
 
 const styles = StyleSheet.create({
   container: {
