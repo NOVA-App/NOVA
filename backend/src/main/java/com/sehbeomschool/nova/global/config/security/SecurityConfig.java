@@ -36,7 +36,7 @@ public class SecurityConfig {
             .and()
             .addFilterBefore(new JwtFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
+//            .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
             .build();
     }
 
