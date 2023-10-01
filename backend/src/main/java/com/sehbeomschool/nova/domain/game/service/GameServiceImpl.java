@@ -1,25 +1,37 @@
 package com.sehbeomschool.nova.domain.game.service;
 
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_FINISHED;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.IN_PROGRESS_GAME_ALREADY_EXIST;
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.IN_PROGRESS_GAME_NOT_FOUND;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
 
 import com.sehbeomschool.nova.domain.game.constant.EventType;
+import com.sehbeomschool.nova.domain.game.constant.GameStatus;
 import com.sehbeomschool.nova.domain.game.dao.AgesRepository;
+import com.sehbeomschool.nova.domain.game.dao.AnalysisCommentRepository;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.domain.Ages;
 import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Event;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
+import com.sehbeomschool.nova.domain.game.domain.OldAgeMonthlyAssets;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.GameStartRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.MarryRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.UpdateLivingCostRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.InProgressGameResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.RankingListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
+import com.sehbeomschool.nova.domain.game.exception.GameFinishedException;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.domain.game.exception.InProgressGameAlreadyExistException;
 import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
 import com.sehbeomschool.nova.domain.news.service.NewsService;
 import com.sehbeomschool.nova.domain.realty.domain.MyRealty;
@@ -28,6 +40,9 @@ import com.sehbeomschool.nova.domain.stock.service.StockManagerService;
 import com.sehbeomschool.nova.global.constant.FixedValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +54,7 @@ public class GameServiceImpl implements GameService {
 
     private final AgesRepository agesRepository;
     private final GameRepository gameRepository;
+    private final AnalysisCommentRepository analysisCommentRepository;
 
     private final RealtyManagerService realtyManagerService;
     private final StockManagerService stockManagerService;
@@ -47,6 +63,15 @@ public class GameServiceImpl implements GameService {
     @Override
     @Transactional
     public GameStartResponseDto createGame(GameStartRequestDto gameStartRequestDto) {
+        // TODO : User pk 받아오는 로직 추가
+        Long userId = 1L;
+        int numOfInProgressGames = gameRepository.countInProgressGame(userId);
+
+        if (numOfInProgressGames >= 1) {
+            throw new InProgressGameAlreadyExistException(
+                IN_PROGRESS_GAME_ALREADY_EXIST.getMessage());
+        }
+
         AnnualAsset annualAsset = AnnualAsset.createStartAnnualAsset(
             gameStartRequestDto.getStartSalary());
 
@@ -75,12 +100,29 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
-    public void updateForNextYear(NextYearRequestDto nextYearRequestDto) {
+    public GameStatus updateForNextYear(NextYearRequestDto nextYearRequestDto) {
         Game game = gameRepository.findById(nextYearRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
+        if (game.getCurrentAge() == FixedValues.END_AGE.getValue().intValue()) {
+            throw new GameFinishedException(GAME_FINISHED.getMessage());
+        }
+
         // 생활비, 고정 지출 지불된 현재 해 총 자산 Ages에 반영
         Ages currentAge = payAllCostsAndSetToCurrentAge(game);
+
+        if ((currentAge.getAge() + 1) == FixedValues.END_AGE.getValue().intValue()) {
+            OldAgeMonthlyAssets oldAgeMonthlyAssets = OldAgeMonthlyAssets.builder().game(game)
+                .build();
+            game.setOldAgeMonthlyAssets(oldAgeMonthlyAssets);
+            game.setAnalysisComment(analysisCommentRepository.findBetweenMinAndMaxAsset(
+                oldAgeMonthlyAssets.getTotalMonthlyAsset()));
+            game.setResultAssets();
+            game.increaseCurrentAge();
+            game.setAssetGrowthRate();
+
+            return GameStatus.FINISHED;
+        }
 
         // 다음 해 Ages 생성 및 추가
         Ages nextAge = makeNextAge(game);
@@ -110,6 +152,8 @@ public class GameServiceImpl implements GameService {
         // 다음 해 총 자산 저장 및 다음 해 Ages에 반영
         game.getMyAssets().recalculateTotalAsset();
         nextAge.setTotalAsset(game.getMyAssets().getTotalAsset());
+
+        return GameStatus.IN_PROGRESS;
     }
 
     @Override
@@ -151,6 +195,43 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
+    public void deleteGame(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+            .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        // TODO: Ages.id 의 StocksInfo 제거 로직 추가
+        // TODO : Game.id 의 RealtyInfo 제거 로직 추가
+        // TODO : Game.id 의 NewsInfo 제거 로직 추가
+        // TODO : Game.id 의 InstallmentSavings 제거 로직 추가
+
+        gameRepository.delete(game);
+    }
+
+    @Override
+    public GameResultDetailResponseDto readGameResultDetail(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+            .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        return GameResultDetailResponseDto.builder().game(game).build();
+    }
+
+    @Override
+    public MyResultsListResponseDto readAllMyGames() {
+        return MyResultsListResponseDto.builder()
+            .games(gameRepository.findFinishedGameByUserId(1L))
+            .build();
+    }
+
+    @Override
+    public RankingListResponseDto readRankingList() {
+        return RankingListResponseDto.builder()
+            .games(gameRepository.findRankList(
+                PageRequest.of(0, 30, Sort.by(Direction.DESC, "assetGrowthRate"))))
+            .build();
+    }
+
+    @Override
+    @Transactional
     public void marry(MarryRequestDto marryRequestDto) {
         Game game = gameRepository.findById(marryRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
@@ -161,6 +242,16 @@ public class GameServiceImpl implements GameService {
             .build());
 
         game.getMyAssets().recalculateTotalAsset();
+    }
+
+    @Override
+    public InProgressGameResponseDto readInProgressGame() {
+        // TODO: 현재 로그인 중인 사용자의 pk 받아오기
+        Long userId = 1L;
+        Game game = gameRepository.findInProgressGame(userId)
+            .orElseThrow(() -> new GameNotFoundException(IN_PROGRESS_GAME_NOT_FOUND.getMessage()));
+
+        return InProgressGameResponseDto.builder().game(game).build();
     }
 
     private void addChildBirthEvent(Game game, Ages nextAge) {

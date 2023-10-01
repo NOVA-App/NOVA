@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Dimensions, View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import StockCard from "./StockCard";
 import * as S from "./style";
 import axios from "axios";
-
-const { height } = Dimensions.get("window");
+import API_URL from "../../../../config";
 
 const StockTrade = () => {
   const [stockData, setStockData] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://192.168.56.200:8080/api/stock/list/1") // 게임아이디 받아와서 주기
+      .get(API_URL + "/api/stock/list/1") // 게임아이디 받아와서 주기
       .then((response) => {
         setStockData(response.data.data);
       })
@@ -20,7 +19,6 @@ const StockTrade = () => {
       });
   }, []);
 
-  console.log(stockData);
   return (
     <View style={{ flex: 1, minWidth: "90%" }}>
       <S.Container style={{ flex: 8.5 }}>

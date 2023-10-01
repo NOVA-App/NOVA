@@ -6,7 +6,6 @@ export const Container = styled.View`
   height: 98%;
   border-radius: 10px;
   margin-left: 1%;
-  margin-bottom: 1%;
 `;
 
 export const TagContainer = styled.View`
@@ -37,4 +36,10 @@ export const MiddleText = styled.Text`
 export const CenterView = styled.View`
   justify-items: center;
   width: 100%;
+`;
+
+export const TextContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-evenly;
+  min-width: 100%;
 `;
