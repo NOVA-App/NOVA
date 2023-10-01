@@ -7,10 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface RealtyNewsRepository extends JpaRepository<RealtyNews, Long> {
 
-    @Query(value = "SELECT * FROM REALTY_NEWS rn, NEWS n "
-        + "WHERE rn.NEWS_ID = n.NEWS_ID AND "
-        + "rn.REALTY_ID = :realtyId AND "
-        + "n.PREDICTION = :prediction "
+    @Query(value = "SELECT * FROM realty_news rn, news n "
+        + "WHERE rn.news_id = n.news_id AND "
+        + "rn.realty_id = :realtyId AND "
+        + "n.prediction = :prediction "
         + "ORDER BY RAND() LIMIT 1", nativeQuery = true)
     RealtyNews findRealtyNewsByRandom(@Param("realtyId") Long realtyId,
         @Param("prediction") String prediction);
