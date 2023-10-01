@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.stock.dao;
 
+import com.sehbeomschool.nova.domain.game.domain.Ages;
 import com.sehbeomschool.nova.domain.stock.domain.StocksInfo;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,6 +31,6 @@ public interface StocksInfoRepository extends JpaRepository<StocksInfo, Long> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM StocksInfo si WHERE si.age.game.id = :gameId")
-    void deleteStocksInfosByGameIdInQuery(@Param("gameId") Long gameId);
+    @Query("DELETE FROM StocksInfo si WHERE si.age in :ages")
+    void deleteStocksInfosByGameIdInQuery(@Param("gameId") List<Ages> ages);
 }
