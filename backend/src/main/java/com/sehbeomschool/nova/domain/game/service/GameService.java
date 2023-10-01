@@ -7,6 +7,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.UpdateLivingCostRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 
@@ -24,6 +25,8 @@ public interface GameService {
     FixedCostResponseDto readFixedCost(Long gameId);
 
     void deleteGame(Long gameId);
+
+    GameResultDetailResponseDto readGameResultDetail(Long gameId);
 
     void marry(MarryRequestDto marryRequestDto);
 }

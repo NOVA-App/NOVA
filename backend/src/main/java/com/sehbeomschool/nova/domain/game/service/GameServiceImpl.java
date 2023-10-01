@@ -20,6 +20,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.NextYearRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameRequestDto.UpdateLivingCostRequestDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.CurrentYearResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.FixedCostResponseDto;
+import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameResultDetailResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.GameStartResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
@@ -179,6 +180,14 @@ public class GameServiceImpl implements GameService {
         // TODO : Game.id 의 InstallmentSavings 제거 로직 추가
 
         gameRepository.delete(game);
+    }
+
+    @Override
+    public GameResultDetailResponseDto readGameResultDetail(Long gameId) {
+        Game game = gameRepository.findById(gameId)
+            .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        return GameResultDetailResponseDto.builder().game(game).build();
     }
 
     @Override
