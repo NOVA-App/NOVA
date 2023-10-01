@@ -12,4 +12,7 @@ public interface NewsInfoRepository extends JpaRepository<NewsInfo, Long> {
     List<String> findContentByGameId(@Param("gameId") Long gameId);
 
     List<NewsInfo> findNewsInfosByGameId(Long gameId);
+
+    @Query("DELETE FROM NewsInfo ni WHERE ni.game.id = :gameId")
+    void deleteNewsInfoByGameIdInQuery(@Param("gameId") Long gameId);
 }
