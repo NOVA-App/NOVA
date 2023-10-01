@@ -15,6 +15,9 @@ public interface RealtyInfoRepository extends JpaRepository<RealtyInfo, Long> {
     @Query("SELECT ri FROM RealtyInfo ri WHERE ri.game.id = :gameId AND NOT EXISTS (SELECT 1 FROM MyRealty mr WHERE mr.realty.id = ri.realty.id AND mr.game.id = ri.game.id)")
     List<RealtyInfo> findRealtyInfosByGameIdAndNotinMyRealty(@Param("gameId") Long gameId);
 
-    @Query(value = "SELECT * FROM REALTY_INFO WHERE GAME_ID = :gameId ORDER BY RAND() LIMIT 3", nativeQuery = true)
+    @Query(value = "SELECT * FROM realty_info WHERE game_id = :gameId ORDER BY RAND() LIMIT 3", nativeQuery = true)
     List<RealtyInfo> findRealtyInfosByRandom(@Param("gameId") Long gameId);
+
+    @Query("DELETE FROM RealtyInfo ri WHERE ri.game.id = :gameId")
+    void deleteRealtyInfoByGameIdInQuery(@Param("gameId") Long gameId);
 }
