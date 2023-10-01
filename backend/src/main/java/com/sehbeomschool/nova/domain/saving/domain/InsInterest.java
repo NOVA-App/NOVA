@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,4 +24,9 @@ public class InsInterest extends BaseEntity {
     private int period;
     private int interest;
 
+    @Builder
+    public InsInterest(int period, int interest) {
+        this.period = period;
+        this.interest = interest;
+    }
 }
