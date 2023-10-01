@@ -20,4 +20,6 @@ public interface SavingService {
 
     void updateIrpForNextYear(Long gameId);
 
+    void deleteInstallmentByGameId(Long gameId);
+
 }

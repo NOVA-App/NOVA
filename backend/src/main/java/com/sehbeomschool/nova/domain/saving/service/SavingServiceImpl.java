@@ -2,6 +2,7 @@ package com.sehbeomschool.nova.domain.saving.service;
 
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
+import static com.sehbeomschool.nova.domain.saving.constant.SavingExceptionMessage.NOT_ALLOW_MINUS;
 import static com.sehbeomschool.nova.domain.saving.constant.SavingExceptionMessage.NOT_EXIST_INSINTEREST;
 import static com.sehbeomschool.nova.domain.saving.constant.SavingExceptionMessage.NOT_EXIST_INSTALLMENT;
 import static com.sehbeomschool.nova.global.constant.FixedValues.INSTALLMENT_TAX_PERCENTAGE;
@@ -21,6 +22,7 @@ import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentR
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.UpdateIrpRequestDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.InstallmentSavingsDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.SavingInfoResponseDto;
+import com.sehbeomschool.nova.domain.saving.exception.SavingNotEnoughException;
 import com.sehbeomschool.nova.domain.saving.exception.SavingNotFoundException;
 import com.sehbeomschool.nova.global.util.RandomCalculator;
 import java.util.List;
@@ -73,10 +75,19 @@ public class SavingServiceImpl implements SavingService {
 
         AnnualAsset annualAsset = game.getAnnualAsset();
         MyAssets myAssets = game.getMyAssets();
-        //TODO : annual_cost 에 추가하기
-        // annualAsset.addInstallmentSaving(installmentSavings.getAmount());
+
+        Long amount = installmentSavings.getAmount();
+        checkAsset(annualAsset, amount);
+
+        annualAsset.increaseInstallmentSavingCost(amount);
         myAssets.increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getAmount());
         myAssets.recalculateTotalAsset();
+    }
+
+    private static void checkAsset(AnnualAsset annualAsset, Long useMoney) {
+        if (annualAsset.getUsableAsset() < useMoney) {
+            throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
+        }
     }
 
     @Override
@@ -88,10 +99,8 @@ public class SavingServiceImpl implements SavingService {
         Game game = installmentSavings.getGame();
         AnnualAsset annualAsset = game.getAnnualAsset();
         MyAssets myAssets = game.getMyAssets();
-        //TODO : annual_cost 에 추가하기
 
-        // annualAsset.deleteInstallmentSaving(installmentSavings.getAmount());
-        annualAsset.earnAsset(installmentSavings.getTotalAmount());
+        annualAsset.decreaseInstallmentSavingCost(installmentSavings.getAmount());
         myAssets.decreaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getTotalAmount());
 
         savingRepository.delete(installmentSavings);
@@ -113,12 +122,10 @@ public class SavingServiceImpl implements SavingService {
         Game game = installmentSavings.getGame();
         AnnualAsset annualAsset = game.getAnnualAsset();
         MyAssets myAssets = game.getMyAssets();
-        //TODO : annual_cost 에 추가하기
 
-        //annualAsset.deleteInstallmentSaving(installmentSavings.getAmount());
+        annualAsset.decreaseInstallmentSavingCost(installmentSavings.getTotalAmount());
 
-        annualAsset.earnAsset(
-            installmentSavings.getTotalAmount() + (long) (compoundInterest - tax));
+        annualAsset.earnAsset((long) (compoundInterest - tax));
         myAssets.decreaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getTotalAmount());
         myAssets.increaseAsset(AssetType.TAX, (long) tax);
 
@@ -143,7 +150,8 @@ public class SavingServiceImpl implements SavingService {
                 continue;
             }
             installmentSaving.updateTotalAmountForNextYear();
-            //TODO : 연간 적금 자산 증가 시키기
+
+            game.getAnnualAsset().increaseInstallmentSavingCost(installmentSaving.getAmount());
             game.getMyAssets()
                 .increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSaving.getAmount());
         }
@@ -152,17 +160,19 @@ public class SavingServiceImpl implements SavingService {
     @Override
     public void updateIrpCost(UpdateIrpRequestDto updateIrpRequestDto) {
         if (updateIrpRequestDto.getIrpCost() < 0) {
-            throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
+            throw new SavingNotEnoughException(NOT_ALLOW_MINUS.getMessage());
         }
 
         Game game = gameRepository.findById(updateIrpRequestDto.getGameId()).orElseThrow(
             () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
         );
         AnnualAsset annualAsset = game.getAnnualAsset();
-        //TODO : 연간 IRP 비용 업데이트
+        annualAsset.updateIRPCost(updateIrpRequestDto.getIrpCost());
+
         MyAssets myAssets = game.getMyAssets();
         Long diff = updateIrpRequestDto.getIrpCost() - annualAsset.getIRPCost();
 
+        checkAsset(annualAsset, diff);
         myAssets.increaseAsset(AssetType.IRP, diff);
         myAssets.recalculateTotalAsset();
     }
@@ -173,12 +183,19 @@ public class SavingServiceImpl implements SavingService {
             () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
         );
         MyAssets myAssets = game.getMyAssets();
+        AnnualAsset annualAsset = game.getAnnualAsset();
 
         Long irpInterest = RandomCalculator.calIrpInterest(myAssets.getIRPAsset());
-        Long irpCost = game.getAnnualAsset().getIRPCost();
+        Long irpCost = annualAsset.getIRPCost();
 
-        //TODO : 연간 자산 업데이트
+        annualAsset.useUsableAsset(irpCost);
+        annualAsset.earnAsset(irpInterest);
         myAssets.increaseAsset(AssetType.IRP, irpInterest + irpCost);
+    }
+
+    @Override
+    public void deleteInstallmentByGameId(Long gameId) {
+        savingRepository.deleteByGameId(gameId);
     }
 
 }
