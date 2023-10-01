@@ -44,6 +44,8 @@ const ForSaleEstate = () => {
                   realtyAmount={realtyItem.evaluationAmount}
                   percent={realtyItem.depreciationPercent}
                   predictIncome={realtyItem.predictedRentIncome}
+                  region={realtyItem.region}
+                  realtyImg={realtyItem.realtyImg}
                 />
               ))}
             </ScrollView>
