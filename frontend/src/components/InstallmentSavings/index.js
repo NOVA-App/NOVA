@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Image, Dimensions } from "react-native";
 import * as S from "./style";
 import SmallButton from "../buttons/SmallButton/index"
 import InputSmall from "../input/SmallInput";
+import ToggleButtonSaving from "./ToggleButtonSaving";
 
 const { height, width } = Dimensions.get("window");
 
@@ -20,13 +21,24 @@ const InstallmentSavingsCard = (props) => {
         </S.SmallContainer >
         
         <S.SmallContainer>
-        <S.MiddleText>적금 기간</S.MiddleText>
-            <InputSmall height={props.height}/>
+        <S.MiddleText>적금 기간 (년)</S.MiddleText>
+        <ToggleButtonSaving
+            label="1"
+            // isSelected={year === 1}
+            // onPress={() => ChangeTerm(1)}
+            />
+        <ToggleButtonSaving
+            label="2"
+            />
+        <ToggleButtonSaving
+            label="3"
+            />
         </S.SmallContainer>
         <S.SmallContainer>
         <S.MiddleText>연 납입 금액</S.MiddleText>
             <InputSmall height={props.height}/>
         </S.SmallContainer>
+
 
         
         
