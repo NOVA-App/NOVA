@@ -2,11 +2,19 @@ import React from "react";
 import { View, Text } from "react-native";
 import * as S from "./style";
 import SmallButton from "../../../buttons/SmallButton";
+import { useNavigation } from '@react-navigation/native';
 
 const StockCard = (props) => {
+  const navigation = useNavigation();
+
   const rate = Math.floor(
     (props.fluctuations * 100) / (props.stockAmount - props.fluctuations)
   );
+
+  const handleBuyButtonPress = () => {
+    navigation.navigate("StockDetailPage", { screen: "StockDetailPage" });
+  };
+
   return (
     <S.Container height={props.height}>
       <S.ContentContainer>
@@ -24,7 +32,7 @@ const StockCard = (props) => {
           minWidth: "100%",
         }}
       >
-        <SmallButton title="매수하기" bgColor="#0046FF" />
+        <SmallButton title="매수하기" bgColor="#0046FF" onPress={handleBuyButtonPress} />
       </View>
     </S.Container>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import MyStock from "../../../../components/stockpage/MyStockComponent";
-import StockTrade from "../../../../components/stockpage/StockTradeComponent";
+import MyStock from "../../../../../components/stockpage/MyStockComponent";
+import StockTrade from "../../../../../components/stockpage/StockTradeComponent";
 
 const TabSelect = ({ selectedTab }) => {
   return (
