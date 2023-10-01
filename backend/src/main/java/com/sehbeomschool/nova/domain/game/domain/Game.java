@@ -127,6 +127,18 @@ public class Game extends BaseEntity {
         myRealty.setGame(this);
     }
 
+    public void setOldAgeMonthlyAssets(OldAgeMonthlyAssets oldAgeMonthlyAssets) {
+        this.oldAgeMonthlyAssets = oldAgeMonthlyAssets;
+    }
+
+    public void setAnalysisComment(AnalysisComment analysisComment) {
+        this.analysisComment = analysisComment;
+    }
+
+    public void setResultAssets() {
+        this.resultAssets = this.myAssets.getTotalAsset();
+    }
+
     private void addChildCost() {
         this.annualAsset.addChildCost();
     }
