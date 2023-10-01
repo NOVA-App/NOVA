@@ -188,7 +188,6 @@ public class SavingServiceImpl implements SavingService {
         Long irpInterest = RandomCalculator.calIrpInterest(myAssets.getIRPAsset());
         Long irpCost = annualAsset.getIRPCost();
 
-        annualAsset.useUsableAsset(irpCost);
         annualAsset.earnAsset(irpInterest);
         myAssets.increaseAsset(AssetType.IRP, irpInterest + irpCost);
     }
