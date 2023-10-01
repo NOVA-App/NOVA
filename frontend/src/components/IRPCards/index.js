@@ -18,7 +18,7 @@ const IRPCard = (props) => {
       axios
         .put(API_URL + "/api/saving", {
           gameId: 1, 
-          irpCost: irpCostNumeric, 
+          irpCost: irpCost, 
         })
         .then((response) => {
           console.log("PUT 요청 성공:", response.data);
