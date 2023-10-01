@@ -1,5 +1,9 @@
 package com.sehbeomschool.nova.domain.saving.service;
 
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.USABLE_ASSET_NOT_ENOUGH;
+import static com.sehbeomschool.nova.domain.saving.constant.SavingExceptionMessage.NOT_EXIST_INSINTEREST;
+import static com.sehbeomschool.nova.domain.saving.constant.SavingExceptionMessage.NOT_EXIST_INSTALLMENT;
 import static com.sehbeomschool.nova.global.constant.FixedValues.INSTALLMENT_TAX_PERCENTAGE;
 
 import com.sehbeomschool.nova.domain.game.constant.AssetType;
@@ -7,6 +11,8 @@ import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
+import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
 import com.sehbeomschool.nova.domain.saving.dao.InsInterestRepository;
 import com.sehbeomschool.nova.domain.saving.dao.SavingRepository;
 import com.sehbeomschool.nova.domain.saving.domain.InsInterest;
@@ -15,6 +21,7 @@ import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentR
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.UpdateIrpRequestDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.InstallmentSavingsDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.SavingInfoResponseDto;
+import com.sehbeomschool.nova.domain.saving.exception.SavingNotFoundException;
 import com.sehbeomschool.nova.global.util.RandomCalculator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +45,9 @@ public class SavingServiceImpl implements SavingService {
         List<InstallmentSavingsDto> installmentSavingsDtos = installmentSavings.stream()
             .map(InstallmentSavingsDto::new).toList();
 
-        Game game = gameRepository.findById(gameId).orElseThrow();
+        Game game = gameRepository.findById(gameId).orElseThrow(
+            () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
         MyAssets myAssets = game.getMyAssets();
 
         return SavingInfoResponseDto.builder().installmentSavings(installmentSavingsDtos)
@@ -50,9 +59,13 @@ public class SavingServiceImpl implements SavingService {
     @Override
     public void createInstallment(AddInstallmentRequestDto addInstallmentRequestDto) {
 
-        Game game = gameRepository.findById(addInstallmentRequestDto.getGameId()).orElseThrow();
+        Game game = gameRepository.findById(addInstallmentRequestDto.getGameId()).orElseThrow(
+            () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
+        );
         InsInterest insInterest = insInterestRepository.findByPeriod(
-            addInstallmentRequestDto.getPeriod()).orElseThrow();
+            addInstallmentRequestDto.getPeriod()).orElseThrow(
+            () -> new SavingNotFoundException(NOT_EXIST_INSINTEREST.getMessage())
+        );
 
         InstallmentSavings installmentSavings = addInstallmentRequestDto.toEntity(game,
             insInterest);
@@ -69,7 +82,8 @@ public class SavingServiceImpl implements SavingService {
     @Override
     public void deleteInstallment(Long installmentSavingId) {
         InstallmentSavings installmentSavings = savingRepository.findById(installmentSavingId)
-            .orElseThrow();
+            .orElseThrow(
+                () -> new SavingNotFoundException(NOT_EXIST_INSTALLMENT.getMessage()));
 
         Game game = installmentSavings.getGame();
         AnnualAsset annualAsset = game.getAnnualAsset();
@@ -86,7 +100,7 @@ public class SavingServiceImpl implements SavingService {
     @Override
     public void matureInstallment(Long installmentSavingId) {
         InstallmentSavings installmentSavings = savingRepository.findById(installmentSavingId)
-            .orElseThrow();
+            .orElseThrow(() -> new SavingNotFoundException(NOT_EXIST_INSTALLMENT.getMessage()));
 
         InsInterest interest = installmentSavings.getInterest();
         double compoundInterest = calculateCompoundInterest(installmentSavings.getAmount(),
@@ -118,7 +132,9 @@ public class SavingServiceImpl implements SavingService {
 
     @Override
     public void updateInstallmentForNextYear(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow();
+        Game game = gameRepository.findById(gameId).orElseThrow(
+            () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
+        );
         List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
             .orElseThrow();
         for (InstallmentSavings installmentSaving : installmentSavings) {
@@ -136,9 +152,12 @@ public class SavingServiceImpl implements SavingService {
     @Override
     public void updateIrpCost(UpdateIrpRequestDto updateIrpRequestDto) {
         if (updateIrpRequestDto.getIrpCost() < 0) {
-            //예외처리
+            throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
         }
-        Game game = gameRepository.findById(updateIrpRequestDto.getGameId()).orElseThrow();
+
+        Game game = gameRepository.findById(updateIrpRequestDto.getGameId()).orElseThrow(
+            () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
+        );
         AnnualAsset annualAsset = game.getAnnualAsset();
         //TODO : 연간 IRP 비용 업데이트
         MyAssets myAssets = game.getMyAssets();
@@ -150,7 +169,9 @@ public class SavingServiceImpl implements SavingService {
 
     @Override
     public void updateIrpForNextYear(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow();
+        Game game = gameRepository.findById(gameId).orElseThrow(
+            () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
+        );
         MyAssets myAssets = game.getMyAssets();
 
         Long irpInterest = RandomCalculator.calIrpInterest(myAssets.getIRPAsset());

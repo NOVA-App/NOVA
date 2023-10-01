@@ -139,4 +139,8 @@ public class MyAssets extends BaseEntity {
 
         recalculateTotalAsset();
     }
+
+    public Long getTotalAssetsExceptRealty() {
+        return this.totalAsset - this.realtyAsset;
+    }
 }
