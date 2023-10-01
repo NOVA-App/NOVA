@@ -16,7 +16,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostRe
 
 public interface GameService {
 
-    GameStartResponseDto createGame(GameStartRequestDto gameStartRequestDto);
+    GameStartResponseDto createGame(GameStartRequestDto gameStartRequestDto, Long userId);
 
     GameStatus updateForNextYear(NextYearRequestDto nextYearRequestDto);
 
@@ -37,5 +37,5 @@ public interface GameService {
 
     void marry(MarryRequestDto marryRequestDto);
 
-    InProgressGameResponseDto readInProgressGame();
+    InProgressGameResponseDto readInProgressGame(Long userId);
 }
