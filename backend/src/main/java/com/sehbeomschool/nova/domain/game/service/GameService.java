@@ -23,5 +23,7 @@ public interface GameService {
 
     FixedCostResponseDto readFixedCost(Long gameId);
 
+    void deleteGame(Long gameId);
+
     void marry(MarryRequestDto marryRequestDto);
 }
