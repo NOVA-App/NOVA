@@ -193,4 +193,9 @@ public class SavingServiceImpl implements SavingService {
         myAssets.increaseAsset(AssetType.IRP, irpInterest + irpCost);
     }
 
+    @Override
+    public void deleteInstallmentByGameId(Long gameId) {
+        savingRepository.deleteByGameId(gameId);
+    }
+
 }
