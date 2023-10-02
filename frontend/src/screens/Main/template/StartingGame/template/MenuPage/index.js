@@ -11,6 +11,12 @@ const MenuPage = () => {
   const handleGameStartPage = () => {
     navigation.navigate("GameStartPage")
   }
+  const handleMyPage = () => {
+    navigation.navigate("MyPage")
+  }
+  const handleRankingPage = () => {
+    navigation.navigate("RankingPage")
+  }
   return (
     <View style={{ alignItems: "center" }}>
       <S.Container style={{ alignItems: "center" }}>
@@ -22,8 +28,8 @@ const MenuPage = () => {
         </View>
       </S.Container>
       <XXLargeButton style={{ margin: 10 }} bgColor="#038C7F" title="새로운 게임 시작하기" onPress={handleGameStartPage}/>
-      <XXLargeButton style={{ margin: 10 }} bgColor="#F5B700" title="마이페이지" />
-      <XXLargeButton style={{ margin: 10 }} bgColor="#D90452" title="랭킹페이지" />
+      <XXLargeButton style={{ margin: 10 }} bgColor="#F5B700" title="마이페이지" onPress={handleMyPage} />
+      <XXLargeButton style={{ margin: 10 }} bgColor="#D90452" title="랭킹페이지" onPress={handleRankingPage} />
     </View>
   );
 };
