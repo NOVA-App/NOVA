@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.global.config.security;
 
+import com.sehbeomschool.nova.global.error.WebAuthenticationEntryPoint;
 import com.sehbeomschool.nova.global.filter.JwtExceptionFilter;
 import com.sehbeomschool.nova.global.filter.JwtFilter;
 import com.sehbeomschool.nova.global.util.JwtUtil;
@@ -19,6 +20,7 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final JwtExceptionFilter jwtExceptionFilter;
+    private final WebAuthenticationEntryPoint webAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,13 +32,17 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-            .anyRequest().permitAll()
-//            .antMatchers("/api/user/oauth/kakao").permitAll()
-//            .antMatchers("/api/user").authenticated()
+            .antMatchers("/api/user/oauth/kakao/callback").permitAll()
+            .antMatchers("/api/user/oauth/kakao/login").permitAll()
+            .antMatchers("/api/user/refreshtoken").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(webAuthenticationEntryPoint)
             .and()
             .addFilterBefore(new JwtFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
-//            .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
+            .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
             .build();
     }
 

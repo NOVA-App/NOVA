@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Image, TouchableOpacity } from "react-native";
 import AgeBar from "../../../../../../../../components/mainpage/AgeBar";
 import AnnualAsset from "../../../../../../../../components/mainpage/AnnualAsset";
 import MyAsset from "../../../../../../../../components/mainpage/MyAsset";
@@ -7,6 +7,8 @@ import { style } from "./style";
 import BabyButton from "../../../../../../../../components/buttons/EventButton/BabyButton";
 import MarriageButton from "../../../../../../../../components/buttons/EventButton/MarriageButton";
 import { useNavigation } from "@react-navigation/native";
+import { isChildBirthState } from "../../../../../../../../recoil/recoil";
+import { useRecoilState } from "recoil";
 
 const MainComponents = () => {
   const navigation = useNavigation();
@@ -17,6 +19,8 @@ const MainComponents = () => {
     navigation.navigate("EventPage", { screen: "MarriagePage" });
   };
 
+  const [isChildBirth] = useRecoilState(isChildBirthState);
+  console.log(isChildBirth);
   return (
     <View style={style.container}>
       <AgeBar />
