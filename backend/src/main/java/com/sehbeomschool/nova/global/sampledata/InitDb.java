@@ -7,6 +7,7 @@ import com.sehbeomschool.nova.domain.news.domain.StockNews;
 import com.sehbeomschool.nova.domain.realty.domain.Realty;
 import com.sehbeomschool.nova.domain.saving.domain.InsInterest;
 import com.sehbeomschool.nova.domain.stock.domain.Stock;
+import com.sehbeomschool.nova.domain.user.domain.User;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -46,6 +47,7 @@ public class InitDb {
             makeRealtyAndNews();
             makeAnalysisComments();
             makeInsInterest();
+            makeTestUser();
         }
 
         public void makeStockAndNews() {
@@ -217,6 +219,10 @@ public class InitDb {
 
             em.persist(InsInterest.builder()
                 .period(3).interest(10).build());
+        }
+
+        private void makeTestUser() {
+            em.persist(User.builder().name("testUser").build());
         }
     }
 

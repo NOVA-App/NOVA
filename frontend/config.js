@@ -1,3 +1,3 @@
-const API_URL = "http://192.168.200.112:8080";
+const API_URL = "http://nohoo.site";
 
 export default API_URL;

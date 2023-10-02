@@ -11,6 +11,7 @@ public enum FixedValues {
     MARRIAGE_COST(20_000_000D),
     CHILD_COST(8_400_000D),
     INSTALLMENT_TAX_PERCENTAGE(15.4),
+    NATIONAL_PENSION_PERCENTAGE(0.045),
     LOAN_INTEREST_PERCENTAGE(0.07);
 
     private final Double value;
