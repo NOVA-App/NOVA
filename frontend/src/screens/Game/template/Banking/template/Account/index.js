@@ -14,7 +14,7 @@ import MyIRP from "../../../../../../components/MyIRP/index"
 
 // import * as S from "./style";
 
-const Account = (props) => {
+const Account = () => {
 
   const navigation = useNavigation();
 
