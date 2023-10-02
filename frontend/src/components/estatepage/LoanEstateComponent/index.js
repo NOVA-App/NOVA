@@ -4,13 +4,18 @@ import HouseCard from "./HouseCard";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../config";
+import { tokenState } from "../../../recoil/recoil";
+import { useRecoilValue } from "recoil";
 
 const { height } = Dimensions.get("window");
 
 const LoanEstate = () => {
   const [loanData, setLoanData] = useState([]);
+  const token = useRecoilValue(tokenState);
 
   useEffect(() => {
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     axios
       .get(API_URL + "/api/realty/loan/1") // 게임아이디 받아와서 주기
       .then((response) => {
@@ -50,7 +55,7 @@ const LoanEstate = () => {
                 />
               ))}
 
-              <HouseCard height={height} />
+              {/* <HouseCard height={height} /> */}
             </ScrollView>
           </View>
         </View>
