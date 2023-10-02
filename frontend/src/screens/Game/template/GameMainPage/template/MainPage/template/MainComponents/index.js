@@ -7,10 +7,14 @@ import { style } from "./style";
 import BabyButton from "../../../../../../../../components/buttons/EventButton/BabyButton";
 import MarriageButton from "../../../../../../../../components/buttons/EventButton/MarriageButton";
 import { useNavigation } from "@react-navigation/native";
-import { isChildBirthState } from "../../../../../../../../recoil/recoil";
+import {
+  gameIdState,
+  isChildBirthState,
+} from "../../../../../../../../recoil/recoil";
 import { useRecoilState } from "recoil";
 
 const MainComponents = () => {
+  const [gameId] = useRecoilState(gameIdState);
   const navigation = useNavigation();
   const handleBabyButtonClick = () => {
     navigation.navigate("EventPage", { screen: "ChildPage" });
