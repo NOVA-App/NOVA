@@ -143,7 +143,7 @@ public class SavingServiceImpl implements SavingService {
         List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
             .orElseThrow();
         for (InstallmentSavings installmentSaving : installmentSavings) {
-            if (installmentSaving.getEndAge() - 1 == game.getCurrentAge()) {
+            if (installmentSaving.getEndAge() == game.getCurrentAge()) {
                 matureInstallment(installmentSaving.getId());
                 continue;
             }
