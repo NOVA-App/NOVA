@@ -5,14 +5,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
 
 import com.sehbeomschool.nova.domain.user.dao.UserRepository;
 import com.sehbeomschool.nova.domain.user.domain.User;
+import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.exception.UserExistException;
 import com.sehbeomschool.nova.domain.user.exception.UserNotFoundException;
-import com.sehbeomschool.nova.global.file.FileStore;
 import com.sehbeomschool.nova.global.util.JwtUtil;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -22,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("유저 서비스 단위 테스트")
 class UserServiceTest {
 
     @InjectMocks
@@ -29,9 +34,6 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private FileStore fileStore;
 
     @Mock
     private JwtUtil jwtUtil;
@@ -119,24 +121,73 @@ class UserServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("유저 카카오 로그인")
+    class kakaoLogin {
 
-    @Test
-    void updateUserProfileImg() {
+        private Map<String, Object> info;
+        private KakaoUserInfoDto kakaoUserInfoDto;
+
+        @BeforeEach
+        void setUp() {
+            info = new HashMap<>();
+            info.put("id", 123);
+
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("nickname", "name");
+            properties.put("profile_image", "https://example.com/profile.jpg");
+
+            info.put("properties", properties);
+            kakaoUserInfoDto = KakaoUserInfoDto.builder().info(info).build();
+        }
+
+        @Nested
+        @DisplayName("가입이 안된 회원이면")
+        class not_exist_user {
+
+            @Test
+            @DisplayName("회원가입 진행")
+            void create_user() {
+
+                User user = User.builder().id(1L).build();
+                given(userRepository.findBySocialId(any(Long.class))).willReturn(Optional.empty());
+                given(userRepository.save(any())).willReturn(user);
+
+                assertThatThrownBy(() -> userService.kakaoLogin(kakaoUserInfoDto)).isInstanceOf(
+                    UserNotFoundException.class
+                );
+                then(userRepository).should().save(any());
+            }
+        }
+
+        @Nested
+        @DisplayName("가입이 된 회원이면")
+        class exist_user {
+
+            @Test
+            @DisplayName("유저정보 불러오고")
+            void get_userInfo() {
+                User user = User.builder().id(1L).build();
+                given(userRepository.findBySocialId(any(Long.class))).willReturn(Optional.of(user));
+
+                userService.kakaoLogin(kakaoUserInfoDto);
+
+                then(userRepository).should(times(2)).findBySocialId(any(Long.class));
+            }
+
+            @Test
+            @DisplayName("토큰 반환")
+            void fail_readUserBySocialId() {
+                User user = User.builder().id(1L).build();
+                given(userRepository.findBySocialId(any(Long.class))).willReturn(Optional.of(user));
+
+                userService.kakaoLogin(kakaoUserInfoDto);
+
+                then(jwtUtil).should().createJwtToken(user.getId());
+                then(jwtUtil).should().createRefreshToken(user.getId());
+            }
+        }
+
     }
 
-    @Test
-    void updateUserName() {
-    }
-
-    @Test
-    void deleteUser() {
-    }
-
-    @Test
-    void isExistUser() {
-    }
-
-    @Test
-    void kakaoLogin() {
-    }
 }
