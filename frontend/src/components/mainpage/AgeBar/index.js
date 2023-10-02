@@ -9,16 +9,16 @@ const { width, height } = Dimensions.get("window");
 // 버튼 이름, 눌릴 때 함수, 배경 넣기
 const AgeBar = (props) => {
   return (
-    <View style={{ marginTop: "1%" }}>
+    <View style={{ marginTop: "10%" }}>
       <S.BarContainer height={height} width={width} bgColor="transparent">
-        <S.ProgressBar bgColor="transparent">
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>27</Text>
+        <S.ProgressBar bgColor="transparent" age={props.age}>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{props.age}</Text>
         </S.ProgressBar>
       </S.BarContainer>
 
       <S.Container>
         <S.BarContainer height={height} width={width}>
-          <S.ProgressBar>
+          <S.ProgressBar age={props.age}>
             <View>
               <Image source={RunnerIcon} />
             </View>
