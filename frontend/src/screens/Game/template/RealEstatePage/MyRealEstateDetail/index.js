@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Dimensions, View, Text, ScrollView } from "react-native";
 import * as S from "./style";
-import HouseImg from "../../../../assets/House.png";
-import Button from "../../../buttons/SmallButton";
+import HouseImg from "../../../../../assets/House.png";
+import Button from "../../../../../components/buttons/SmallButton";
 import axios from "axios";
-import API_URL from "../../../../config";
+import API_URL from "../../../../../../config";
 const { height } = Dimensions.get("window");
 
 const MyRealEstateDetail = (props) => {
