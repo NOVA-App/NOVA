@@ -15,6 +15,7 @@ const LoanEstate = () => {
       .get(API_URL + "/api/realty/loan/1") // 게임아이디 받아와서 주기
       .then((response) => {
         setLoanData(response.data.data);
+        console.log(response.data.data)
       })
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
@@ -32,13 +33,13 @@ const LoanEstate = () => {
           }}
         >
           <S.TagContainer>
-            <Text style={{ fontSize: 20, color: "white" }}>내 부동산 현황</Text>
+            <Text style={{ fontSize: 20, color: "white" }}>대출목록</Text>
           </S.TagContainer>
         </View>
         <View style={{ flex: 8 }}>
           <View style={{ marginTop: "5%" }}>
             <ScrollView>
-              {/* {loanData.map((loanItem, index) => (
+              {loanData.map((loanItem, index) => (
                 <HouseCard
                   key={index}
                   realtyId={loanItem.realtyId}
@@ -47,7 +48,7 @@ const LoanEstate = () => {
                   realtyPrice={loanItem.realtyPrice}
                   principal={loanItem.principal}
                 />
-              ))} */}
+              ))}
 
               <HouseCard height={height} />
             </ScrollView>
