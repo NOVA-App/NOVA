@@ -12,6 +12,7 @@ import com.sehbeomschool.nova.global.file.FileStore;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,30 +34,36 @@ class UserServiceTest {
     @Mock
     private JwtUtil jwtUtil;
 
-    @Test
-    @DisplayName("회원 생성 성공 테스트")
-    void success_createUser() {
-        User user = User.builder().id(1L).build();
-        given(userRepository.save(user)).willReturn(user);
+    @Nested
+    @DisplayName("유저 생성 테스트")
+    class createUser {
 
-        Long userId = userService.createUser(user);
+        @Test
+        @DisplayName("회원 생성 성공")
+        void success_createUser() {
+            User user = User.builder().id(1L).build();
+            given(userRepository.save(user)).willReturn(user);
 
-        then(userRepository).should().save(user);
-        assertThat(userId).isEqualTo(1L);
+            Long userId = userService.createUser(user);
 
+            then(userRepository).should().save(user);
+            assertThat(userId).isEqualTo(1L);
+
+        }
+
+        @Test
+        @DisplayName("이미 존재하는 회원이면 생성 실패")
+        void fail_createUser() {
+
+            User user = User.builder().id(1L).socialId(123L).build();
+            given(userRepository.findBySocialId(user.getSocialId())).willReturn(Optional.of(user));
+
+            assertThatThrownBy(() -> userService.createUser(user)).isInstanceOf(
+                UserExistException.class);
+
+        }
     }
 
-    @Test
-    @DisplayName("회원 생성 실패 테스트")
-    void fail_createUser() {
-
-        User user = User.builder().id(1L).socialId(123L).build();
-        given(userRepository.findBySocialId(user.getSocialId())).willReturn(Optional.of(user));
-
-        assertThatThrownBy(() -> userService.createUser(user)).isInstanceOf(
-            UserExistException.class);
-
-    }
 
     @Test
     void readUser() {
