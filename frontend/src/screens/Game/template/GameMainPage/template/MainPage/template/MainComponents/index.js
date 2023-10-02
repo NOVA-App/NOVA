@@ -29,7 +29,7 @@ const MainComponents = () => {
   console.log(isChildBirth);
   return (
     <View style={style.container}>
-      <AgeBar age={age} />
+      <AgeBar age={27} />
       <AnnualAsset />
       <MyAsset />
       <View style={style.imageContainer}>

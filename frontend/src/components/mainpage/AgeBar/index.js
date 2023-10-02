@@ -11,7 +11,7 @@ const AgeBar = (props) => {
   return (
     <View style={{ marginTop: "10%" }}>
       <S.BarContainer height={height} width={width} bgColor="transparent">
-        <S.ProgressBar bgColor="transparent">
+        <S.ProgressBar bgColor="transparent" age={props.age}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>{props.age}</Text>
         </S.ProgressBar>
       </S.BarContainer>
