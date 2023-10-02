@@ -24,7 +24,7 @@ const AgeBar = (props) => {
             </View>
           </S.ProgressBar>
         </S.BarContainer>
-        <SmallButton title="내년으로..." />
+        <SmallButton title="내년으로..." onPress={props.onPress} />
       </S.Container>
     </View>
   );
