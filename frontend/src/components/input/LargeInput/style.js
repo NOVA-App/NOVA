@@ -1,11 +1,10 @@
-import styled from 'styled-components/native';
-import { useWindowDimensions } from 'react-native';
+import styled from "styled-components/native";
 
 export const StyledInputLarge = styled.TextInput.attrs(({ theme }) => ({
   placeholderTextColor: theme.main,
 }))`
-  width: 70%; 
-  height: ${props => props.windowHeight * 0.07};
+  width: 70%;
+  height: ${({ windowHeight }) => windowHeight * 0.07}px;
   margin: 3px 0;
   padding: 20px 25px;
   border-radius: 12px;
