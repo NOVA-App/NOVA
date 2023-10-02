@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Dimensions, View, Text, ScrollView } from "react-native";
 import * as S from "./style";
 import HouseImg from "../../../../assets/House.png";
 import Button from "../../../buttons/SmallButton";
-const { height } = Dimensions.get("window");
+import axios from "axios";
+import API_URL from "../../../../config";
 
 const ForSaleDetail = (props) => {
   const ID = props.realtyId
-  // const [realtyDetailData, setRealtyDetailData] = useState([]);
+  const { height } = Dimensions.get("window");
+  const [realtyData, setRealtyData] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/realty/1/${ID}`) // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/1/${ID}`) // 부동산 아이디 받아와서 주기
       .then((response) => {
         setRealtyData(response.data.data);
       })
@@ -29,32 +31,29 @@ const ForSaleDetail = (props) => {
           }}
         ></View>
         <View style={{ flex: 8, alignItems: "center" }}>
-
-        {realtyData.map((realtyItem, index) => (
-        <View key={index}>
+        <View>
           <S.ImgContainer source={HouseImg}></S.ImgContainer>
           <View style={{ marginTop: "5%" }}></View>
           <S.InfoText>
-          {realtyItem.realtyName} ({"  "}
+          {realtyData.realtyName} ({"  "}
             <S.InfoText style={{ color: "#D90452" }}>+20%</S.InfoText> )
           </S.InfoText>
-          <S.InfoText>{`지역    `}{realtyItem.region}</S.InfoText>
-          <S.InfoText>{`예상 월세 수익    `}{realtyItem.predictedRentIncome}</S.InfoText>
+          <S.InfoText>{`지역    `}{realtyData.region}</S.InfoText>
+          <S.InfoText>{`예상 월세 수익    `}{realtyData.predictedRentIncome}</S.InfoText>
           <S.InfoText>
             {`총금액          `}
-            {realtyItem.totalPrice}
+            {realtyData.totalPrice}
           </S.InfoText>
           <S.InfoText>
             {`매물가격          `}
-            {realtyItem.evaluationAmount}
+            {realtyData.evaluationAmount}
           </S.InfoText>
-          <S.InfoText>{`취득세        `}{realtyItem.acquistionTax}</S.InfoText>
+          <S.InfoText>{`취득세        `}{realtyData.acquistionTax}</S.InfoText>
           <S.InfoText>
             {`모자란 금액     `}
             <S.InfoText style={{ color: "#D90452" }}>-100</S.InfoText>
           </S.InfoText>
         </View>
-      ))}
 
 
         </View>
