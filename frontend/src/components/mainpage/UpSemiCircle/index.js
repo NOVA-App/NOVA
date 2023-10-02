@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions, View } from "react-native";
 import Svg, { Circle, Text } from "react-native-svg";
 
-const UpSemiCircle = () => {
+const UpSemiCircle = (props) => {
   const windowWidth = Dimensions.get("window").width;
   const windowHeight = Dimensions.get("window").height;
 
@@ -24,7 +24,7 @@ const UpSemiCircle = () => {
           cx="50"
           cy="50" // 중심을 상단으로 이동시켜 상단의 반만 나오도록 합니다.
           r="50"
-          fill="darkred"
+          fill={props.bgColor}
         />
         <Circle
           cx="50"
@@ -40,7 +40,7 @@ const UpSemiCircle = () => {
           stroke="black"
           strokeWidth="1"
         >
-          주식
+          {props.title}
         </Text>
         <Text
           x="50%"
@@ -50,7 +50,7 @@ const UpSemiCircle = () => {
           stroke="black"
           strokeWidth="1"
         >
-          2억4천
+          {props.amount}
         </Text>
       </Svg>
     </View>
