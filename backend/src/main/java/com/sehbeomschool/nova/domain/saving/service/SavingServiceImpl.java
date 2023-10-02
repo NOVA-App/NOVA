@@ -117,13 +117,11 @@ public class SavingServiceImpl implements SavingService {
             interest.getPeriod());
         double tax = compoundInterest * INSTALLMENT_TAX_PERCENTAGE.getValue() / 100;
 
-        System.out.println("이자 : " + compoundInterest);
-
         Game game = installmentSavings.getGame();
         AnnualAsset annualAsset = game.getAnnualAsset();
         MyAssets myAssets = game.getMyAssets();
 
-        annualAsset.decreaseInstallmentSavingCost(installmentSavings.getTotalAmount());
+        annualAsset.decreaseInstallmentSavingCost(installmentSavings.getAmount());
 
         annualAsset.earnAsset((long) (compoundInterest - tax));
         myAssets.decreaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getTotalAmount());
@@ -145,13 +143,12 @@ public class SavingServiceImpl implements SavingService {
         List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
             .orElseThrow();
         for (InstallmentSavings installmentSaving : installmentSavings) {
-            if (installmentSaving.getEndAge() - 1 == game.getCurrentAge()) {
+            if (installmentSaving.getEndAge() == game.getCurrentAge()) {
                 matureInstallment(installmentSaving.getId());
                 continue;
             }
             installmentSaving.updateTotalAmountForNextYear();
 
-            game.getAnnualAsset().increaseInstallmentSavingCost(installmentSaving.getAmount());
             game.getMyAssets()
                 .increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSaving.getAmount());
         }
@@ -166,16 +163,15 @@ public class SavingServiceImpl implements SavingService {
         Game game = gameRepository.findById(updateIrpRequestDto.getGameId()).orElseThrow(
             () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
         );
-        AnnualAsset annualAsset = game.getAnnualAsset();
-        annualAsset.updateIRPCost(updateIrpRequestDto.getIrpCost());
 
-        MyAssets myAssets = game.getMyAssets();
+        AnnualAsset annualAsset = game.getAnnualAsset();
         Long diff = updateIrpRequestDto.getIrpCost() - annualAsset.getIRPCost();
 
         checkAsset(annualAsset, diff);
-        myAssets.increaseAsset(AssetType.IRP, diff);
-        myAssets.recalculateTotalAsset();
+        annualAsset.updateIRPCost(updateIrpRequestDto.getIrpCost());
+
     }
+
 
     @Override
     public void updateIrpForNextYear(Long gameId) {
@@ -188,8 +184,6 @@ public class SavingServiceImpl implements SavingService {
         Long irpInterest = RandomCalculator.calIrpInterest(myAssets.getIRPAsset());
         Long irpCost = annualAsset.getIRPCost();
 
-        annualAsset.useUsableAsset(irpCost);
-        annualAsset.earnAsset(irpInterest);
         myAssets.increaseAsset(AssetType.IRP, irpInterest + irpCost);
     }
 

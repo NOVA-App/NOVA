@@ -11,6 +11,7 @@ import API_URL from "../../../../../../../config";
 
 export default function GameStartPage() {
   const navigation = useNavigation();
+
   const handleGameMainPage = () => {
     navigation.navigate("Game", { screen: "GameMainPage" });
   };
@@ -19,14 +20,14 @@ export default function GameStartPage() {
   const [, setGameIdState] = useRecoilState(gameIdState);
 
   const gameStart = async () => {
-    
+
     try {
       const response = await axios.post(`${API_URL}/api/game`, {
         startSalary: salary,
         gender: gender,
       });
-
       console.log("서버 응답 데이터:", response.data);
+      setGameIdState(response.data.data.gameId);
       handleGameMainPage();
     } catch (error) {
       console.error("API 호출 오류:", error);
@@ -55,10 +56,18 @@ export default function GameStartPage() {
       />
 
       <Text style={{ fontSize: 22, margin: 20 }}>성별을 설정해주세요.</Text>
-
       <View style={{ flexDirection: "row" }}>
-        <ToggleButton label="남" isSelected={gender === "MALE"} onPress={() => ChangeGender("MALE")} />
-        <ToggleButton label="여" isSelected={gender === "FEMALE"} onPress={() => ChangeGender("FEMALE")} />
+
+        <ToggleButton
+          label="남"
+          isSelected={gender === "MALE"}
+          onPress={() => ChangeGender("MALE")}
+        />
+        <ToggleButton
+          label="여"
+          isSelected={gender === "FEMALE"}
+          onPress={() => ChangeGender("FEMALE")}
+        />
       </View>
       <Button title="시작하기" onPress={gameStart} bgColor="#038C7F" />
     </View>
