@@ -11,12 +11,28 @@ const MyAsset = (props) => {
   return (
     <S.Container style={{ marginTop: "3%" }}>
       <View>
-        <UpSemiCircle />
-        <DownSemiCircle />
+        <UpSemiCircle
+          title="주식"
+          amount={props.asset.stocksAsset}
+          bgColor="#4E5EEA"
+        />
+        <DownSemiCircle
+          title="부동산"
+          amount={props.asset.realtyAsset}
+          bgColor="#34B658"
+        />
       </View>
       <View>
-        <UpSemiCircle />
-        <DownSemiCircle />
+        <UpSemiCircle
+          title="금융자산"
+          amount={props.asset.savingAsset}
+          bgColor="#E32A56"
+        />
+        <DownSemiCircle
+          title="대출"
+          amount={props.asset.loanAsset}
+          bgColor="#F4EB1D"
+        />
       </View>
     </S.Container>
   );

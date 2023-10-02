@@ -21,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +56,7 @@ public class UserApiController {
             jwtUtil.reCreateJwtToken(refreshToken)));
     }
 
-    @PatchMapping("/profileimg")
+    @PutMapping("/profileimg")
     public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyProfileImg
         (@AuthenticationPrincipal Long userId, @RequestParam MultipartFile profile) {
 
