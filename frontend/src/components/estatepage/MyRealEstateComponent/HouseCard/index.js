@@ -3,7 +3,14 @@ import { View } from "react-native";
 import * as S from "./style";
 import HouseImg from "../../../../assets/House.png";
 import SmallButton from "../../../buttons/SmallButton";
+import { useNavigation } from '@react-navigation/native';
+
 const HouseCard = (props) => {
+  const navigation = useNavigation();
+
+  const handleHouseDetailPress = () => {
+    navigation.navigate("MyRealEstateDetail", { screen: "MyRealEstateDetail" });
+  };
   return (
     <S.Container height={props.height}>
       <S.ImgBox source={HouseImg} />
@@ -27,7 +34,7 @@ const HouseCard = (props) => {
             justifyContent: "flex-end",
           }}
         >
-          <SmallButton title="상세보기" bgColor="#0046FF" realtyId={props.realtyId}/>
+          <SmallButton title="상세보기" bgColor="#0046FF" realtyId={props.realtyId} onPress={handleHouseDetailPress}/>
         </View>
       </S.ContentContainer>
     </S.Container>
