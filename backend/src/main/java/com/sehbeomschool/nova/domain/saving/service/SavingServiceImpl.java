@@ -167,15 +167,12 @@ public class SavingServiceImpl implements SavingService {
             () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
         );
 
-        MyAssets myAssets = game.getMyAssets();
         AnnualAsset annualAsset = game.getAnnualAsset();
         Long diff = updateIrpRequestDto.getIrpCost() - annualAsset.getIRPCost();
 
         checkAsset(annualAsset, diff);
         annualAsset.updateIRPCost(updateIrpRequestDto.getIrpCost());
 
-        myAssets.increaseAsset(AssetType.IRP, diff);
-        myAssets.recalculateTotalAsset();
     }
 
 
@@ -190,7 +187,6 @@ public class SavingServiceImpl implements SavingService {
         Long irpInterest = RandomCalculator.calIrpInterest(myAssets.getIRPAsset());
         Long irpCost = annualAsset.getIRPCost();
 
-        annualAsset.earnAsset(irpInterest);
         myAssets.increaseAsset(AssetType.IRP, irpInterest + irpCost);
     }
 
