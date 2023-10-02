@@ -7,10 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface StockNewsRepository extends JpaRepository<StockNews, Long> {
 
-    @Query(value = "SELECT * FROM STOCK_NEWS sn, NEWS n "
-        + "WHERE sn.NEWS_ID = n.NEWS_ID AND "
-        + "sn.STOCK_ID = :stockId AND "
-        + "n.PREDICTION = :prediction "
+    @Query(value = "SELECT * FROM stock_news sn, news n "
+        + "WHERE sn.news_id = n.news_id AND "
+        + "sn.stock_id = :stockId AND "
+        + "n.prediction = :prediction "
         + "ORDER BY RAND() LIMIT 1", nativeQuery = true)
     StockNews findStockNewsByRandom(@Param("stockId") Long stockId,
         @Param("prediction") String prediction);

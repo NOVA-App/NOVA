@@ -31,6 +31,7 @@ import com.sehbeomschool.nova.global.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -50,11 +51,12 @@ public class GameApiController {
 
     @PostMapping("")
     public ResponseEntity<ResponseDto<GameStartResponseDto>> createGame(@RequestBody
-        GameStartRequestDto gameStartRequestDto) {
+        GameStartRequestDto gameStartRequestDto,
+        @AuthenticationPrincipal Long userId) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
             ResponseDto.create(
                 GAME_START_SUCCESS.getMessage(),
-                gameService.createGame(gameStartRequestDto)
+                gameService.createGame(gameStartRequestDto, userId)
             )
         );
     }
@@ -162,11 +164,13 @@ public class GameApiController {
     }
 
     @GetMapping("/inprogress")
-    public ResponseEntity<ResponseDto<InProgressGameResponseDto>> readInProgressGame() {
+    public ResponseEntity<ResponseDto<InProgressGameResponseDto>> readInProgressGame(
+        @AuthenticationPrincipal Long userId
+    ) {
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(
                 READ_IN_PROGRESS_GAME_SUCCESS.getMessage(),
-                gameService.readInProgressGame()
+                gameService.readInProgressGame(userId)
             )
         );
     }

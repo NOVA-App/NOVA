@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.game.domain;
 
 import com.sehbeomschool.nova.domain.game.constant.AssetType;
+import com.sehbeomschool.nova.global.constant.FixedValues;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -104,6 +105,8 @@ public class MyAssets extends BaseEntity {
 
             case LOAN:
                 this.loanAsset += value;
+                this.annualAsset.updateLoanCost((long) (this.loanAsset.doubleValue()
+                    * FixedValues.LOAN_INTEREST_PERCENTAGE.getValue()));
                 break;
 
             case TAX:
@@ -134,6 +137,8 @@ public class MyAssets extends BaseEntity {
 
             case LOAN:
                 this.loanAsset -= value;
+                this.annualAsset.updateLoanCost((long) (this.loanAsset.doubleValue()
+                    * FixedValues.LOAN_INTEREST_PERCENTAGE.getValue()));
                 break;
         }
 
