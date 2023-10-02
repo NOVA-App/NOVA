@@ -30,7 +30,8 @@ public class User extends BaseEntity {
     private boolean isDeleted;
 
     @Builder
-    public User(Long socialId, String name, String profileImg) {
+    public User(Long id, Long socialId, String name, String profileImg) {
+        this.id = id;
         this.socialId = socialId;
         this.name = name;
         this.profileImg = profileImg;
