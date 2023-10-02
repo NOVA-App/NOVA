@@ -2,12 +2,14 @@ package com.sehbeomschool.nova.domain.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 import com.sehbeomschool.nova.domain.user.dao.UserRepository;
 import com.sehbeomschool.nova.domain.user.domain.User;
 import com.sehbeomschool.nova.domain.user.exception.UserExistException;
+import com.sehbeomschool.nova.domain.user.exception.UserNotFoundException;
 import com.sehbeomschool.nova.global.file.FileStore;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import java.util.Optional;
@@ -64,6 +66,30 @@ class UserServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("유저 조회")
+    class readUser {
+
+        @Test
+        @DisplayName("존재하는 유저이면")
+        void success_readUser() {
+            User user = User.builder().id(1L).socialId(123L).build();
+            given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
+
+            assertThat(userService.readUser(any(Long.class))).isNotNull();
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 유저이면")
+        void fail_readUser() {
+            given(userRepository.findById(any(Long.class))).willReturn(Optional.empty());
+
+            assertThatThrownBy(() -> userService.readUser(any(Long.class))).isInstanceOf(
+                UserNotFoundException.class
+            );
+        }
+
+    }
 
     @Test
     void readUser() {
