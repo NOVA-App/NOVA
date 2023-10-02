@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Dimensions, View, Text, ScrollView } from "react-native";
 import * as S from "./style";
 import HouseImg from "../../../../assets/House.png";
 import Button from "../../../buttons/SmallButton";
+import axios from "axios";
+import API_URL from "../../../../config";
 const { height } = Dimensions.get("window");
 
 const MyRealEstateDetail = (props) => {
+  const ID = props.realtyId
+  const [realtyData, setRealtyData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/realty/mine/1/${ID}`) // 부동산 아이디 받아와서 주기
+      .then((response) => {
+        setRealtyData(response.data.data);
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 동안 오류 발생: ", error);
+      });
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <S.Container style={{ flex: 8.5, minWidth: "80%" }}>
@@ -18,18 +34,18 @@ const MyRealEstateDetail = (props) => {
           <S.ImgContainer source={HouseImg}></S.ImgContainer>
           <View style={{ marginTop: "5%" }}></View>
           <S.InfoText>
-            마당 딸린 43평 주택 ({"  "}
+            {realtyData.realtyName} ({"  "}
             <S.InfoText style={{ color: "#D90452" }}>+20%</S.InfoText> )
           </S.InfoText>
-          <S.InfoText>{`지역    `}서울시 용산구 한남동</S.InfoText>
-          <S.InfoText>{`투자 금액    `}150,000,000</S.InfoText>
-          <S.InfoText>{`현재가         `}300,000,000</S.InfoText>
+          <S.InfoText>{`지역    `}{realtyData.realtyName}</S.InfoText>
+          <S.InfoText>{`투자 금액    `}{realtyData.investAmount}</S.InfoText>
+          <S.InfoText>{`현재가         `}{realtyData.evaluationAmount}</S.InfoText>
           <S.InfoText>
             {`투자 수익률          `}
-            <S.InfoText style={{ color: "#D90452" }}> + 110 % </S.InfoText>
+            <S.InfoText style={{ color: "#D90452" }}> {realtyData.depreciationPercent} % </S.InfoText>
           </S.InfoText>
-          <S.InfoText>{`월세 수익        `}15,000,000</S.InfoText>
-          <S.InfoText>{`남은 대출금     `}15,000,000</S.InfoText>
+          <S.InfoText>{`월세 수익        `}{realtyData.rentIncome}</S.InfoText>
+          <S.InfoText>{`남은 대출금     `}{realtyData.principal}</S.InfoText>
         </View>
         <View
           style={{
