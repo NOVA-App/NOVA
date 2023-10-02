@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import AgeBar from "../../../../../../../../components/mainpage/AgeBar";
 import AnnualAsset from "../../../../../../../../components/mainpage/AnnualAsset";
@@ -12,9 +12,11 @@ import {
   isChildBirthState,
 } from "../../../../../../../../recoil/recoil";
 import { useRecoilState } from "recoil";
+import API_URL from "../../../../../../../../../config";
 
 const MainComponents = () => {
   const [gameId] = useRecoilState(gameIdState);
+
   const navigation = useNavigation();
   const handleBabyButtonClick = () => {
     navigation.navigate("EventPage", { screen: "ChildPage" });
@@ -27,7 +29,7 @@ const MainComponents = () => {
   console.log(isChildBirth);
   return (
     <View style={style.container}>
-      <AgeBar />
+      <AgeBar age={27} />
       <AnnualAsset />
       <MyAsset />
       <View style={style.imageContainer}>
