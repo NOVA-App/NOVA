@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.user.service;
 
+import static com.sehbeomschool.nova.domain.user.constant.UserExceptionMessage.ALREADY_EXIST_USER;
 import static com.sehbeomschool.nova.domain.user.constant.UserExceptionMessage.NOT_EXIST_USER;
 
 import com.sehbeomschool.nova.domain.user.dao.UserRepository;
@@ -8,6 +9,7 @@ import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.FileUploadResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.TokenResponseDto;
 import com.sehbeomschool.nova.domain.user.dto.UserResponseDto.UserInfoResponseDto;
+import com.sehbeomschool.nova.domain.user.exception.UserExistException;
 import com.sehbeomschool.nova.domain.user.exception.UserNotFoundException;
 import com.sehbeomschool.nova.global.file.FileStore;
 import com.sehbeomschool.nova.global.util.JwtUtil;
@@ -28,6 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long createUser(User user) {
+        if (isExistUser(user.getSocialId())) {
+            throw new UserExistException(ALREADY_EXIST_USER.getMessage());
+        }
         User saved = userRepository.save(user);
         return saved.getId();
     }
