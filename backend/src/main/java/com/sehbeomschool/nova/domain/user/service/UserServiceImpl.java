@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public Long createUser(KakaoUserInfoDto user) {
-        User saved = userRepository.save(user.toEntity());
+    public Long createUser(User user) {
+        User saved = userRepository.save(user);
         return saved.getId();
     }
 
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public TokenResponseDto kakaoLogin(KakaoUserInfoDto kakaoUserInfoDto) {
         if (!isExistUser(kakaoUserInfoDto.getId())) {
-            createUser(kakaoUserInfoDto);
+            createUser(kakaoUserInfoDto.toEntity());
         }
 
         User user = readUserBySocialId(kakaoUserInfoDto.getId());
