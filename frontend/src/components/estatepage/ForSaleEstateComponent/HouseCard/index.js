@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 const HouseCard = (props) => {
   const navigation = useNavigation();
   const handleBuyHousePress = () => {
-    navigation.navigate("StockDetailPage", { screen: "StockDetailPage" });
+    navigation.navigate("MyRealEstateDetail", { screen: "MyRealEstateDetail" });
   };
   return (
     <S.Container height={props.height}>
