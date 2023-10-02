@@ -12,17 +12,22 @@ const InstallmentSavingsCard = (props) => {
 
         <S.SmallContainer>
           <S.MiddleText>적금 이름</S.MiddleText>
-          <S.PropsMiddleText>결혼자금</S.PropsMiddleText>
+          <S.PropsMiddleText>{props.name}</S.PropsMiddleText>
         </S.SmallContainer >
         
         <S.SmallContainer>
         <S.MiddleText>현재금액</S.MiddleText>
-        <S.PropsMiddleText>1,000,000,000,000 원</S.PropsMiddleText>
+        <S.PropsMiddleText>{props.totalAmount}</S.PropsMiddleText>
         </S.SmallContainer>
 
         <S.SmallContainer>
         <S.MiddleText>연 납입 금액</S.MiddleText>
-        <S.PropsMiddleText>1,000,000,000,000 원</S.PropsMiddleText>
+        <S.PropsMiddleText>{props.amount}</S.PropsMiddleText>
+        </S.SmallContainer>
+
+        <S.SmallContainer>
+        <S.MiddleText>기간</S.MiddleText>
+        <S.PropsMiddleText>{props.startAge} ~ {props.endAge}</S.PropsMiddleText>
         </S.SmallContainer>
 
         
