@@ -117,13 +117,11 @@ public class SavingServiceImpl implements SavingService {
             interest.getPeriod());
         double tax = compoundInterest * INSTALLMENT_TAX_PERCENTAGE.getValue() / 100;
 
-        System.out.println("이자 : " + compoundInterest);
-
         Game game = installmentSavings.getGame();
         AnnualAsset annualAsset = game.getAnnualAsset();
         MyAssets myAssets = game.getMyAssets();
 
-        annualAsset.decreaseInstallmentSavingCost(installmentSavings.getTotalAmount());
+        annualAsset.decreaseInstallmentSavingCost(installmentSavings.getAmount());
 
         annualAsset.earnAsset((long) (compoundInterest - tax));
         myAssets.decreaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getTotalAmount());
@@ -151,7 +149,6 @@ public class SavingServiceImpl implements SavingService {
             }
             installmentSaving.updateTotalAmountForNextYear();
 
-            game.getAnnualAsset().increaseInstallmentSavingCost(installmentSaving.getAmount());
             game.getMyAssets()
                 .increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSaving.getAmount());
         }
