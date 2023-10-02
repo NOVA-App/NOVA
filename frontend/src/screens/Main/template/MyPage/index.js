@@ -1,11 +1,32 @@
-import React from "react";
-import { View, Text, StatusBar, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StatusBar, Pressable } from "react-native";
 import Button from "../../../../components/buttons/XLargeButton";
 import MediumButton from "../../../../components/buttons/MediumButton";
 import * as S from "./style";
 import ProfileImg from "../../../../assets/ProfileIcon.png";
+import * as ImagePicker from "expo-image-picker";
 
 const MyPage = () => {
+  const [profileImage, setProfileImage] = useState(null);
+
+  // 이미지를 선택하고 선택한 이미지를 처리하는 함수
+  const handleSelectImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1], // 원하는 이미지 비율로 설정
+        quality: 1, // 이미지 품질 (0부터 1까지)
+      });
+
+      if (!result.cancelled) {
+        setProfileImage(result.uri); // 선택한 이미지를 state에 저장
+      }
+    } catch (error) {
+      console.error("이미지 선택 오류: ", error);
+    }
+  };
+
   return (
     <View style={{ flex: 20 }}>
       <StatusBar />
@@ -18,7 +39,7 @@ const MyPage = () => {
           }}
         >
           <S.ImgContainer source={ProfileImg} />
-          <TouchableOpacity
+          <Pressable
             style={{
               position: "relative",
               bottom: "5%", // 원하는 위치로 조절하세요.
@@ -28,12 +49,10 @@ const MyPage = () => {
               paddingRight: 10,
               paddingLeft: 10,
             }}
-            onPress={() => {
-              // 버튼 클릭 시 실행할 동작을 여기에 추가하세요.
-            }}
+            onPress={handleSelectImage}
           >
             <Text style={{ fontSize: 30 }}>+</Text>
-          </TouchableOpacity>
+          </Pressable>
           <Text style={{ fontSize: 26 }}>이름임</Text>
           <View
             style={{
