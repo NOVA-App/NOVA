@@ -13,8 +13,17 @@ export const isChildBirthState = atom({
   default: false,
 });
 
-export const tokenState = atom({
-  key: "tokenState",
-  default:
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImV4cCI6MTY5NjYzMDM5MX0.zWtHdQr_XzF735p0nls2_zMOWTRVZU_qq1R0afPYHTQ",
+export const accessTokenState = atom({
+  key: "accessTokenState",
+  default: "initialAccessToken",
+});
+
+export const refreshTokenState = atom({
+  key: "refreshTokenState",
+  default: "initialRefreshToken",
+});
+
+export const gameIdState = atom({
+  key: "gameIdState",
+  default: 1,
 });
