@@ -91,13 +91,34 @@ class UserServiceTest {
 
     }
 
-    @Test
-    void readUser() {
+    @Nested
+    @DisplayName("유저 조회 by 소셜아이디")
+    class readUserBySocialId {
+
+        @Test
+        @DisplayName("존재하는 유저이면")
+        void success_readUserBySocialId() {
+            User user = User.builder().id(1L).socialId(123L).build();
+            given(userRepository.findBySocialId(any(Long.class))).willReturn(Optional.of(user));
+
+            User findUser = userService.readUserBySocialId(any(Long.class));
+
+            assertThat(findUser).isNotNull();
+            assertThat(findUser.getId()).isEqualTo(1L);
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 유저이면")
+        void fail_readUserBySocialId() {
+            given(userRepository.findBySocialId(any(Long.class))).willReturn(Optional.empty());
+
+            assertThatThrownBy(() -> userService.readUserBySocialId(any(Long.class))).isInstanceOf(
+                UserNotFoundException.class
+            );
+        }
+
     }
 
-    @Test
-    void readUserBySocialId() {
-    }
 
     @Test
     void updateUserProfileImg() {
