@@ -5,6 +5,7 @@ public enum GameExceptionMessage {
     IN_PROGRESS_GAME_NOT_FOUND("진행 중 게임 조회 실패"),
     IN_PROGRESS_GAME_ALREADY_EXIST("진행 중 게임 존재"),
     GAME_FINISHED("종료된 게임"),
+    GAME_NOT_FINISHED("종료되지 않은 게임"),
     USABLE_ASSET_NOT_ENOUGH("여유 자금 부족");
 
     private final String message;
