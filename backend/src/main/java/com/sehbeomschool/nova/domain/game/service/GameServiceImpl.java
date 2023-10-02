@@ -1,6 +1,7 @@
 package com.sehbeomschool.nova.domain.game.service;
 
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_FINISHED;
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FINISHED;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.IN_PROGRESS_GAME_ALREADY_EXIST;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.IN_PROGRESS_GAME_NOT_FOUND;
@@ -30,6 +31,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListRespo
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.RankingListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
 import com.sehbeomschool.nova.domain.game.exception.GameFinishedException;
+import com.sehbeomschool.nova.domain.game.exception.GameNotFinishedException;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
 import com.sehbeomschool.nova.domain.game.exception.InProgressGameAlreadyExistException;
 import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
@@ -215,6 +217,10 @@ public class GameServiceImpl implements GameService {
     public GameResultDetailResponseDto readGameResultDetail(Long gameId) {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        if (game.getCurrentAge() != FixedValues.END_AGE.getValue().intValue()) {
+            throw new GameNotFinishedException(GAME_NOT_FINISHED.getMessage());
+        }
 
         return GameResultDetailResponseDto.builder().game(game).build();
     }
