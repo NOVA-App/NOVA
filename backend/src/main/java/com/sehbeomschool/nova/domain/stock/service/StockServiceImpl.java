@@ -105,6 +105,7 @@ public class StockServiceImpl implements StockService {
                 .stockName(myStock.getStock().getName())
                 .investAmount(myStock.getInvestAmount())
                 .evaluationAmount(myStockInfo.getCurrentPrice() * myStock.getQuantity())
+                .price(myStockInfo.getCurrentPrice())
                 .fluctuations(fluctuation * myStock.getQuantity())
                 .fluctuationsPercent(
                     fluctuation * myStock.getQuantity() * 100L / myStock.getInvestAmount())
