@@ -4,7 +4,7 @@ import { useWindowDimensions } from 'react-native';
 export const StyledInputSmall = styled.TextInput.attrs(({ theme }) => ({
   placeholderTextColor: theme.main,
 }))`
-  width: 30%;
+  min-width: 30%;
   height: ${props => props.windowHeight * 0.06};
   margin: 3px 0;
   padding: 20px 15px;
