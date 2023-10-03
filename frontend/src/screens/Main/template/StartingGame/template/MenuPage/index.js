@@ -10,7 +10,8 @@ import { accessTokenState, refreshTokenState } from "../../../../../../recoil/re
 
 const MenuPage = () => {
   const [accessToken] = useRecoilState(accessTokenState);
-  const [refreshToken] = useRecoilState(refreshTokenState);
+  console.log("여기에 찍혀야댐")
+  console.log(accessToken)
 
   axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
