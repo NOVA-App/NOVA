@@ -4,13 +4,19 @@ import HouseCard from "./HouseCard";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../config";
+import { useRecoilValue } from "recoil";
+import { accessTokenState, gameIdState } from "../../../recoil/recoil";
+
 
 const ForSaleEstate = () => {
   const [realtyData, setRealtyData] = useState([]);
+  const token = useRecoilValue(accessTokenState);
+  const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     axios
-      .get(API_URL + "/api/realty/list/1") // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/list/${gameID}`) // 게임아이디 받아와서 주기
       .then((response) => {
         setRealtyData(response.data.data);
       })

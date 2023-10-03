@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import * as S from './style'; 
 
-const InputSmallText = (props) => {
+const TextInputSmall = (props) => {
   return (
     <S.StyledInputSmall
       placeholder={props.placeholder}
@@ -12,18 +12,17 @@ const InputSmallText = (props) => {
       returnKeyType='done'
       keyboardAppearance='dark'
       value={props.value}
-      onChangeText={() => {
-      }}
+      onChangeText={props.onChangeText}
       onSubmitEditing={props.onSubmitEditing}
     />
   );
 };
 
-InputSmall.propTypes = {
+TextInputSmall.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChangeText: PropTypes.func.isRequired,
   onSubmitEditing: PropTypes.func.isRequired,
 };
 
-export default InputSmallText;
+export default TextInputSmall;
