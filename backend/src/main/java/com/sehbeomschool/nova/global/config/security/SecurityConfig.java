@@ -22,14 +22,13 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final JwtExceptionFilter jwtExceptionFilter;
-    private final FileSizeExceptionFilter fileSizeExceptionFilter;
     private final WebAuthenticationEntryPoint webAuthenticationEntryPoint;
 
     @Bean
     public FilterRegistrationBean<FileSizeExceptionFilter> customFilter() {
         FilterRegistrationBean<FileSizeExceptionFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new FileSizeExceptionFilter());
-        registrationBean.addUrlPatterns("/api/user/profileimg"); // 필터가 적용될 URL 패턴 설정
+        registrationBean.addUrlPatterns("/api/user/profileimg");
         return registrationBean;
     }
 
