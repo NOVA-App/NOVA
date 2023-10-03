@@ -41,14 +41,14 @@ public class SavingServiceImpl implements SavingService {
 
     @Override
     public SavingInfoResponseDto readSavingInfo(Long gameId) {
+        Game game = gameRepository.findById(gameId).orElseThrow(
+            () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
         List<InstallmentSavings> installmentSavings = savingRepository.findByGameId(gameId)
             .orElseThrow();
 
         List<InstallmentSavingsDto> installmentSavingsDtos = installmentSavings.stream()
             .map(InstallmentSavingsDto::new).toList();
-
-        Game game = gameRepository.findById(gameId).orElseThrow(
-            () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
         MyAssets myAssets = game.getMyAssets();
 
