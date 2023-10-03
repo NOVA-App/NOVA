@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Dimensions, View, Text, ScrollView } from "react-native";
 import * as S from "./style";
-import HouseImg from "../../../../assets/House.png";
-import Button from "../../../buttons/SmallButton";
+import HouseImg from "../../../../../assets/House.png";
+import Button from "../../../../../components/buttons/SmallButton";
 import axios from "axios";
-import API_URL from "../../../../config";
+import API_URL from "../../../../../../config";
 import { useRecoilValue } from "recoil";
-import { tokenState } from "../../../../recoil/recoil";
-import TabSelect from "../../../../screens/Game/template/RealEstatePage/TabSelect";
-import HouseCard from "../HouseCard";
+import { tokenState } from "../../../../../recoil/recoil";
+import TabSelect from "../RealEstateMainPage/TabSelect";
+import HouseCard from "../../../../../components/estatepage/ForSaleEstateComponent/HouseCard";
 
 
 const ForSaleDetail = (props) => {
@@ -79,4 +79,3 @@ const ForSaleDetail = (props) => {
 };
 
 export default ForSaleDetail;
-
