@@ -4,13 +4,17 @@ import StockCard from "./StockCard";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../config";
+import { gameIdState } from "../../../recoil/recoil";
+import { useRecoilValue } from "recoil";
+
 
 const StockTrade = () => {
   const [stockData, setStockData] = useState([]);
+  const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
     axios
-      .get(API_URL + "/api/stock/list/1") // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/stock/list/${gameID}`) // 게임아이디 받아와서 주기
       .then((response) => {
         setStockData(response.data.data);
       })
