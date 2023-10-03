@@ -15,6 +15,7 @@ import com.sehbeomschool.nova.domain.saving.dao.InsInterestRepository;
 import com.sehbeomschool.nova.domain.saving.dao.SavingRepository;
 import com.sehbeomschool.nova.domain.saving.domain.InstallmentSavings;
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentRequestDto;
+import com.sehbeomschool.nova.domain.saving.exception.SavingMinusMoneyException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -115,6 +116,15 @@ class SavingServiceTest {
             @Test
             @DisplayName("마이너스 금액 예외 발생")
             void not_minus_money_exception() {
+                Game game = Game.builder()
+                    .annualAsset(AnnualAsset.builder().usableAsset(0L).build()).build();
+                AddInstallmentRequestDto build = AddInstallmentRequestDto.builder().amount(-10L)
+                    .build();
+                given(gameRepository.findById(any())).willReturn(Optional.of(game));
+
+                assertThatThrownBy(() -> savingService.createInstallment(build)).isInstanceOf(
+                    SavingMinusMoneyException.class
+                );
 
             }
         }
