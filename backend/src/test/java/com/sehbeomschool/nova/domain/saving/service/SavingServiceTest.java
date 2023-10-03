@@ -6,12 +6,15 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
+import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
 import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.game.domain.MyAssets;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
+import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
 import com.sehbeomschool.nova.domain.saving.dao.InsInterestRepository;
 import com.sehbeomschool.nova.domain.saving.dao.SavingRepository;
 import com.sehbeomschool.nova.domain.saving.domain.InstallmentSavings;
+import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentRequestDto;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -81,10 +84,57 @@ class SavingServiceTest {
 
     }
 
+    @Nested
+    @DisplayName("적금 가입")
+    class createInstallment {
 
-    @Test
-    void createInstallment() {
+        @Nested
+        @DisplayName("여유자금이 부족하면")
+        class not_enough_money {
+
+            @Test
+            @DisplayName("여유 자금 부족 예외 발생")
+            void not_enough_money_exception() {
+                Game game = Game.builder()
+                    .annualAsset(AnnualAsset.builder().usableAsset(0L).build()).build();
+                AddInstallmentRequestDto build = AddInstallmentRequestDto.builder().amount(100L)
+                    .build();
+                given(gameRepository.findById(any())).willReturn(Optional.of(game));
+
+                assertThatThrownBy(() -> savingService.createInstallment(build)).isInstanceOf(
+                    UsableAssetNotEnoughException.class
+                );
+
+            }
+        }
+
+        @Nested
+        @DisplayName("가입 금액이 0원 이하면")
+        class not_allow_minus {
+
+            @Test
+            @DisplayName("마이너스 금액 예외 발생")
+            void not_minus_money_exception() {
+
+            }
+        }
+
+        @Nested
+        @DisplayName("가입 기간이 범위를 벗어나면")
+        class not_allow_period {
+
+            @Test
+            @DisplayName("여유 자금 부족 예외 발생")
+            void not_enough_money_exception() {
+
+            }
+        }
+
+        @Test
+        void createInstallment() {
+        }
     }
+
 
     @Test
     void deleteInstallment() {
