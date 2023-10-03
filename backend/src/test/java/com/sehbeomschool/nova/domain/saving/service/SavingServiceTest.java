@@ -16,6 +16,7 @@ import com.sehbeomschool.nova.domain.saving.dao.SavingRepository;
 import com.sehbeomschool.nova.domain.saving.domain.InstallmentSavings;
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentRequestDto;
 import com.sehbeomschool.nova.domain.saving.exception.SavingMinusMoneyException;
+import com.sehbeomschool.nova.domain.saving.exception.SavingNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -134,9 +135,20 @@ class SavingServiceTest {
         class not_allow_period {
 
             @Test
-            @DisplayName("여유 자금 부족 예외 발생")
-            void not_enough_money_exception() {
+            @DisplayName("이자 찾을 수 없는 예외 발생")
+            void not_found_exception() {
+                Game game = Game.builder()
+                    .annualAsset(AnnualAsset.builder().usableAsset(10L).build()).build();
+                AddInstallmentRequestDto build = AddInstallmentRequestDto.builder().amount(5L)
+                    .period(5)
+                    .build();
+                given(gameRepository.findById(any())).willReturn(Optional.of(game));
+                given(insInterestRepository.findByPeriod(any(Integer.class))).willReturn(
+                    Optional.empty());
 
+                assertThatThrownBy(() -> savingService.createInstallment(build)).isInstanceOf(
+                    SavingNotFoundException.class
+                );
             }
         }
 
