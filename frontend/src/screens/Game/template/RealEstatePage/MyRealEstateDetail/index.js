@@ -5,15 +5,19 @@ import HouseImg from "../../../../../assets/House.png";
 import Button from "../../../../../components/buttons/SmallButton";
 import axios from "axios";
 import API_URL from "../../../../../../config";
+import { useRecoilValue } from "recoil";
+import { gameIdState } from "../../../../../recoil/recoil";
+
 const { height } = Dimensions.get("window");
 
 const MyRealEstateDetail = (props) => {
   const ID = props.realtyId
   const [realtyData, setRealtyData] = useState([]);
+  const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/realty/mine/1/${ID}`) // 부동산 아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/mine/${gameID}/${ID}`) // 부동산 아이디 받아와서 주기
       .then((response) => {
         setRealtyData(response.data.data);
       })
