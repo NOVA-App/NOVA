@@ -11,7 +11,7 @@ import { gameIdState } from "../../../../../recoil/recoil";
 const { height } = Dimensions.get("window");
 
 const MyRealEstateDetail = (props) => {
-  const ID = props.realtyId
+  const ID = props.route.params.realtyId
   const [realtyData, setRealtyData] = useState([]);
   const gameID = useRecoilValue(gameIdState)
 
@@ -39,17 +39,16 @@ const MyRealEstateDetail = (props) => {
           <View style={{ marginTop: "5%" }}></View>
           <S.InfoText>
             {realtyData.realtyName} ({"  "}
-            <S.InfoText style={{ color: "#D90452" }}>+20%</S.InfoText> )
+            <S.InfoText style={{ color: "#D90452" }}>{(realtyData.evaluationAmount - realtyData.investAmount)/realtyData.investAmount * 100}</S.InfoText> )
           </S.InfoText>
-          <S.InfoText>{`지역    `}{realtyData.realtyName}</S.InfoText>
-          <S.InfoText>{`투자 금액    `}{realtyData.investAmount}</S.InfoText>
-          <S.InfoText>{`현재가         `}{realtyData.evaluationAmount}</S.InfoText>
+          <S.InfoText>{`투자 금액:    `}{realtyData.investAmount}</S.InfoText>
+          <S.InfoText>{`현재가:         `}{realtyData.evaluationAmount}</S.InfoText>
           <S.InfoText>
-            {`투자 수익률          `}
-            <S.InfoText style={{ color: "#D90452" }}> {realtyData.depreciationPercent} % </S.InfoText>
+            {`투자 수익률:          `}
+            <S.InfoText style={{ color: "#D90452" }}>{(realtyData.evaluationAmount - realtyData.investAmount)/realtyData.investAmount * 100} % </S.InfoText>
           </S.InfoText>
-          <S.InfoText>{`월세 수익        `}{realtyData.rentIncome}</S.InfoText>
-          <S.InfoText>{`남은 대출금     `}{realtyData.principal}</S.InfoText>
+          <S.InfoText>{`월세 수익:        `}{realtyData.rentIncome}</S.InfoText>
+          <S.InfoText>{`남은 대출금:     `}{realtyData.principal}</S.InfoText>
         </View>
         <View
           style={{
