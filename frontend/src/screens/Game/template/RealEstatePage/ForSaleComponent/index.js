@@ -6,7 +6,7 @@ import Button from "../../../../../components/buttons/SmallButton";
 import axios from "axios";
 import API_URL from "../../../../../../config";
 import { useRecoilValue } from "recoil";
-import { tokenState, gameIdState, gameDataState } from "../../../../../recoil/recoil";
+import { accessTokenState, gameIdState, gameDataState } from "../../../../../recoil/recoil";
 import LoneLargeModal from "../../../../../components/modals/LoneLargeModal";
 
 // 매물목록 상세 페이지
@@ -14,11 +14,12 @@ const ForSaleDetail = (props) => {
   const ID = props.route.params.realtyId
   const { height } = Dimensions.get("window");
   const [realtyData, setRealtyData] = useState([]);
-  const token = useRecoilValue(tokenState);
+  const token = useRecoilValue(accessTokenState);
   const gameID = useRecoilValue(gameIdState)
   const gameData = useRecoilValue(gameDataState)
   const usableAsset = gameData.annualAssets.usableAsset
   const [isModalVisible, setIsModalVisible] = useState(false);
+  
   const onModalClose = () => {
     setIsModalVisible(false);
   };

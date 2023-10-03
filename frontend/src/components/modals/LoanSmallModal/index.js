@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import * as S from './style'
 import Button from '../../buttons/MediumButton/index'
 
-const OneButtonSmallModal = props => {
+const LoanSmallModal = props => {
   const styles = StyleSheet.create({
     Text:{
       fontSize: 40,
@@ -14,7 +14,7 @@ const OneButtonSmallModal = props => {
     // <Modal animationType="fade"  // 스타일 둘 중 하나 택 1
     <Modal animationType="slide" 
       transparent={true} 
-      visible={props.isVisible}
+      visible={props.visible}
       >
     <S.ModalContent>
       <S.TitleContainer>
@@ -32,4 +32,4 @@ const OneButtonSmallModal = props => {
   )
 }
 
-export default OneButtonSmallModal;
+export default LoanSmallModal;
