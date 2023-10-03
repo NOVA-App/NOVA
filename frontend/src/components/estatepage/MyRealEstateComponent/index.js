@@ -16,8 +16,9 @@ const MyRealEstate = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/realty/mine/${gameID}`) // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/mine/${gameID}`)
       .then((response) => {
+        console.log(response.data.data);
         setMyRealtyData(response.data.data);
         setMyHouseData(response.data.data.myRealties);
       })
@@ -67,9 +68,9 @@ const MyRealEstate = () => {
                   investAmount={realtyItem.investAmount}
                   evaluationAmount={realtyItem.evaluationAmount}
                   rentalIncome={realtyItem.rentalIncome}
+                  height={height}
                 />
               ))}
-              <HouseCard height={height} />
             </ScrollView>
           </View>
         </View>

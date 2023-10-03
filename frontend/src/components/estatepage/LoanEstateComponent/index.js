@@ -15,10 +15,8 @@ const LoanEstate = () => {
   const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
-
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     axios
-      .get(`${API_URL}/api/realty/loan/${gameID}`) // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/loan/${gameID}`)
       .then((response) => {
         setLoanData(response.data.data);
         console.log(response.data.data)

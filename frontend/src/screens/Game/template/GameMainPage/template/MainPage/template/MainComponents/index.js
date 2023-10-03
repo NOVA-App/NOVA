@@ -18,6 +18,8 @@ import API_URL from "../../../../../../../../../config";
 import axios from "axios";
 import AnnualModal from "../../../../../../../../components/mainpage/modal/annualModal";
 
+// 메인 페이지
+
 const MainComponents = () => {
   const [gameId] = useRecoilState(gameIdState);
   const [gameData, setGameData] = useRecoilState(gameDataState);
@@ -25,7 +27,9 @@ const MainComponents = () => {
   const navigation = useNavigation();
   const [refresh, setRefresh] = useState(false);
   const [modalVisible] = useRecoilState(annualModalState);
+  const usableAsset = gameData.annualAssets.usableAsset
 
+  // 현재 해 정보 업데이트
   useEffect(() => {
     axios
       .get(`${API_URL}/api/game/${gameId}`)

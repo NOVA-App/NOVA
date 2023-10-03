@@ -1,16 +1,30 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Dimensions, View, Text, ScrollView } from "react-native";
 import * as S from "./style";
 import HouseImg from "../../../../assets/House.png";
 import SmallButton from "../../../buttons/SmallButton";
 import { useNavigation } from '@react-navigation/native';
+import { gameIdState } from "../../../../recoil/recoil";
+import { useRecoilValue } from "recoil";
+
 
 const HouseCard = (props) => {
   const navigation = useNavigation();
+  const gameID = useRecoilValue(gameIdState)
 
   const handleHouseDetailPress = () => {
     navigation.navigate("MyRealEstateDetail", { screen: "MyRealEstateDetail" });
   };
+
+  useEffect(() => {
+    console.log('props들 확인')
+    console.log(props.realtyId)
+    console.log(props.realtyName)
+    console.log(props.investAmount)
+    console.log(props.evaluationAmount)
+    console.log(props.rentalIncome)
+  }, []);
+
   return (
     <S.Container height={props.height}>
       <S.ImgBox source={HouseImg} />

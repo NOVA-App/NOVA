@@ -40,6 +40,7 @@ const ForSaleDetail = (props) => {
       .catch((error) => {
         console.error("부동산 매물 상세 에러: ", error);
       });
+      // console.log(props)
   }, []);
 
   return (
