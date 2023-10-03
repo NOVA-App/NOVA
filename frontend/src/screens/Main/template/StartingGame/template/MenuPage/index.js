@@ -5,11 +5,14 @@ import XXLargeButton from "../../../../../../components/buttons/XXLargeButton";
 import * as S from "./style";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { accessTokenState, refreshTokenState } from "../../../../../../recoil/recoil";
+import { useRecoilValue } from "recoil";
+// import { accessTokenState, refreshTokenState } from "../../../../../../recoil/recoil";
+import { tokenState } from "../../../../../../recoil/recoil";
 
 const MenuPage = () => {
-  const [accessToken] = useRecoilState(accessTokenState);
+  // const [accessToken] = useRecoilState(accessTokenState);
+  const accessToken = useRecoilValue(tokenState);
+
   console.log("여기에 찍혀야댐")
   console.log(accessToken)
 
