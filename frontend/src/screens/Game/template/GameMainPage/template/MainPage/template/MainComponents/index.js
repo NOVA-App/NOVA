@@ -36,6 +36,7 @@ const MainComponents = () => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
   }, [refresh]);
+
   // 다음해로 넘어가기 버튼 클릭
   const handleNextYearButtonClick = () => {
     axios
@@ -66,7 +67,11 @@ const MainComponents = () => {
     <View style={style.container}>
       <AgeBar age={gameData.currentAge} onPress={handleNextYearButtonClick} />
       <AnnualAsset asset={gameData.annualAssets} />
-      <AnnualModal visible={modalVisible} asset={gameData.annualAssets} />
+      <AnnualModal
+        visible={modalVisible}
+        asset={gameData.annualAssets}
+        setRefresh={setRefresh}
+      />
       <MyAsset asset={gameData.myAssets} />
       <View style={style.imageContainer}>
         <View style={style.imageAndButtonContainer}>
