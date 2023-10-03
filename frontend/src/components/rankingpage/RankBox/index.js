@@ -11,16 +11,18 @@ const RankBox = (props) => {
     <View style={{ justifyContent: "center" }}>
       <S.Container style={{ flex: 10 }}>
         <View style={{ flex: 2, alignItems: "center" }}>
-          <Text style={{ fontSize: 30 }}>1</Text>
+          <Text style={{ fontSize: 30 }}>{rankNum}</Text>
         </View>
         <View style={{ flex: 3 }}>
-          <ImgBox></ImgBox>
+          <ImgBox ProfileUrl={props.rankItem.userInfo.profileImg} />
         </View>
         <View style={{ flex: 3 }}>
-          <Text>닉네임</Text>
+          <Text>{props.rankItem.userInfo.name}</Text>
         </View>
         <View style={{ flex: 2 }}>
-          <Text style={{ color: "#D90452" }}>+ 2,500%</Text>
+          <Text style={{ color: "#D90452" }}>
+            {props.rankItem.resultInfo.assetGrowthRate}
+          </Text>
         </View>
       </S.Container>
     </View>

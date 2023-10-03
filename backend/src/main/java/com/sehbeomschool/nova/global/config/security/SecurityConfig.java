@@ -32,8 +32,11 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-            .antMatchers("/api/user/oauth/kakao/callback").permitAll()
-            .antMatchers("/api/user/oauth/kakao/login").permitAll()
+            .antMatchers("/api/user/oauth/kakao/**").permitAll()
+            .requestMatchers(request -> {
+                String code = request.getParameter("code");
+                return code != null;
+            }).permitAll()
             .antMatchers("/api/user/refreshtoken").permitAll()
             .anyRequest().authenticated()
             .and()

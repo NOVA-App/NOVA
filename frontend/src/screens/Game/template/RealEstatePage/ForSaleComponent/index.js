@@ -6,7 +6,7 @@ import Button from "../../../../../components/buttons/SmallButton";
 import axios from "axios";
 import API_URL from "../../../../../../config";
 import { useRecoilValue } from "recoil";
-import { tokenState } from "../../../../../recoil/recoil";
+import { tokenState, gameIdState } from "../../../../../recoil/recoil";
 import TabSelect from "../RealEstateMainPage/TabSelect";
 import HouseCard from "../../../../../components/estatepage/ForSaleEstateComponent/HouseCard";
 
@@ -16,11 +16,12 @@ const ForSaleDetail = (props) => {
   const { height } = Dimensions.get("window");
   const [realtyData, setRealtyData] = useState([]);
   const token = useRecoilValue(tokenState);
+  const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     axios
-      .get(`${API_URL}/api/realty/1/${ID}`) // 부동산 아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/${gameID}/${ID}`) // 부동산 아이디 받아와서 주기
       .then((response) => {
         setRealtyData(response.data.data);
       })
