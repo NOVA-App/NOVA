@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import * as S from "./style";
 import SmallButton from "../../../buttons/SmallButton";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 
 const StockCard = (props) => {
   const navigation = useNavigation();
@@ -12,11 +12,14 @@ const StockCard = (props) => {
   );
 
   const handleBuyButtonPress = () => {
-    navigation.navigate("StockDetailPage", { screen: "StockDetailPage" });
+    navigation.navigate("StockDetailPage", {
+      screen: "StockDetailPage",
+      stockId: props.stockItem.stockId,
+      rate: rate,
+    });
   };
-
   return (
-    <S.Container height={props.height}>
+    <S.Container>
       <S.ContentContainer>
         <S.MiddleText>{props.stockName}</S.MiddleText>
         <S.MiddleText>{props.stockAmount}</S.MiddleText>
@@ -32,7 +35,11 @@ const StockCard = (props) => {
           minWidth: "100%",
         }}
       >
-        <SmallButton title="매수하기" bgColor="#0046FF" onPress={handleBuyButtonPress} />
+        <SmallButton
+          title="매수하기"
+          bgColor="#0046FF"
+          onPress={handleBuyButtonPress}
+        />
       </View>
     </S.Container>
   );
