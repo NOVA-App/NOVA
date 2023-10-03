@@ -4,6 +4,7 @@ import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.saving.domain.InsInterest;
 import com.sehbeomschool.nova.domain.saving.domain.InstallmentSavings;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ public class SavingRequestDto {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    @Builder
     public static class AddInstallmentRequestDto {
 
         private Long gameId;
