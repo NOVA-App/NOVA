@@ -70,17 +70,19 @@ public class StockResponseDto {
 
         private Long stockId;
         private String stockName;
+        private Long investAmount;
         private Long evaluationAmount;
         private Long quantity;
         private Long fluctuations;
         private Long fluctuationsPercent;
 
         @Builder
-        public MyStockResponseDto(Long stockId, String stockName,
+        public MyStockResponseDto(Long stockId, String stockName, Long investAmount,
             Long evaluationAmount,
             Long quantity, Long fluctuations, Long fluctuationsPercent) {
             this.stockId = stockId;
             this.stockName = stockName;
+            this.investAmount = investAmount;
             this.evaluationAmount = evaluationAmount;
             this.quantity = quantity;
             this.fluctuations = fluctuations;
