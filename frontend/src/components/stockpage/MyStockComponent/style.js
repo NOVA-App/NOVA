@@ -34,6 +34,12 @@ export const MiddleText = styled.Text`
 `;
 
 export const CenterView = styled.View`
-  justify-items: center;
-  width: 100%;
+  justify-content: center;
+  align-items: center;
+  min-width: 50%;
+`;
+
+export const rowContainer = styled.View`
+  flex-direction: row;
+  min-width: 100%;
 `;
