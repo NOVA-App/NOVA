@@ -13,6 +13,7 @@ import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
 import com.sehbeomschool.nova.domain.game.exception.UsableAssetNotEnoughException;
 import com.sehbeomschool.nova.domain.saving.dao.InsInterestRepository;
 import com.sehbeomschool.nova.domain.saving.dao.SavingRepository;
+import com.sehbeomschool.nova.domain.saving.domain.InsInterest;
 import com.sehbeomschool.nova.domain.saving.domain.InstallmentSavings;
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentRequestDto;
 import com.sehbeomschool.nova.domain.saving.exception.SavingMinusMoneyException;
@@ -152,9 +153,47 @@ class SavingServiceTest {
             }
         }
 
-        @Test
-        void createInstallment() {
+        @Nested
+        @DisplayName("성공할 경우")
+        class success_createInstallment {
+
+            AnnualAsset annualAsset = AnnualAsset.builder().totalAnnualAsset(10L)
+                .installmentSavingCost(0L)
+                .usableAsset(10L).livingCost(0L).monthlyRentCost(0L).IRPCost(0L)
+                .childCost(0L).loansCost(0L).build();
+            Game game = Game.builder()
+                .currentAge(30)
+                .myAssets(MyAssets.builder().annualAsset(annualAsset)
+                    .installmentSavingAsset(0L).IRPAsset(0L).stockAsset(0L).realtyAsset(0L)
+                    .loanAsset(0L).build())
+                .annualAsset(
+                    annualAsset)
+                .build();
+            AddInstallmentRequestDto requestDto = AddInstallmentRequestDto.builder().amount(5L)
+                .period(1)
+                .build();
+            InsInterest insInterest = InsInterest.builder().build();
+
+            @Test
+            @DisplayName("적금을 생성한다")
+            void createInstallment() {
+                given(gameRepository.findById(any())).willReturn(Optional.of(game));
+                given(insInterestRepository.findByPeriod(any(Integer.class))).willReturn(
+                    Optional.of(insInterest));
+
+                savingService.createInstallment(requestDto);
+
+                then(savingRepository).should()
+                    .save(any());
+            }
+
+            @Test
+            @DisplayName("여유 자금이 줄어든다")
+            void decrease_usable_cost() {
+            }
+
         }
+
     }
 
 
