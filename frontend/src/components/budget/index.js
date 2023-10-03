@@ -2,8 +2,12 @@ import React from "react";
 import { Text, View, Image } from "react-native";
 import Logo from "../../assets/nova_logo.png";
 import styled from "styled-components/native";
+import { gameDataState } from "../../recoil/recoil";
+import { useRecoilState } from "recoil";
 
-const Budget = (props) => {
+const Budget = () => {
+  const [data] = useRecoilState(gameDataState);
+  console.log(data);
   return (
     <StyledUpper>
       <View style={{ flex: 1, alignItems: "flex-start" }}>
@@ -14,7 +18,9 @@ const Budget = (props) => {
       </View>
       <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>여유자금</Text>
-        <Text style={{ fontSize: 20, color: "#F5B700" }}>2,000,000원</Text>
+        <Text style={{ fontSize: 20, color: "#F5B700" }}>
+          {data.annualAssets.usableAsset}원
+        </Text>
       </View>
       <View
         style={{ flex: 1, alignItems: "flex-end", justifyContent: "center" }}
