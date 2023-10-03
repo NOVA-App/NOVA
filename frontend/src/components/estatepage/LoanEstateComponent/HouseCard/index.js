@@ -9,13 +9,12 @@ import axios from "axios";
 import { gameDataState } from "../../../../recoil/recoil";
 import { useRecoilValue } from "recoil";
 
-
 const HouseCard = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [principalAmount, setPrincipalAmount] = useState(props.principal);
-  const gameData = useRecoilValue(gameDataState)
-  const usableAsset = gameData.annualAssets.usableAsset
-  
+  const gameData = useRecoilValue(gameDataState);
+  const usableAsset = gameData.annualAssets.usableAsset;
+
   const onModalClose = () => {
     setIsModalVisible(false);
   };
@@ -23,9 +22,6 @@ const HouseCard = (props) => {
   const onModalOpen = () => {
     setIsModalVisible(true);
   };
-
-
-
 
   return (
     <S.Container height={props.height}>
@@ -50,9 +46,9 @@ const HouseCard = (props) => {
             justifyContent: "flex-end",
           }}
         >
-          <SmallButton 
-            title="상환하기" 
-            bgColor="#0046FF" 
+          <SmallButton
+            title="상환하기"
+            bgColor="#0046FF"
             onPress={onModalOpen}
           />
           <LoanSmallModal
@@ -65,8 +61,9 @@ const HouseCard = (props) => {
 내 여유자금:  ${usableAsset}\n
 대출 상환 신청 금액: `}
             onClose={onModalClose}
-      />
-          
+            maxAmount={usableAsset}
+            minAmount={props.principal}
+          />
         </View>
       </S.ContentContainer>
     </S.Container>
