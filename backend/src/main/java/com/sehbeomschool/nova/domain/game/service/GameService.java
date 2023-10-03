@@ -31,7 +31,7 @@ public interface GameService {
 
     GameResultDetailResponseDto readGameResultDetail(Long gameId);
 
-    MyResultsListResponseDto readAllMyGames();
+    MyResultsListResponseDto readAllMyGames(Long userId);
 
     RankingListResponseDto readRankingList();
 

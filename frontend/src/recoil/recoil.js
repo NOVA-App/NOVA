@@ -13,15 +13,25 @@ export const isChildBirthState = atom({
   default: false,
 });
 
-export const tokenState = atom({
-  key: "tokenState",
-  default:
-    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImV4cCI6MTY5NjYzMDM5MX0.zWtHdQr_XzF735p0nls2_zMOWTRVZU_qq1R0afPYHTQ",
+export const accessTokenState = atom({
+  key: "accessTokenState",
+  default: "",
+});
+
+// export const tokenState = atom({
+//   key: "tokenState",
+//   default:
+//     "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImV4cCI6MTY5NjYzMDM5MX0.zWtHdQr_XzF735p0nls2_zMOWTRVZU_qq1R0afPYHTQ",
+// });
+
+export const refreshTokenState = atom({
+  key: "refreshTokenState",
+  default: "",
 });
 
 export const gameIdState = atom({
   key: "gameIdState",
-  default: 0,
+  default: 1,
 });
 
 export const gameDataState = atom({
@@ -52,4 +62,9 @@ export const gameDataState = atom({
       loanAsset: 0,
     },
   },
+});
+
+export const annualModalState = atom({
+  key: "annualModalState",
+  default: false,
 });

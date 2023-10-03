@@ -44,6 +44,7 @@ import com.sehbeomschool.nova.domain.user.constant.UserExceptionMessage;
 import com.sehbeomschool.nova.domain.user.dao.UserRepository;
 import com.sehbeomschool.nova.domain.user.exception.UserNotFoundException;
 import com.sehbeomschool.nova.global.constant.FixedValues;
+import com.sehbeomschool.nova.global.util.VarifyUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -107,8 +108,11 @@ public class GameServiceImpl implements GameService {
     @Override
     @Transactional
     public GameStatus updateForNextYear(NextYearRequestDto nextYearRequestDto) {
+
         Game game = gameRepository.findById(nextYearRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        VarifyUser.varifyUser(game.getUser().getId());
 
         if (game.getCurrentAge() == FixedValues.END_AGE.getValue().intValue()) {
             throw new GameFinishedException(GAME_FINISHED.getMessage());
@@ -152,8 +156,8 @@ public class GameServiceImpl implements GameService {
         // 뉴스 변화
         newsService.updateNewsInfoByNextYear(game, nextAge);
 
-        // TODO : 적금 변화
-        // TODO : IRP 변화
+        savingService.updateInstallmentForNextYear(game.getId());
+        savingService.updateIrpForNextYear(game.getId());
 
         // 다음 해 총 자산 저장 및 다음 해 Ages에 반영
         game.getMyAssets().recalculateTotalAsset();
@@ -166,6 +170,8 @@ public class GameServiceImpl implements GameService {
     public CurrentYearResponseDto readCurrentYear(Long gameId) {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        VarifyUser.varifyUser(game.getUser().getId());
 
         return CurrentYearResponseDto.builder()
             .game(game)
@@ -183,6 +189,8 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(updateLivingCostRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
+        VarifyUser.varifyUser(game.getUser().getId());
+
         game.getAnnualAsset().updateLivingCost(updateLivingCostRequestDto.getLivingCost());
         game.getMyAssets().recalculateTotalAsset();
 
@@ -196,6 +204,8 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
+        VarifyUser.varifyUser(game.getUser().getId());
+
         return FixedCostResponseDto.builder().annualAsset(game.getAnnualAsset()).build();
     }
 
@@ -204,6 +214,8 @@ public class GameServiceImpl implements GameService {
     public void deleteGame(Long gameId) {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        VarifyUser.varifyUser(game.getUser().getId());
 
         stockManagerService.deleteStocksInfo(game.getAges());
         realtyManagerService.deleteRealtyInfo(game.getId());
@@ -218,6 +230,8 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
+        VarifyUser.varifyUser(game.getUser().getId());
+
         if (game.getCurrentAge() != FixedValues.END_AGE.getValue().intValue()) {
             throw new GameNotFinishedException(GAME_NOT_FINISHED.getMessage());
         }
@@ -226,9 +240,9 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public MyResultsListResponseDto readAllMyGames() {
+    public MyResultsListResponseDto readAllMyGames(Long userId) {
         return MyResultsListResponseDto.builder()
-            .games(gameRepository.findFinishedGameByUserId(1L))
+            .games(gameRepository.findFinishedGameByUserId(userId))
             .build();
     }
 
@@ -245,6 +259,8 @@ public class GameServiceImpl implements GameService {
     public void marry(MarryRequestDto marryRequestDto) {
         Game game = gameRepository.findById(marryRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
+
+        VarifyUser.varifyUser(game.getUser().getId());
 
         game.addEventAndSetThis(Event.builder()
             .age(agesRepository.findCurrentAge(game))
@@ -263,6 +279,8 @@ public class GameServiceImpl implements GameService {
     }
 
     private void addChildBirthEvent(Game game, Ages nextAge) {
+        VarifyUser.varifyUser(game.getUser().getId());
+
         game.addEventAndSetThis(Event.builder()
             .eventType(EventType.CHILD_BIRTH)
             .age(nextAge)
