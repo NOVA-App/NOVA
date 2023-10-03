@@ -1,21 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import * as S from "./style";
 import HouseImg from "../../../../assets/House.png";
 import SmallButton from "../../../buttons/SmallButton";
-import OneButtonSmallModal from "../../../modals/OneButtonSmallModal";
+import LoanSmallModal from "../../../modals/LoanSmallModal";
+import API_URL from "../../../../../config";
+import axios from "axios";
+
 
 
 const HouseCard = (props) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [principalAmount, setPrincipalAmount] = useStat(props.principal);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   
+  const [principalAmount, setPrincipalAmount] = useState(props.principal);
+  
+  const onModalClose = () => {
+    setIsModalVisible(false);
+  };
+
+  const onModalOpen = () => {
+    setIsModalVisible(true);
+  };
+
   const handleRepayment = () => {
+    console.log('props.gameID',props.gameID)
+    console.log('props.realtyId',props.realtyId)
+    console.log('principalAmount',principalAmount)
     axios
     .patch(API_URL + "/api/realty/loan/repayment", {
-      gameId: props.gameId, // 게임 아이디, 필요한 경우 수정
+      gameId: props.gameID,
       realtyId: props.realtyId,
-      principalAmount: updatedPrincipalAmount,
+      principalAmount: principalAmount,
     })
     .then((response) => {
       console.log("PATCH 요청 성공!!:", response.data);
@@ -23,7 +38,7 @@ const HouseCard = (props) => {
     .catch((error) => {
       console.error("PATCH 요청 오류 ㅠㅅㅠ:", error);
     });
-    setModalVisible(false);
+    setIsModalVisible(false);
   }
 
 
@@ -50,15 +65,17 @@ const HouseCard = (props) => {
             justifyContent: "flex-end",
           }}
         >
-          <SmallButton title="상환하기" bgColor="#0046FF" onPress={() => setModalVisible(true)}/>
-          <OneButtonSmallModal
+          <SmallButton 
+            title="상환하기" 
+            bgColor="#0046FF" 
+            onPress={onModalOpen}
+          />
+          <LoanSmallModal
             animationType="slide"
             transparent={true}
-            visible={modalVisible}
+            visible={isModalVisible}
             title='상환하기'
-            onClose={() => {
-              setModalVisible(false);
-        }}
+            onClose={onModalClose}
       />
           
         </View>

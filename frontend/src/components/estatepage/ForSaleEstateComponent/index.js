@@ -5,12 +5,12 @@ import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../config";
 import { useRecoilValue } from "recoil";
-import { tokenState, gameIdState } from "../../../recoil/recoil";
+import { accessTokenState, gameIdState } from "../../../recoil/recoil";
 
 
 const ForSaleEstate = () => {
   const [realtyData, setRealtyData] = useState([]);
-  const token = useRecoilValue(tokenState);
+  const token = useRecoilValue(accessTokenState);
   const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
