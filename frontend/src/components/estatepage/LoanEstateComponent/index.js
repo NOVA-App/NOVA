@@ -4,15 +4,19 @@ import HouseCard from "./HouseCard";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../config";
+import { useRecoilValue } from "recoil";
+import { accessTokenState, gameIdState } from "../../../recoil/recoil";
 
 const { height } = Dimensions.get("window");
 
 const LoanEstate = () => {
   const [loanData, setLoanData] = useState([]);
+  const token = useRecoilValue(accessTokenState);
+  const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
     axios
-      .get(API_URL + "/api/realty/loan/1") // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/loan/${gameID}`)
       .then((response) => {
         setLoanData(response.data.data);
         console.log(response.data.data)
@@ -42,6 +46,7 @@ const LoanEstate = () => {
               {loanData.map((loanItem, index) => (
                 <HouseCard
                   key={index}
+                  gameID={gameID}
                   realtyId={loanItem.realtyId}
                   loanId={loanItem.loanId}
                   realtyName={loanItem.realtyName}
@@ -50,7 +55,7 @@ const LoanEstate = () => {
                 />
               ))}
 
-              <HouseCard height={height} />
+              {/* <HouseCard height={height} /> */}
             </ScrollView>
           </View>
         </View>

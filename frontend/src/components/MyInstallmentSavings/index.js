@@ -5,16 +5,19 @@ import SmallButton from "../buttons/SmallButton/index"
 import MyInstallmentSavingsCard from "./MyInstallmentSavingsCard/index"
 import axios from "axios";
 import API_URL from "../../../config";
+import { useRecoilValue } from "recoil";
+import { gameIdState } from "../../recoil/recoil";
 
 const { height, width } = Dimensions.get("window");
 
 const MyInstallmentSavings = (props) => {
 
   const [savingData, setSavingData] = useState([]);
+  const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
     axios
-      .get(API_URL + "/api/saving/1") 
+      .get(`${API_URL}/api/saving/${gameID}`) 
       .then((response) => {
         setSavingData(response.data.data.installmentSavings);
         console.log(response.data.data.installmentSavings)

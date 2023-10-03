@@ -4,15 +4,21 @@ import HouseCard from "./HouseCard";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../config";
+import { gameIdState } from "../../../recoil/recoil";
+import { useRecoilValue } from "recoil";
+
 const { height } = Dimensions.get("window");
 
 const MyRealEstate = () => {
   const [myRealtyData, setMyRealtyData] = useState([]);
   const [myHouseData, setMyHouseData] = useState([]);
+  const gameID = useRecoilValue(gameIdState)
+
   useEffect(() => {
     axios
-      .get(API_URL + "/api/realty/mine/1") // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/mine/${gameID}`)
       .then((response) => {
+        console.log(response.data.data);
         setMyRealtyData(response.data.data);
         setMyHouseData(response.data.data.myRealties);
       })
@@ -62,9 +68,9 @@ const MyRealEstate = () => {
                   investAmount={realtyItem.investAmount}
                   evaluationAmount={realtyItem.evaluationAmount}
                   rentalIncome={realtyItem.rentalIncome}
+                  height={height}
                 />
               ))}
-              <HouseCard height={height} />
             </ScrollView>
           </View>
         </View>

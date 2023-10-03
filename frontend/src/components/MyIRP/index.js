@@ -4,14 +4,17 @@ import * as S from "./style";
 import SmallButton from "../buttons/SmallButton/index"
 import axios from "axios";
 import API_URL from "../../../config";
+import { useRecoilValue } from "recoil";
+import { gameIdState } from "../../recoil/recoil";
 
 const MyIRP = () => {
   const { height, width } = Dimensions.get("window");
   const [costData, setCostData] = useState(0);
+  const gameID = useRecoilValue(gameIdState)
 
   useEffect(() => {
-    axios
-      .get(API_URL + "/api/saving/1")
+      axios
+      .get(`${API_URL}/api/saving/${gameID}`)
       .then((response) => {
         console.log(response.data.data.irpCost)
         setCostData(response.data.data.irpCost);
@@ -49,3 +52,4 @@ const MyIRP = () => {
 };
 
 export default MyIRP;
+
