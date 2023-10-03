@@ -101,7 +101,7 @@ public class StockServiceImpl implements StockService {
             Long fluctuation = myStockInfo.getCurrentPrice() - myStockInfo.getPrevPrice();
 
             MyStockResponseDto myStockResponseDto = MyStockResponseDto.builder()
-                .stockId(myStock.getId())
+                .stockId(myStock.getStock().getId())
                 .stockName(myStock.getStock().getName())
                 .investAmount(myStock.getInvestAmount())
                 .evaluationAmount(myStockInfo.getCurrentPrice() * myStock.getQuantity())
