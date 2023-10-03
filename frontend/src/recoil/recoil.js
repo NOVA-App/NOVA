@@ -31,7 +31,7 @@ export const refreshTokenState = atom({
 
 export const gameIdState = atom({
   key: "gameIdState",
-  default: 0,
+  default: 1,
 });
 
 export const gameDataState = atom({
@@ -62,4 +62,9 @@ export const gameDataState = atom({
       loanAsset: 0,
     },
   },
+});
+
+export const annualModalState = atom({
+  key: "annualModalState",
+  default: false,
 });
