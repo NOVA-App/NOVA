@@ -17,7 +17,7 @@ const TitleContainer = styled.View`
     justify-content: space-between;
 `;
 const ButtonContainer = styled.View`
-    top: 60%;
+    bottom: -10%;
     left: 25%
 `;
 

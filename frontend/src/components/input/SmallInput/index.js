@@ -12,6 +12,7 @@ const InputSmall = (props) => {
       returnKeyType='done'
       keyboardAppearance='dark'
       value={props.value}
+
       onChangeText={(text) => {
         // 숫자로 변환 시도
         const numericValue = parseInt(text, 10);

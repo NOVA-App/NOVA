@@ -3,6 +3,7 @@ import { View, Text, ScrollView, Image, Dimensions } from "react-native";
 import * as S from "./style";
 import SmallButton from "../buttons/SmallButton/index"
 import InputSmall from "../input/SmallInput";
+import TextInputSmall from "../input/TextInputSmall";
 import ToggleButtonSaving from "./ToggleButtonSaving";
 import axios from "axios";
 import API_URL from "../../../config";
@@ -21,11 +22,12 @@ const InstallmentSavingsCard = (props) => {
   
   const handleSavings = () => {
     if (savingsName.trim() === "" || savingsAmount.trim() === "") {
-      return ;}
+      return ;
+    }
 
     axios
     .post(API_URL + "/api/saving", {
-      gameId: 1, // 게임 아이디, 필요한 경우 수정
+      gameId: 1,
       name: savingsName,
       period: savingsPeriod,
       amount: savingsAmount,
@@ -47,7 +49,7 @@ const InstallmentSavingsCard = (props) => {
 
         <S.SmallContainer>
           <S.MiddleText>적금 이름</S.MiddleText>
-            <InputSmall height={props.height}
+            <TextInputSmall height={props.height}
               placeholder="적금 이름을 입력하세요"
               value={savingsName}
               onChangeText={(text) => setSavingsName(text)}
@@ -77,12 +79,9 @@ const InstallmentSavingsCard = (props) => {
             <InputSmall height={props.height}
               placeholder="연 납입 금액을 입력하세요"
               value={savingsAmount}
-              onChangeText={(text) => setSavingsAmount(text)}
+              onChangeText={(txt) => setSavingsAmount(txt)}
             />
         </S.SmallContainer>
-
-
-        
         
         <View
           style={{
@@ -92,7 +91,6 @@ const InstallmentSavingsCard = (props) => {
           }}
         >
           <SmallButton title="가입하기" bgColor="#0046FF" onPress={handleSavings}/>
-          {/* <Text>fdfd</Text> */}
         </View>
     </S.Container>
   );
