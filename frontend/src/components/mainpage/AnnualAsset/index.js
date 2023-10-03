@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dimensions, View, Text, Image } from "react-native";
 import * as S from "./style";
 import SmallButton from "../../buttons/SmallButton";
+import { annualModalState } from "../../../recoil/recoil";
+import { useRecoilState } from "recoil";
 
 const { width, height } = Dimensions.get("window");
 
-// 버튼 이름, 눌릴 때 함수, 배경 넣기
 const AnnualAsset = (props) => {
+  const [, setModalVisible] = useRecoilState(annualModalState);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
   return (
     <S.Container height={height} width={width} style={{ marginTop: "3%" }}>
       <S.BoxContainer height={height}>
@@ -26,7 +33,12 @@ const AnnualAsset = (props) => {
             </Text>
           </S.PosessionBox>
         </S.BarContainer>
-        <SmallButton title="· · ·" bgColor="#E7F7F6" fontColor="black" />
+        <SmallButton
+          title="· · ·"
+          bgColor="#E7F7F6"
+          fontColor="black"
+          onPress={openModal}
+        />
       </S.BoxContainer>
     </S.Container>
   );
