@@ -22,7 +22,7 @@ import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.AddInstallmentR
 import com.sehbeomschool.nova.domain.saving.dto.SavingRequestDto.UpdateIrpRequestDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.InstallmentSavingsDto;
 import com.sehbeomschool.nova.domain.saving.dto.SavingResponseDto.SavingInfoResponseDto;
-import com.sehbeomschool.nova.domain.saving.exception.SavingNotEnoughException;
+import com.sehbeomschool.nova.domain.saving.exception.SavingMinusMoneyException;
 import com.sehbeomschool.nova.domain.saving.exception.SavingNotFoundException;
 import com.sehbeomschool.nova.global.util.RandomCalculator;
 import java.util.List;
@@ -64,6 +64,13 @@ public class SavingServiceImpl implements SavingService {
         Game game = gameRepository.findById(addInstallmentRequestDto.getGameId()).orElseThrow(
             () -> new GameNotFoundException(GAME_NOT_FOUND.getMessage())
         );
+
+        AnnualAsset annualAsset = game.getAnnualAsset();
+        MyAssets myAssets = game.getMyAssets();
+
+        Long amount = addInstallmentRequestDto.getAmount();
+        checkMoney(annualAsset, amount);
+
         InsInterest insInterest = insInterestRepository.findByPeriod(
             addInstallmentRequestDto.getPeriod()).orElseThrow(
             () -> new SavingNotFoundException(NOT_EXIST_INSINTEREST.getMessage())
@@ -73,20 +80,17 @@ public class SavingServiceImpl implements SavingService {
             insInterest);
         savingRepository.save(installmentSavings);
 
-        AnnualAsset annualAsset = game.getAnnualAsset();
-        MyAssets myAssets = game.getMyAssets();
-
-        Long amount = installmentSavings.getAmount();
-        checkAsset(annualAsset, amount);
-
         annualAsset.increaseInstallmentSavingCost(amount);
         myAssets.increaseAsset(AssetType.INSTALLMENT_SAVING, installmentSavings.getAmount());
         myAssets.recalculateTotalAsset();
     }
 
-    private static void checkAsset(AnnualAsset annualAsset, Long useMoney) {
+    private static void checkMoney(AnnualAsset annualAsset, Long useMoney) {
         if (annualAsset.getUsableAsset() < useMoney) {
             throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
+        }
+        if (useMoney <= 0) {
+            throw new SavingMinusMoneyException(NOT_ALLOW_MINUS.getMessage());
         }
     }
 
@@ -157,7 +161,7 @@ public class SavingServiceImpl implements SavingService {
     @Override
     public void updateIrpCost(UpdateIrpRequestDto updateIrpRequestDto) {
         if (updateIrpRequestDto.getIrpCost() < 0) {
-            throw new SavingNotEnoughException(NOT_ALLOW_MINUS.getMessage());
+            throw new SavingMinusMoneyException(NOT_ALLOW_MINUS.getMessage());
         }
 
         Game game = gameRepository.findById(updateIrpRequestDto.getGameId()).orElseThrow(
@@ -167,7 +171,7 @@ public class SavingServiceImpl implements SavingService {
         AnnualAsset annualAsset = game.getAnnualAsset();
         Long diff = updateIrpRequestDto.getIrpCost() - annualAsset.getIRPCost();
 
-        checkAsset(annualAsset, diff);
+        checkMoney(annualAsset, diff);
         annualAsset.updateIRPCost(updateIrpRequestDto.getIrpCost());
 
     }
