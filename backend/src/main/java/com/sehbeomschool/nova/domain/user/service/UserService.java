@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 
-    Long createUser(KakaoUserInfoDto user);
+    Long createUser(User user);
 
     UserInfoResponseDto readUser(Long userId);
 
