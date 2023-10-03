@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import * as S from "./style";
 import HouseImg from "../../../../assets/House.png";
@@ -8,7 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 const HouseCard = (props) => {
   const navigation = useNavigation();
   const handleBuyHousePress = () => {
-    navigation.navigate("ForSaleDetail", { screen: "ForSaleDetail" });
+    navigation.navigate("ForSaleDetail", { screen: "ForSaleDetail", realtyId: props.realtyId});
+  const realtyId = props.realtyId
   };
   return (
     <S.Container height={props.height}>

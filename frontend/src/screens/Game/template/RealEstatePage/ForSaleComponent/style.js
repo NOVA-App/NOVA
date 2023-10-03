@@ -39,8 +39,8 @@ export const CenterView = styled.View`
 `;
 
 export const ImgContainer = styled.Image`
-  width: 70%;
-  height: 40%;
+  /* width: 70%; */
+  height: 50%;
   border: 0.5px;
   border-radius: 10px;
 `;
