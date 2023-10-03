@@ -1,19 +1,26 @@
 import styled from "styled-components/native";
 
 const ModalContent = styled.View`
-  height: 70%;
-  width: 80%;
+  height: 80%;
+  width: 95%;
   background-color: #eafaf5;
   border-radius: 20px;
   position: absolute;
-  bottom: 15%;
-  left: 10%;
+  bottom: 10%;
+  left: 2.5%;
 `;
+
 const TitleContainer = styled.View`
-  height: 15%;
+  height: 10%;
+  width: 100%;
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
 `;
 
-export { ModalContent, TitleContainer };
+const Text = styled.Text`
+  font-size: 20px;
+  font-weight: 800;
+`;
+
+export { ModalContent, TitleContainer, Text };
