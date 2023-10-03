@@ -6,13 +6,15 @@ import SmallButton from "../../../buttons/SmallButton";
 import LoanSmallModal from "../../../modals/LoanSmallModal";
 import API_URL from "../../../../../config";
 import axios from "axios";
-
+import { gameDataState } from "../../../../recoil/recoil";
+import { useRecoilValue } from "recoil";
 
 
 const HouseCard = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  
   const [principalAmount, setPrincipalAmount] = useState(props.principal);
+  const gameData = useRecoilValue(gameDataState)
+  const usableAsset = gameData.annualAssets.usableAsset
   
   const onModalClose = () => {
     setIsModalVisible(false);
@@ -22,24 +24,7 @@ const HouseCard = (props) => {
     setIsModalVisible(true);
   };
 
-  const handleRepayment = () => {
-    console.log('props.gameID',props.gameID)
-    console.log('props.realtyId',props.realtyId)
-    console.log('principalAmount',principalAmount)
-    axios
-    .patch(API_URL + "/api/realty/loan/repayment", {
-      gameId: props.gameID,
-      realtyId: props.realtyId,
-      principalAmount: principalAmount,
-    })
-    .then((response) => {
-      console.log("PATCH 요청 성공!!:", response.data);
-    })
-    .catch((error) => {
-      console.error("PATCH 요청 오류 ㅠㅅㅠ:", error);
-    });
-    setIsModalVisible(false);
-  }
+
 
 
   return (
@@ -71,10 +56,14 @@ const HouseCard = (props) => {
             onPress={onModalOpen}
           />
           <LoanSmallModal
+            gameID={props.gameID}
+            realtyId={props.realtyId}
             animationType="slide"
             transparent={true}
             visible={isModalVisible}
-            title='상환하기'
+            title={`남은 대출금:  ${props.principal}\n
+내 여유자금:  ${usableAsset}\n
+대출 상환 신청 금액: `}
             onClose={onModalClose}
       />
           

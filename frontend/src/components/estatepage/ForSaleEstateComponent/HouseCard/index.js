@@ -11,6 +11,8 @@ const HouseCard = (props) => {
     navigation.navigate("ForSaleDetail", { screen: "ForSaleDetail", realtyId: props.realtyId});
   const realtyId = props.realtyId
   };
+
+
   return (
     <S.Container height={props.height}>
       <S.ImgBox source={HouseImg} />
