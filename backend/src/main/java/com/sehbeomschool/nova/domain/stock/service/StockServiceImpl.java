@@ -103,6 +103,7 @@ public class StockServiceImpl implements StockService {
             MyStockResponseDto myStockResponseDto = MyStockResponseDto.builder()
                 .stockId(myStock.getId())
                 .stockName(myStock.getStock().getName())
+                .investAmount(myStock.getInvestAmount())
                 .evaluationAmount(myStockInfo.getCurrentPrice() * myStock.getQuantity())
                 .fluctuations(fluctuation * myStock.getQuantity())
                 .fluctuationsPercent(
