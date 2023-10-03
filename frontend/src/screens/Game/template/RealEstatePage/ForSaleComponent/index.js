@@ -6,33 +6,36 @@ import Button from "../../../../../components/buttons/SmallButton";
 import axios from "axios";
 import API_URL from "../../../../../../config";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, gameIdState, gameDataState } from "../../../../../recoil/recoil";
+import {
+  accessTokenState,
+  gameIdState,
+  gameDataState,
+} from "../../../../../recoil/recoil";
 import LoneLargeModal from "../../../../../components/modals/LoneLargeModal";
 
 // 매물목록 상세 페이지
 const ForSaleDetail = (props) => {
-  const ID = props.route.params.realtyId
+  const ID = props.route.params.realtyId;
   const { height } = Dimensions.get("window");
   const [realtyData, setRealtyData] = useState([]);
   const token = useRecoilValue(accessTokenState);
-  const gameID = useRecoilValue(gameIdState)
-  const gameData = useRecoilValue(gameDataState)
-  const usableAsset = gameData.annualAssets.usableAsset
+  const gameID = useRecoilValue(gameIdState);
+  const gameData = useRecoilValue(gameDataState);
+  const usableAsset = gameData.annualAssets.usableAsset;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  
+
   const onModalClose = () => {
     setIsModalVisible(false);
   };
-
-
+  console.log(realtyData.enableLoanAmount);
   useEffect(() => {
     // 부동산 매물 디테일 받아오기
-      axios
+    axios
       .get(`${API_URL}/api/realty/${gameID}/${ID}`) // 부동산 아이디 받아와서 주기
       .then((response) => {
         setRealtyData(response.data.data);
-        console.log(realtyData)
-        console.log(gameData)
+        console.log(realtyData);
+        console.log(gameData);
       })
       .catch((error) => {
         console.error("부동산 매물 상세 에러: ", error);
@@ -40,23 +43,27 @@ const ForSaleDetail = (props) => {
       // console.log(props)
   }, []);
 
- 
   return (
     <View style={{ flex: 1 }}>
       <LoneLargeModal
-        realtyId = {ID}
-        enableLoanAmount = {realtyData.enableLoanAmount}
-        usableAsset = {usableAsset}
-        totalPrice = {realtyData.totalPrice}
+        realtyId={ID}
+        enableLoanAmount={realtyData.enableLoanAmount}
+        usableAsset={usableAsset}
+        totalPrice={realtyData.totalPrice}
         isVisible={isModalVisible}
         onClose={onModalClose}
-        btnTitle='매수'
-        title= {`총 금액: ${realtyData.totalPrice}\n 
+        btnTitle="매수"
+        title={`총 금액: ${realtyData.totalPrice}\n 
 가능 대출 금액:  ${realtyData.enableLoanAmount}\n
-모자란 금액:  ${usableAsset - realtyData.totalPrice < 0 ? usableAsset - realtyData.totalPrice : 0}\n
+모자란 금액:  ${
+          usableAsset - realtyData.totalPrice < 0
+            ? usableAsset - realtyData.totalPrice
+            : 0
+        }\n
 여유 자금:  ${usableAsset}\n
-대출 신청금액: `} >
-    </LoneLargeModal>
+대출 신청금액: `}
+        maxAmount={realtyData.enableLoanAmount}
+      ></LoneLargeModal>
       <S.Container style={{ flex: 8.5, minWidth: "80%" }}>
         <View
           style={{
@@ -64,31 +71,44 @@ const ForSaleDetail = (props) => {
           }}
         ></View>
         <View style={{ flex: 8, alignItems: "center" }}>
-        <View>
-          <S.ImgContainer source={{uri: realtyData.realtyImg}}></S.ImgContainer>
-          <View style={{ marginTop: "5%" }}></View>
-          <S.InfoText>
-          {realtyData.realtyName} ({"  "}
-            <S.InfoText style={{ color: "#D90452" }}>+20%</S.InfoText> )
-          </S.InfoText>
-          <S.InfoText>{`지역    `}{realtyData.region}</S.InfoText>
-          <S.InfoText>{`예상 월세 수익    `}{realtyData.predictedRentIncome}</S.InfoText>
-          <S.InfoText>
-            {`총금액          `}
-            {realtyData.totalPrice}
-          </S.InfoText>
-          <S.InfoText>
-            {`매물가격          `}
-            {realtyData.evaluationAmount}
-          </S.InfoText>
-          <S.InfoText>{`취득세        `}{realtyData.acquistionTax}</S.InfoText>
-          <S.InfoText>
-            {`모자란 금액     `}
-            <S.InfoText style={{ color: "#D90452" }}>{usableAsset - realtyData.totalPrice < 0 ? usableAsset - realtyData.totalPrice : 0}</S.InfoText>
-          </S.InfoText>
-        </View>
-
-
+          <View>
+            <S.ImgContainer
+              source={{ uri: realtyData.realtyImg }}
+            ></S.ImgContainer>
+            <View style={{ marginTop: "5%" }}></View>
+            <S.InfoText>
+              {realtyData.realtyName} ({"  "}
+              <S.InfoText style={{ color: "#D90452" }}>+20%</S.InfoText> )
+            </S.InfoText>
+            <S.InfoText>
+              {`지역    `}
+              {realtyData.region}
+            </S.InfoText>
+            <S.InfoText>
+              {`예상 월세 수익    `}
+              {realtyData.predictedRentIncome}
+            </S.InfoText>
+            <S.InfoText>
+              {`총금액          `}
+              {realtyData.totalPrice}
+            </S.InfoText>
+            <S.InfoText>
+              {`매물가격          `}
+              {realtyData.evaluationAmount}
+            </S.InfoText>
+            <S.InfoText>
+              {`취득세        `}
+              {realtyData.acquistionTax}
+            </S.InfoText>
+            <S.InfoText>
+              {`모자란 금액     `}
+              <S.InfoText style={{ color: "#D90452" }}>
+                {usableAsset - realtyData.totalPrice < 0
+                  ? usableAsset - realtyData.totalPrice
+                  : 0}
+              </S.InfoText>
+            </S.InfoText>
+          </View>
         </View>
         <View
           style={{
@@ -97,11 +117,12 @@ const ForSaleDetail = (props) => {
             alignItems: "flex-end",
           }}
         >
-          <Button title="매수하기" bgColor="#0046FF" 
+          <Button
+            title="매수하기"
+            bgColor="#0046FF"
             onPress={() => {
-            setIsModalVisible(true);
+              setIsModalVisible(true);
             }}
-
           />
         </View>
       </S.Container>
