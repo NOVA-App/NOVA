@@ -6,10 +6,13 @@ import { useNavigation } from "@react-navigation/native";
 
 const StockCard = (props) => {
   const navigation = useNavigation();
-
   const handleDetailPress = () => {
-    navigation.navigate("StockDetailPage", { screen: "StockDetailPage" });
+    navigation.navigate("StockDetailPage", {
+      screen: "StockDetailPage",
+      stockId: props.stock.stockId,
+    });
   };
+  console.log(props.stock.stockId);
 
   return (
     <S.Container height={props.height}>
