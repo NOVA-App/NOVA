@@ -30,6 +30,7 @@ const AnnualModal = (props) => {
       .then((response) => {
         console.log("API 요청 성공:", response.data);
         closeModal();
+        props.setRefresh(true);
       })
       .catch((error) => {
         console.error("API 요청 오류:", error);
