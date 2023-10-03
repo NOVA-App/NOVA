@@ -5,14 +5,16 @@ import ProfileImg from "../../../../assets/ProfileIcon.png";
 import { Image } from "react-native-elements";
 import RankBox from "../../../../components/rankingpage/RankBox";
 import axios from "axios";
+import API_URL from "../../../../../config";
 
 const RankingPage = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     axios
-      .get("http://192.168.56.200/api/game/rank") // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/game/rank`)
       .then((response) => {
-        setData(response.data.data);
+        setData(response.data.data.rankResults);
+        console.log(data);
         console.log(data);
       })
       .catch((error) => {

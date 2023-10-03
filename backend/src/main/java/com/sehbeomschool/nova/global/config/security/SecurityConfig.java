@@ -1,10 +1,12 @@
 package com.sehbeomschool.nova.global.config.security;
 
 import com.sehbeomschool.nova.global.error.WebAuthenticationEntryPoint;
+import com.sehbeomschool.nova.global.filter.FileSizeExceptionFilter;
 import com.sehbeomschool.nova.global.filter.JwtExceptionFilter;
 import com.sehbeomschool.nova.global.filter.JwtFilter;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +23,14 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final JwtExceptionFilter jwtExceptionFilter;
     private final WebAuthenticationEntryPoint webAuthenticationEntryPoint;
+
+    @Bean
+    public FilterRegistrationBean<FileSizeExceptionFilter> customFilter() {
+        FilterRegistrationBean<FileSizeExceptionFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new FileSizeExceptionFilter());
+        registrationBean.addUrlPatterns("/api/user/profileimg");
+        return registrationBean;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {

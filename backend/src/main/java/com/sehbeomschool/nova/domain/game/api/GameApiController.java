@@ -135,11 +135,12 @@ public class GameApiController {
     }
 
     @GetMapping("/myresults")
-    public ResponseEntity<ResponseDto<MyResultsListResponseDto>> readAllMyGames() {
+    public ResponseEntity<ResponseDto<MyResultsListResponseDto>> readAllMyGames(
+        @AuthenticationPrincipal Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(
             ResponseDto.create(
                 READ_ALL_MY_GAMES_SUCCESS.getMessage(),
-                gameService.readAllMyGames()
+                gameService.readAllMyGames(userId)
             )
         );
     }
