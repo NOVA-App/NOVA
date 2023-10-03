@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Image, Dimensions } from "react-native";
 import * as S from "./style";
 import SmallButton from "../buttons/SmallButton/index"
-import axios from "";
+import axios from "axios";
 import API_URL from "../../../config";
 import { useRecoilValue } from "recoil";
 import { gameIdState } from "../../recoil/recoil";
@@ -52,3 +52,4 @@ const MyIRP = () => {
 };
 
 export default MyIRP;
+
