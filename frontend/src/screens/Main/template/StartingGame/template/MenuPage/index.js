@@ -6,11 +6,14 @@ import * as S from "./style";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { useRecoilState } from "recoil";
-import { tokenState } from "../../../../../../recoil/recoil";
+import { accessTokenState, refreshTokenState } from "../../../../../../recoil/recoil";
 
 const MenuPage = () => {
-  const [token] = useRecoilState(tokenState);
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  const [accessToken] = useRecoilState(accessTokenState);
+  console.log("여기에 찍혀야댐")
+  console.log(accessToken)
+
+  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
   const navigation = useNavigation();
   const handleGameStartPage = () => {
