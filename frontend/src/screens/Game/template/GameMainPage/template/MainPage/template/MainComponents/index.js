@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import AgeBar from "../../../../../../../../components/mainpage/AgeBar";
 import AnnualAsset from "../../../../../../../../components/mainpage/AnnualAsset";
@@ -10,26 +10,69 @@ import { useNavigation } from "@react-navigation/native";
 import {
   gameIdState,
   isChildBirthState,
+  gameDataState,
+  annualModalState,
 } from "../../../../../../../../recoil/recoil";
 import { useRecoilState } from "recoil";
+import API_URL from "../../../../../../../../../config";
+import axios from "axios";
+import AnnualModal from "../../../../../../../../components/mainpage/modal/annualModal";
 
 const MainComponents = () => {
   const [gameId] = useRecoilState(gameIdState);
+  const [gameData, setGameData] = useRecoilState(gameDataState);
+  const [isChildBirth, setIsChildBirth] = useRecoilState(isChildBirthState);
   const navigation = useNavigation();
+  const [refresh, setRefresh] = useState(false);
+  const [modalVisible] = useRecoilState(annualModalState);
+
+  useEffect(() => {
+    axios
+      .get(`${API_URL}/api/game/${gameId}`)
+      .then((response) => {
+        setGameData(response.data.data);
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 동안 오류 발생: ", error);
+      });
+  }, [refresh]);
+
+  // 다음해로 넘어가기 버튼 클릭
+  const handleNextYearButtonClick = () => {
+    axios
+      .put(`${API_URL}/api/game`, {
+        gameId: gameId,
+        isChildBirth: isChildBirth,
+      })
+      .then((response) => {
+        // API 요청이 성공하면 isChildBirth 값을 업데이트합니다.
+        setIsChildBirth(false);
+        navigation.navigate("MainComponents");
+        setRefresh(!refresh);
+      })
+      .catch((error) => {
+        console.error("API 요청 오류:", error);
+      });
+  };
+
   const handleBabyButtonClick = () => {
     navigation.navigate("EventPage", { screen: "ChildPage" });
   };
+
   const handleMarriageButtonClick = () => {
     navigation.navigate("EventPage", { screen: "MarriagePage" });
   };
 
-  const [isChildBirth] = useRecoilState(isChildBirthState);
-  console.log(isChildBirth);
   return (
     <View style={style.container}>
-      <AgeBar />
-      <AnnualAsset />
-      <MyAsset />
+      <AgeBar age={gameData.currentAge} onPress={handleNextYearButtonClick} />
+      <AnnualAsset asset={gameData.annualAssets} />
+      <AnnualModal
+        visible={modalVisible}
+        asset={gameData.annualAssets}
+        setRefresh={setRefresh}
+      />
+      <MyAsset asset={gameData.myAssets} />
       <View style={style.imageContainer}>
         <View style={style.imageAndButtonContainer}>
           <Image
