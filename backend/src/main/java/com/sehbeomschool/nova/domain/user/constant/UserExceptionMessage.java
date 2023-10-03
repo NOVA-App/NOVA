@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum UserExceptionMessage {
 
-    NOT_EXIST_USER("존재하지 않는 유저입니다");
-    
+    NOT_EXIST_USER("존재하지 않는 유저입니다"),
+    FILE_SIZE_LIMIT_EXCEEDED("파일 사이즈가 제한 크기를 초과합니다");
+
     private final String message;
 }
