@@ -19,6 +19,7 @@ const StockDetailPage = (props) => {
     axios
       .get(`${API_URL}/api/stock/${gameId}/${props.route.params.stockId}`)
       .then((response) => {
+        console.log(response.data.data)
         setStockInfo(response.data.data);
         setRefresh(!refresh);
       })

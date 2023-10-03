@@ -34,7 +34,14 @@ const MainComponents = () => {
     axios
       .get(`${API_URL}/api/game/${gameId}`)
       .then((response) => {
-        setGameData(response.data.data);
+        const responseData = response.data;
+        
+        if (responseData.message === "게임 종료") {
+          // 게임 종료일 경우 다른 페이지로 이동
+          navigation.navigate("FirstResultPage"); // 적절한 페이지로 변경
+        } else {
+          setGameData(responseData.data);
+        }
       })
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
@@ -57,7 +64,7 @@ const MainComponents = () => {
       .catch((error) => {
         console.error("API 요청 오류:", error);
       });
-  };
+      };
 
   const handleBabyButtonClick = () => {
     navigation.navigate("EventPage", { screen: "ChildPage" });
