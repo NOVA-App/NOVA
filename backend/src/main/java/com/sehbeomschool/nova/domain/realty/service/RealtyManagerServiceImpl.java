@@ -73,4 +73,18 @@ public class RealtyManagerServiceImpl implements RealtyManagerService {
     public void deleteRealtyInfo(Long gameId) {
         realtyInfoRepository.deleteRealtyInfoByGameIdInQuery(gameId);
     }
+
+    @Override
+    public Long calRealtyAssetForNextYear(Game game) {
+        Long realtyAsset = 0L;
+
+        for (MyRealty mr : game.getMyRealties()) {
+            RealtyInfo ri = realtyInfoRepository.findRealtyInfoByGameIdAndRealtyId(game.getId(),
+                mr.getRealty().getId());
+
+            realtyAsset += ri.getCurrentPrice();
+        }
+
+        return realtyAsset;
+    }
 }
