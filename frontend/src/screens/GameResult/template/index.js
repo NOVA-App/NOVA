@@ -1,3 +1,3 @@
 import FirstResultPage from "./FirstResultPage";
-
-export {FirstResultPage};
+import SecondResultPage from "./SecondResultPage";
+export {FirstResultPage, SecondResultPage};

@@ -52,4 +52,8 @@ public class StocksInfo extends BaseEntity {
     public Long calFluctuaions(){
         return this.currentPrice - this.prevPrice;
     }
+
+    public Long calFluctuationsPercent() {
+        return (this.currentPrice - this.prevPrice) * 100 / this.prevPrice;
+    }
 }
