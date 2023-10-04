@@ -32,7 +32,7 @@ const MyIRP = () => {
 
       <S.SmallContainer>
         <S.MiddleText>현재금액</S.MiddleText>
-        <Text>{costData}원</Text>
+        <Text>{[costData].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</Text>
       </S.SmallContainer>
 
       <View
