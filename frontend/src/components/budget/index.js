@@ -61,6 +61,7 @@ const styles = {
   },
 };
 
+
 const StyledUpper = styled.View`
   background-color: white;
   padding: 10px;
