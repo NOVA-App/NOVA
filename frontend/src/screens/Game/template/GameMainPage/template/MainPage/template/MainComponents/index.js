@@ -12,6 +12,7 @@ import {
   isChildBirthState,
   gameDataState,
   annualModalState,
+  refreshState,
 } from "../../../../../../../../recoil/recoil";
 import { useRecoilState } from "recoil";
 import API_URL from "../../../../../../../../../config";
@@ -25,9 +26,9 @@ const MainComponents = () => {
   const [gameData, setGameData] = useRecoilState(gameDataState);
   const [isChildBirth, setIsChildBirth] = useRecoilState(isChildBirthState);
   const navigation = useNavigation();
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useRecoilState(refreshState);
   const [modalVisible] = useRecoilState(annualModalState);
-  const usableAsset = gameData.annualAssets.usableAsset
+  const usableAsset = gameData.annualAssets.usableAsset;
 
   // 현재 해 정보 업데이트
   useEffect(() => {
@@ -35,7 +36,7 @@ const MainComponents = () => {
       .get(`${API_URL}/api/game/${gameId}`)
       .then((response) => {
         const responseData = response.data;
-        
+
         if (responseData.message === "게임 종료") {
           // 게임 종료일 경우 다른 페이지로 이동
           navigation.navigate("FirstResultPage"); // 적절한 페이지로 변경
@@ -64,7 +65,7 @@ const MainComponents = () => {
       .catch((error) => {
         console.error("API 요청 오류:", error);
       });
-      };
+  };
 
   const handleBabyButtonClick = () => {
     navigation.navigate("EventPage", { screen: "ChildPage" });
@@ -78,11 +79,7 @@ const MainComponents = () => {
     <View style={style.container}>
       <AgeBar age={gameData.currentAge} onPress={handleNextYearButtonClick} />
       <AnnualAsset asset={gameData.annualAssets} />
-      <AnnualModal
-        visible={modalVisible}
-        asset={gameData.annualAssets}
-        setRefresh={setRefresh}
-      />
+      <AnnualModal visible={modalVisible} asset={gameData.annualAssets} />
       <MyAsset asset={gameData.myAssets} />
       <View style={style.imageContainer}>
         <View style={style.imageAndButtonContainer}>
