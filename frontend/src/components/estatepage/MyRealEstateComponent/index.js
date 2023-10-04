@@ -47,15 +47,15 @@ const MyRealEstate = () => {
             <S.TotalAssetContainer>
               <S.TextContainer>
                 <S.MiddleText>{`총 투자금`}</S.MiddleText>
-                <S.MiddleText>{myRealtyData.investAmounts}</S.MiddleText>
+                <S.MiddleText>{[myRealtyData.investAmounts].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
               </S.TextContainer>
               <S.TextContainer>
                 <S.MiddleText>{`총 평가금`}</S.MiddleText>
-                <S.MiddleText>{myRealtyData.evaluationAmounts}</S.MiddleText>
+                <S.MiddleText>{[myRealtyData.evaluationAmounts].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
               </S.TextContainer>
               <S.TextContainer>
                 <S.MiddleText>{`월세 수익`}</S.MiddleText>
-                <S.MiddleText>{myRealtyData.totalRentalIncome}</S.MiddleText>
+                <S.MiddleText>{[myRealtyData.totalRentalIncome].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
               </S.TextContainer>
             </S.TotalAssetContainer>
           </View>

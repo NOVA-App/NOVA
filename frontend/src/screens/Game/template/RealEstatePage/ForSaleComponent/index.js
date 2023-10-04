@@ -86,25 +86,25 @@ const ForSaleDetail = (props) => {
             </S.InfoText>
             <S.InfoText>
               {`예상 월세 수익    `}
-              {realtyData.predictedRentIncome}
+              {[realtyData.predictedRentIncome].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </S.InfoText>
             <S.InfoText>
               {`총금액          `}
-              {realtyData.totalPrice}
+              {[realtyData.totalPrice].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </S.InfoText>
             <S.InfoText>
               {`매물가격          `}
-              {realtyData.evaluationAmount}
+              {[realtyData.evaluationAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </S.InfoText>
             <S.InfoText>
               {`취득세        `}
-              {realtyData.acquistionTax}
+              {[realtyData.acquistionTax].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </S.InfoText>
             <S.InfoText>
               {`모자란 금액     `}
               <S.InfoText style={{ color: "#D90452" }}>
                 {usableAsset - realtyData.totalPrice < 0
-                  ? usableAsset - realtyData.totalPrice
+                  ? [usableAsset - realtyData.totalPrice].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   : 0}
               </S.InfoText>
             </S.InfoText>
