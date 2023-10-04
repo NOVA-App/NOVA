@@ -65,9 +65,9 @@ public class UserApiController {
                 userService.updateUserProfileImg(userId, profile)));
     }
 
-    @PatchMapping("/name")
-    public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyName(
-        @AuthenticationPrincipal Long userId, @RequestBody String name) {
+    @PatchMapping("")
+    public ResponseEntity<ResponseDto<?>> modifyName(
+        @AuthenticationPrincipal Long userId, @RequestParam String name) {
 
         userService.updateUserName(userId, name);
 
@@ -76,7 +76,7 @@ public class UserApiController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<ResponseDto<FileUploadResponseDto>> deleteUser(
+    public ResponseEntity<ResponseDto<?>> deleteUser(
         @AuthenticationPrincipal Long userId) {
 
         userService.deleteUser(userId);
