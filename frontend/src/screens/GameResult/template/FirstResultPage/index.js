@@ -12,7 +12,7 @@ import style from "./style";
 import API_URL from "../../../../../config";
 
 const FirstResultPage = (props) => {
-  const gameId = useRecoilValue(gameIdState);
+  const gameId = props.route.params?.gameId || useRecoilValue(gameIdState);
   const [apiData, setApiData] = useState(null);
 
   useEffect(() => {
@@ -50,8 +50,12 @@ const FirstResultPage = (props) => {
   const navigation = useNavigation();
 
   const handleFirstResultPage = () => {
-    navigation.navigate("SecondResultPage");
+    navigation.navigate("GameResult", {
+      screen: "SecondResultPage",
+      params: { gameId }
+    });
   };
+  
 
   if (!apiData) {
     return <Text>Loading...</Text>;
