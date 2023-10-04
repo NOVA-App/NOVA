@@ -8,7 +8,7 @@ import axios from "axios";
 import API_URL from "../../../config";
 
 const ModalComponent = ({ isVisible, onClose }) => {
-  const [gameId, setGameId] = useRecoilValue(gameIdState);
+  const [gameId, setGameId] = useRecoilState(gameIdState);
 
   const handleGiveUp = async () => {
     try {
