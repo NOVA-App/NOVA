@@ -5,20 +5,22 @@ import SmallButton from "../buttons/SmallButton/index";
 import InputSmall from "../input/SmallInput";
 import axios from "axios"; // axios 라이브러리 추가
 import API_URL from "../../../config";
+import { useRecoilValue } from "recoil";
+import { gameIdState } from "../../recoil/recoil";
 
 const { height, width } = Dimensions.get("window");
 
 const IRPCard = (props) => {
   const [irpCost, setIrpCost] = useState("");
+  const gameID = useRecoilValue(gameIdState)
 
   const handleIrpPayment = () => {
     if (irpCost.trim() === "") {  //입력값이 비었을 떄
       return;
     }
-
       axios
         .put(API_URL + "/api/saving", {
-          'gameId': 1, 
+          'gameId': gameID, 
           'irpCost': irpCost, 
         })
         .then((response) => {
