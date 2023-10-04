@@ -28,9 +28,8 @@ const MainComponents = () => {
   const navigation = useNavigation();
   const [refresh, setRefresh] = useRecoilState(refreshState);
   const [modalVisible] = useRecoilState(annualModalState);
-  const usableAsset = gameData.annualAssets.usableAsset
-  const livingCost = gameData.annualAssets.livingCost
-
+  const usableAsset = gameData.annualAssets.usableAsset;
+  const livingCost = gameData.annualAssets.livingCost;
 
   // 현재 해 정보 업데이트
   useEffect(() => {
@@ -56,7 +55,7 @@ const MainComponents = () => {
       .get(`${API_URL}/api/game/${gameId}`)
       .then((response) => {
         const responseData = response.data;
-        
+
         if (responseData.message === "게임 종료") {
           // 게임 종료일 경우 다른 페이지로 이동
           navigation.navigate("FirstResultPage"); // 적절한 페이지로 변경
@@ -73,7 +72,7 @@ const MainComponents = () => {
       .get(`${API_URL}/api/game/${gameId}`)
       .then((response) => {
         const responseData = response.data;
-        
+
         if (responseData.message === "게임 종료") {
           // 게임 종료일 경우 다른 페이지로 이동
           navigation.navigate("FirstResultPage"); // 적절한 페이지로 변경

@@ -45,7 +45,7 @@ const AnnualModal = (props) => {
   const styles = StyleSheet.create({
     Text: {
       fontSize: 40,
-      Colors: "black",
+      color: "black",
       marginRight: "2%",
     },
   });

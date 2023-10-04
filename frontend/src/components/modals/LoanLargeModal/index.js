@@ -20,7 +20,7 @@ const LoanLargeModal = (props) => {
   const styles = StyleSheet.create({
     Text: {
       fontSize: 40,
-      Colors: "black",
+      color: "black",
     },
   });
 
@@ -42,8 +42,8 @@ const LoanLargeModal = (props) => {
         .then((response) => {
           console.log("POST 요청 성공:", response.data);
           alert("구매가 완료 되었습니다");
-          navigation.navigate("RealEstateMainPage");
           setRefresh(!refresh);
+          navigation.navigate("RealEstateMainPage");
         })
         .catch((error) => {
           console.error("POST 요청 오류:", error);
