@@ -15,6 +15,7 @@ import API_URL from "../../../config";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { gameIdState, refreshState } from "../../recoil/recoil";
 import SmallModal from "../modals/SmallModal";
+import { useNavigation } from "@react-navigation/native";
 
 const { height, width } = Dimensions.get("window");
 
@@ -23,6 +24,7 @@ const IRPCard = (props) => {
   const gameID = useRecoilValue(gameIdState);
   const [refresh, setRefresh] = useRecoilState(refreshState);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const navigation = useNavigation();
 
   const onModalClose = () => {
     setIsModalVisible(false);
@@ -40,6 +42,8 @@ const IRPCard = (props) => {
       .then((response) => {
         console.log("PUT 요청 성공11:", response.data);
         console.log("PUT 요청 성공22:", irpCost);
+        alert("납입이 완료 되었습니다");
+        navigation.navigate("BankingMainPage");
         setRefresh(!refresh);
       })
       .catch((error) => {
@@ -89,7 +93,7 @@ const IRPCard = (props) => {
           placeholder="금액을 입력하세요"
           value={irpCost}
           onChangeText={(text) => setIrpCost(text)}
-          onSubmitEditing={handleIrpPayment}
+          onPress={handleIrpPayment}
         />
       </S.SmallContainer>
 

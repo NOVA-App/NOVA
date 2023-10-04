@@ -6,10 +6,12 @@ import axios from "axios";
 import API_URL from "../../../../config";
 import { refreshState } from "../../../recoil/recoil";
 import { useRecoilState } from "recoil";
+import { useNavigation } from "@react-navigation/native";
 
 const { height, width } = Dimensions.get("window");
 
 const InstallmentSavingsCard = (props) => {
+  const navigation = useNavigation();
   const [refresh, setRefresh] = useRecoilState(refreshState);
 
   const TerminateHandle = () => {
@@ -18,6 +20,8 @@ const InstallmentSavingsCard = (props) => {
       .delete(`${API_URL}/api/saving/${props.id}`)
       .then((response) => {
         console.log("delete 요청 성공:", response.data);
+        alert("해지가 완료 되었습니다");
+        navigation.navigate("BankingMainPage");
         setRefresh(!refresh);
       })
       .catch((error) => {
@@ -61,7 +65,6 @@ const InstallmentSavingsCard = (props) => {
           bgColor="#D90452"
           onPress={TerminateHandle}
         />
-        {/* <Text>fdfd</Text> */}
       </View>
     </S.Container>
   );
