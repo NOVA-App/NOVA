@@ -170,7 +170,7 @@ public class Game extends BaseEntity {
             investAmount += ms.getInvestAmount();
         }
 
-        return investAmount;
+        return investAmount == 0 ? 1 : investAmount;
     }
 
     public Long calRealtyInvestAmount() {
@@ -180,7 +180,7 @@ public class Game extends BaseEntity {
             investAmount += mr.getInvestAmount();
         }
 
-        return investAmount;
+        return investAmount == 0 ? 1 : investAmount;
     }
 
     private void addChildCost() {
