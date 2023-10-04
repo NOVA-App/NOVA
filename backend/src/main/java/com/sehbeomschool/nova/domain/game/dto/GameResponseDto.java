@@ -206,8 +206,8 @@ public class GameResponseDto {
             this.realtyAsset = myAssets.getRealtyAsset();
             this.loanAsset = myAssets.getLoanAsset();
             this.totalTax = myAssets.getTotalTax();
-            this.stockVariable = myAssets.getStockAsset() * 100 / game.calStockInvestAmount();
-            this.realtyVariable = myAssets.getRealtyAsset() * 100 / game.calRealtyInvestAmount();
+            this.stockVariable = (myAssets.getStockAsset() * 100L / game.calStockInvestAmount()) - 100L;
+            this.realtyVariable = (myAssets.getRealtyAsset() * 100L / game.calRealtyInvestAmount()) - 100L;
         }
     }
 
