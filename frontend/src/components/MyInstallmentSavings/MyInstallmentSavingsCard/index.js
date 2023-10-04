@@ -4,12 +4,15 @@ import * as S from "./style";
 import SmallButton from "../../buttons/SmallButton/index";
 import axios from "axios";
 import API_URL from "../../../../config";
+import { refreshState } from "../../../recoil/recoil";
+import { useRecoilState } from "recoil";
 import { useNavigation } from "@react-navigation/native";
 
 const { height, width } = Dimensions.get("window");
 
 const InstallmentSavingsCard = (props) => {
   const navigation = useNavigation();
+  const [refresh, setRefresh] = useRecoilState(refreshState);
 
   const TerminateHandle = () => {
     console.log(props.id);
@@ -19,6 +22,7 @@ const InstallmentSavingsCard = (props) => {
         console.log("delete 요청 성공:", response.data);
         alert("해지가 완료 되었습니다");
         navigation.navigate("BankingMainPage");
+        setRefresh(!refresh);
       })
       .catch((error) => {
         console.error("delete 요청 오류:", error);
@@ -56,8 +60,11 @@ const InstallmentSavingsCard = (props) => {
           justifyContent: "flex-end",
         }}
       >
-        <SmallButton title="해지하기" bgColor="#D90452" onPress={TerminateHandle} />
-        {/* <Text>fdfd</Text> */}
+        <SmallButton
+          title="해지하기"
+          bgColor="#D90452"
+          onPress={TerminateHandle}
+        />
       </View>
     </S.Container>
   );
