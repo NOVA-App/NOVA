@@ -37,6 +37,9 @@ const IRPCard = (props) => {
       <S.TagContainer>
         <Text style={{ fontSize: 20, color: "white" }}>IRP</Text>
       </S.TagContainer>
+      <S.InfoContainer>
+        <Text style={{ fontSize: 22, color: "red" }}>?</Text>
+      </S.InfoContainer>
 
       <S.SmallContainer>
         <S.MiddleText>납입 금액</S.MiddleText>
