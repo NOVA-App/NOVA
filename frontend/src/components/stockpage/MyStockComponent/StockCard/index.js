@@ -10,6 +10,7 @@ const StockCard = (props) => {
     navigation.navigate("StockDetailPage", {
       screen: "StockDetailPage",
       stockId: props.stock.stockId,
+      rate: props.stock.fluctuationsPercent,
     });
   };
   console.log(props.stock.stockId);
