@@ -14,7 +14,7 @@ const ForSaleEstate = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_URL}/api/realty/list/${gameID}`) // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/list/${gameID}`)
       .then((response) => {
         setRealtyData(response.data.data);
       })

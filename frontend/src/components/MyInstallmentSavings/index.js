@@ -21,7 +21,7 @@ const MyInstallmentSavings = (props) => {
       .then((response) => {
         setSavingData(response.data.data.installmentSavings);
         console.log('적금정보', response.data.data.installmentSavings)
-      })
+      })  
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
