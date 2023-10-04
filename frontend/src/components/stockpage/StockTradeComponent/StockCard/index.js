@@ -22,7 +22,7 @@ const StockCard = (props) => {
     <S.Container>
       <S.ContentContainer>
         <S.MiddleText>{props.stockName}</S.MiddleText>
-        <S.MiddleText>{props.stockAmount}</S.MiddleText>
+        <S.MiddleText>{[props.stockAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         <Text style={{ fontSize: 25, color: "#D90452" }}>
           {rate < 0 ? rate : `+${rate}`}%
         </Text>

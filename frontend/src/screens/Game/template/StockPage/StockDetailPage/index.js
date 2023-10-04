@@ -3,8 +3,12 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../../../config";
-import { gameIdState, refreshState } from "../../../../../recoil/recoil";
-import { useRecoilState } from "recoil";
+import {
+  gameDataState,
+  gameIdState,
+  refreshState,
+} from "../../../../../recoil/recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigation } from "@react-navigation/native";
 
 const StockDetailPage = (props) => {
@@ -16,6 +20,7 @@ const StockDetailPage = (props) => {
   const stockId = props.route.params.stockId;
   const [refresh, setRefresh] = useRecoilState(refreshState);
   const navigation = useNavigation();
+  const data = useRecoilValue(gameDataState);
 
   useEffect(() => {
     axios
@@ -105,10 +110,12 @@ const StockDetailPage = (props) => {
               marginBottom: 20,
             }}
           ></View>
-          <Text>{`현재가: ${stockInfo.evaluation}`}</Text>
+          <Text>{`현재가: ${[stockInfo.evaluation].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}`}</Text>
           <Text>{`상승률: ${rate}%`}</Text>
           <Text>{`내 보유량: ${stockInfo.myQuantity}`}</Text>
-          <Text>{`여유자산: 150,000,000원`}</Text>
+          <Text>{`여유자산: ${[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}`}</Text>
           <View
             style={{
               flexDirection: "row",

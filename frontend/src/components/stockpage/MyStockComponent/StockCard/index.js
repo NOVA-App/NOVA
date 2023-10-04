@@ -27,7 +27,7 @@ const StockCard = (props) => {
       <S.ContentContainer>
         <S.TextContainer>
           <S.MiddleText>{`현재가`}</S.MiddleText>
-          <S.MiddleText>{props.stock.evaluationAmount}</S.MiddleText>
+          <S.MiddleText>{[props.stock.evaluationAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <S.TextContainer>
           <S.MiddleText>{`보유 수량`}</S.MiddleText>
