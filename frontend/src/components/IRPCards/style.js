@@ -44,5 +44,17 @@ export const TagContainer = styled.View`
   flex: 0.5;
 `;
 
+export const InfoContainer = styled.View`
+  background-color: #038c7f;
+  width: 30%;
+  height: 100%;
+  /* height: 50px; */
+  justify-items: flex-end;
+  align-items: center;
+  border-radius: 10px;
+  margin-top: 3%;
+  flex: 0.5;
+`;
+
 
 

@@ -36,6 +36,7 @@ const MyInstallmentSavings = (props) => {
         {savingData.map((savingItem, index) => (
           <MyInstallmentSavingsCard
             key={index}
+            id={savingItem.id}
             name={savingItem.name}
             totalAmount={savingItem.totalAmount}
             amount={savingItem.amount}
