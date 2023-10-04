@@ -5,7 +5,7 @@ import * as S from './style'
 const SmallModal = props => {
   const styles = StyleSheet.create({
     Text:{
-      fontSize: 40,
+      fontSize: 30,
       Colors: 'black',
     }
   })
@@ -19,7 +19,7 @@ const SmallModal = props => {
       <S.TitleContainer>
         <Text style={styles.Text} onPress={props.onClose}> X</Text>
       </S.TitleContainer>
-      <Text style={{ fontSize: 14 }}>{props.title}</Text>
+      <Text style={{ fontSize: 15 }}>{props.title}</Text>
     </S.ModalContent>
   </Modal>
   )

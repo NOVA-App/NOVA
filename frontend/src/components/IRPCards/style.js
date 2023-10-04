@@ -45,14 +45,12 @@ export const TagContainer = styled.View`
 `;
 
 export const InfoContainer = styled.View`
-  background-color: #038c7f;
-  width: 30%;
-  height: 100%;
   /* height: 50px; */
-  justify-items: flex-end;
-  align-items: center;
+  /* justify-items: flex-start; */
+  align-items: flex-end;
   border-radius: 10px;
-  margin-top: 3%;
+  margin-top: -5%;
+  margin-right: 3%;
   flex: 0.5;
 `;
 
