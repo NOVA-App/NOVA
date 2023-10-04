@@ -163,6 +163,26 @@ public class Game extends BaseEntity {
         this.assetGrowthRate = (double) this.resultAssets / (double) defaultAsset;
     }
 
+    public Long calStockInvestAmount() {
+        Long investAmount = 0L;
+
+        for (MyStocks ms : this.myStocks) {
+            investAmount += ms.getInvestAmount();
+        }
+
+        return investAmount == 0 ? 1 : investAmount;
+    }
+
+    public Long calRealtyInvestAmount() {
+        Long investAmount = 0L;
+
+        for (MyRealty mr : this.myRealties) {
+            investAmount += mr.getInvestAmount();
+        }
+
+        return investAmount == 0 ? 1 : investAmount;
+    }
+
     private void addChildCost() {
         this.annualAsset.addChildCost();
     }

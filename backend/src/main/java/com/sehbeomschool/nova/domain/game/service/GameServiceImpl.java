@@ -136,6 +136,7 @@ public class GameServiceImpl implements GameService {
 
         // 다음 해 Ages 생성 및 추가
         Ages nextAge = makeNextAge(game);
+        game.getAges().add(nextAge);
 
         // 근로 소득 및 부동산 월세 수익 여유 자금에 추가
         long income = calculateAllIncome(game);
@@ -158,6 +159,11 @@ public class GameServiceImpl implements GameService {
 
         savingService.updateInstallmentForNextYear(game.getId());
         savingService.updateIrpForNextYear(game.getId());
+
+        // 주식 부동산 변경 된 가격 반영
+        game.getMyAssets()
+            .setRealtyAndStockAssetForNextYear(realtyManagerService.calRealtyAssetForNextYear(game),
+                stockManagerService.calStockAssetForNextYear(game));
 
         // 다음 해 총 자산 저장 및 다음 해 Ages에 반영
         game.getMyAssets().recalculateTotalAsset();
