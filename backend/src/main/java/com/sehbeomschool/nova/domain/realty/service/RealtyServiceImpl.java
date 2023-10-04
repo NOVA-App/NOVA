@@ -260,6 +260,7 @@ public class RealtyServiceImpl implements RealtyService {
                     .realtyName(mr.getRealty().getName())
                     .realtyPrice(ri.getCurrentPrice())
                     .principal(mr.getLoan().getPrincipal())
+                    .realtyImg(mr.getRealty().getRealtyImg())
                     .build();
 
                 list.add(dto);
