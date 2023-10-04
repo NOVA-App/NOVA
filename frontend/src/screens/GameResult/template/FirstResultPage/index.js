@@ -18,11 +18,10 @@ const FirstResultPage = (props) => {
   useEffect(() => {
     axios
       .get(`${API_URL}/api/game/result/${gameId}`)
-      .then((response) => {        
+      .then((response) => {
         setApiData(response.data);
       })
-      .catch((error) => {
-      });
+      .catch((error) => {});
   }, [gameId]);
   useEffect(() => {
     console.log("현재 상태의 값", apiData);
@@ -102,25 +101,29 @@ const FirstResultPage = (props) => {
               <Text style={style.tableCell}>{assetsInfo.irpasset}</Text>
               <Text style={style.tableCell}>-</Text>
             </View>
-            {/* IRP 행 */}
+            {/* 적금 행 */}
             <View style={style.tableRow}>
               <Text style={style.tableCell}>적금</Text>
               <Text style={style.tableCell}>{assetsInfo.installmentSavingAsset}</Text>
               <Text style={style.tableCell}>-</Text>
             </View>
-            {/* IRP 행 */}
+            {/* 주식 행 */}
             <View style={style.tableRow}>
               <Text style={style.tableCell}>주식</Text>
               <Text style={style.tableCell}>{assetsInfo.stockAsset}</Text>
-              <Text style={style.tableCell}>-</Text>
+              <Text style={[style.tableCell, assetsInfo.stockVariable > 0 ? style.positiveText : style.negativeText]}>
+                {assetsInfo.stockVariable}
+              </Text>
             </View>
-            {/* IRP 행 */}
+            {/* 부동산 행 */}
             <View style={style.tableRow}>
               <Text style={style.tableCell}>부동산</Text>
               <Text style={style.tableCell}>{assetsInfo.realtyAsset}</Text>
-              <Text style={style.tableCell}>-</Text>
+              <Text style={[style.tableCell, assetsInfo.realtyVariable > 0 ? style.positiveText : style.negativeText]}>
+                {assetsInfo.realtyVariable}
+              </Text>
             </View>
-            {/* IRP 행 */}
+            {/* 대출 행 */}
             <View style={style.tableRow}>
               <Text style={style.tableCell}>대출</Text>
               <Text style={style.tableCell}>{assetsInfo.loanAsset}</Text>
