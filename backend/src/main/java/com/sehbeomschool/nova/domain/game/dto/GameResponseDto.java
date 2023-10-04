@@ -148,6 +148,7 @@ public class GameResponseDto {
             this.assetsInfo = AssetsInfoResponseDto.builder()
                 .annualAsset(game.getAnnualAsset())
                 .myAssets(game.getMyAssets())
+                .game(game)
                 .build();
             this.oldAgeAssetsInfo = OldAgeAssetsInfoResponseDto.builder()
                 .oldAgeMonthlyAssets(game.getOldAgeMonthlyAssets())
@@ -193,9 +194,11 @@ public class GameResponseDto {
         private Long realtyAsset;
         private Long loanAsset;
         private Long totalTax;
+        private Long stockVariable;
+        private Long realtyVariable;
 
         @Builder
-        public AssetsInfoResponseDto(AnnualAsset annualAsset, MyAssets myAssets) {
+        public AssetsInfoResponseDto(AnnualAsset annualAsset, MyAssets myAssets, Game game) {
             this.usableAsset = annualAsset.getUsableAsset();
             this.IRPAsset = myAssets.getIRPAsset();
             this.installmentSavingAsset = myAssets.getInstallmentSavingAsset();
@@ -203,6 +206,8 @@ public class GameResponseDto {
             this.realtyAsset = myAssets.getRealtyAsset();
             this.loanAsset = myAssets.getLoanAsset();
             this.totalTax = myAssets.getTotalTax();
+            this.stockVariable = myAssets.getStockAsset() * 100 / game.calStockInvestAmount();
+            this.realtyVariable = myAssets.getRealtyAsset() * 100 / game.calRealtyInvestAmount();
         }
     }
 
