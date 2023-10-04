@@ -21,7 +21,7 @@ const ForSaleEstate = () => {
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <View style={{ flex: 1, minWidth: "90%" }}>
