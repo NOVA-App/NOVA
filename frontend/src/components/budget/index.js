@@ -12,7 +12,7 @@ const Budget = () => {
     <StyledUpper>
       <View style={{ flex: 1, alignItems: "flex-start" }}>
         <Image
-          style={{ resizeMode: "contain", width: "100%", marginLeft: 5 }}
+          style={{ resizeMode: "contain", width: "70%", marginLeft: 5, marginTop:3 }}
           source={Logo}
         />
       </View>
