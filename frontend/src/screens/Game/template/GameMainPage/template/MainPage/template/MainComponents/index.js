@@ -73,7 +73,6 @@ const MainComponents = () => {
         console.error("에러 상세 내용: ", error.response);
       });
   };
-  };
 
   const handleBabyButtonClick = () => {
     navigation.navigate("EventPage", { screen: "ChildPage" });
