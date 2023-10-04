@@ -19,9 +19,8 @@ const StockDetailPage = (props) => {
     axios
       .get(`${API_URL}/api/stock/${gameId}/${props.route.params.stockId}`)
       .then((response) => {
-        console.log(response.data.data)
+        console.log(response.data.data);
         setStockInfo(response.data.data);
-        setRefresh(!refresh);
       })
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
