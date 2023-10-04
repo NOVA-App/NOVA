@@ -3,7 +3,11 @@ import { Modal, Text, StyleSheet, View } from "react-native";
 import * as S from "./style";
 import Slider from "@react-native-community/slider";
 import Button from "../../../buttons/MediumButton";
-import { gameIdState, annualModalState } from "../../../../recoil/recoil";
+import {
+  gameIdState,
+  annualModalState,
+  refreshState,
+} from "../../../../recoil/recoil";
 import { useRecoilState } from "recoil";
 import API_URL from "../../../../../config";
 import axios from "axios";
@@ -12,6 +16,7 @@ const AnnualModal = (props) => {
   const [sliderValue, setSliderValue] = useState(6000000);
   const [gameId] = useRecoilState(gameIdState);
   const [annualModal, setAnnualModal] = useRecoilState(annualModalState);
+  const [refresh, setRefresh] = useRecoilState(refreshState);
 
   const closeModal = () => {
     setAnnualModal(false);
@@ -29,7 +34,8 @@ const AnnualModal = (props) => {
       })
       .then((response) => {
         closeModal();
-        props.setRefresh(true);
+        setRefresh(!refresh);
+        console.log(refresh);
       })
       .catch((error) => {
         console.error("API 요청 오류:", error);
