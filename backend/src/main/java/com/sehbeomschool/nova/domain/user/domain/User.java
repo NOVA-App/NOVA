@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
+@Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
@@ -28,7 +30,8 @@ public class User extends BaseEntity {
     private boolean isDeleted;
 
     @Builder
-    public User(Long socialId, String name, String profileImg) {
+    public User(Long id, Long socialId, String name, String profileImg) {
+        this.id = id;
         this.socialId = socialId;
         this.name = name;
         this.profileImg = profileImg;

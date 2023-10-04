@@ -9,19 +9,17 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native"; // useNavigation 추가
-import Budget from "../../../../../../components/budget/index";
 import MyInstallmentSavings from "../../../../../../components/MyInstallmentSavings/index"
 import MyIRP from "../../../../../../components/MyIRP/index"
 
 // import * as S from "./style";
 
-const Account = (props) => {
+const Account = () => {
 
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <Budget />
       <View style={styles.upper}>
         <View>
           <Text style={{ fontSize: 20, marginBottom: 10 }}>

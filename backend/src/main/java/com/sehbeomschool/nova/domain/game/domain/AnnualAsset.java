@@ -70,6 +70,36 @@ public class AnnualAsset extends BaseEntity {
             .build();
     }
 
+    public void addMonthlyRentCost() {
+        this.monthlyRentCost = FixedValues.MONTHLY_RENT_COST.getValue().longValue();
+        recalculateUsableAsset();
+    }
+
+    public void removeMonthlyRentCost() {
+        this.monthlyRentCost = 0L;
+        recalculateUsableAsset();
+    }
+
+    public void updateIRPCost(Long value) {
+        this.IRPCost = value;
+        recalculateUsableAsset();
+    }
+
+    public void updateLoanCost(Long value) {
+        this.loansCost = value;
+        recalculateUsableAsset();
+    }
+
+    public void increaseInstallmentSavingCost(Long value) {
+        this.installmentSavingCost += value;
+        recalculateUsableAsset();
+    }
+
+    public void decreaseInstallmentSavingCost(Long value) {
+        this.installmentSavingCost -= value;
+        recalculateUsableAsset();
+    }
+
     public Long sumOfFixedCost() {
         Long fixedCost = 0L;
         fixedCost += this.monthlyRentCost;
@@ -83,15 +113,30 @@ public class AnnualAsset extends BaseEntity {
 
     public void updateLivingCost(Long livingCost) {
         this.livingCost = livingCost;
-        this.usableAsset = this.totalAnnualAsset - (this.livingCost + sumOfFixedCost());
+        recalculateUsableAsset();
     }
 
     public void addChildCost() {
         this.childCost += FixedValues.CHILD_COST.getValue().intValue();
+        recalculateUsableAsset();
+    }
+
+    private void recalculateUsableAsset() {
+        this.usableAsset = this.totalAnnualAsset - (this.livingCost + sumOfFixedCost());
     }
 
     public void useUsableAsset(Long cost) {
         this.usableAsset -= cost;
         this.totalAnnualAsset -= cost;
+    }
+
+    public void earnAsset(Long asset) {
+        this.totalAnnualAsset += asset;
+        recalculateUsableAsset();
+    }
+
+    public void payLivingAndFixedCost() {
+        this.totalAnnualAsset -= this.livingCost;
+        this.totalAnnualAsset -= sumOfFixedCost();
     }
 }

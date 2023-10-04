@@ -111,5 +111,11 @@ public class NewsServiceImpl implements NewsService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteNewsInfo(Long gameId) {
+        newsInfoRepository.deleteNewsInfoByGameIdInQuery(gameId);
+    }
+
 
 }

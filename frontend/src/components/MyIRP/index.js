@@ -1,12 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Image, Dimensions } from "react-native";
 import * as S from "./style";
 import SmallButton from "../buttons/SmallButton/index"
-import InputSmall from "../input/SmallInput";
+import axios from "axios";
+import API_URL from "../../../config";
+import { useRecoilValue } from "recoil";
+import { gameIdState } from "../../recoil/recoil";
 
-const { height, width } = Dimensions.get("window");
+const MyIRP = () => {
+  const { height, width } = Dimensions.get("window");
+  const [costData, setCostData] = useState(0);
+  const gameID = useRecoilValue(gameIdState)
 
-const MyIRP = (props) => {
+  useEffect(() => {
+      axios
+      .get(`${API_URL}/api/saving/${gameID}`)
+      .then((response) => {
+        console.log(response.data.data.irpCost)
+        setCostData(response.data.data.irpCost);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <S.Container height={height * 0.4} >
 
@@ -16,7 +33,7 @@ const MyIRP = (props) => {
 
         <S.SmallContainer>
           <S.MiddleText>현재금액</S.MiddleText>
-            <InputSmall height={props.height}/>
+            <Text>{costData}원</Text>
         </S.SmallContainer >
         
 
@@ -29,11 +46,10 @@ const MyIRP = (props) => {
             justifyContent: "flex-end",
           }}
         >
-          <SmallButton title="현재 금액" bgColor="#D90452" />
-          {/* <Text>fdfd</Text> */}
         </View>
     </S.Container>
   );
 };
 
 export default MyIRP;
+

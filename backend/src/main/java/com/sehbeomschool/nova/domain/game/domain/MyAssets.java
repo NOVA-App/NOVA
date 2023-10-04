@@ -1,5 +1,7 @@
 package com.sehbeomschool.nova.domain.game.domain;
 
+import com.sehbeomschool.nova.domain.game.constant.AssetType;
+import com.sehbeomschool.nova.global.constant.FixedValues;
 import com.sehbeomschool.nova.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -81,5 +83,69 @@ public class MyAssets extends BaseEntity {
         newTotalAsset -= this.loanAsset;
 
         this.totalAsset = newTotalAsset;
+    }
+
+    public void increaseAsset(AssetType assetType, Long value) {
+        switch (assetType) {
+            case IRP:
+                this.IRPAsset += value;
+                break;
+
+            case INSTALLMENT_SAVING:
+                this.installmentSavingAsset += value;
+                break;
+
+            case STOCK:
+                this.stockAsset += value;
+                break;
+
+            case REALTY:
+                this.realtyAsset += value;
+                break;
+
+            case LOAN:
+                this.loanAsset += value;
+                this.annualAsset.updateLoanCost((long) (this.loanAsset.doubleValue()
+                    * FixedValues.LOAN_INTEREST_PERCENTAGE.getValue()));
+                break;
+
+            case TAX:
+                this.totalTax += value;
+                break;
+        }
+
+        recalculateTotalAsset();
+    }
+
+    public void decreaseAsset(AssetType assetType, Long value) {
+        switch (assetType) {
+            case IRP:
+                this.IRPAsset -= value;
+                break;
+
+            case INSTALLMENT_SAVING:
+                this.installmentSavingAsset -= value;
+                break;
+
+            case STOCK:
+                this.stockAsset -= value;
+                break;
+
+            case REALTY:
+                this.realtyAsset -= value;
+                break;
+
+            case LOAN:
+                this.loanAsset -= value;
+                this.annualAsset.updateLoanCost((long) (this.loanAsset.doubleValue()
+                    * FixedValues.LOAN_INTEREST_PERCENTAGE.getValue()));
+                break;
+        }
+
+        recalculateTotalAsset();
+    }
+
+    public Long getTotalAssetsExceptRealty() {
+        return this.totalAsset - this.realtyAsset;
     }
 }

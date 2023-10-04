@@ -69,6 +69,8 @@ public class Game extends BaseEntity {
 
     private Integer currentAge;
 
+    private Double assetGrowthRate;
+
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ages> ages = new ArrayList<>();
 
@@ -81,7 +83,7 @@ public class Game extends BaseEntity {
     @Builder
     public Game(Long id, User user, AnalysisComment analysisComment, MyAssets myAssets,
         OldAgeMonthlyAssets oldAgeMonthlyAssets, AnnualAsset annualAsset, Integer startSalary,
-        Gender gender, Long resultAssets, Integer currentAge) {
+        Gender gender, Long resultAssets, Integer currentAge, Double assetGrowthRate) {
         this.id = id;
         this.user = user;
         this.analysisComment = analysisComment;
@@ -92,6 +94,7 @@ public class Game extends BaseEntity {
         this.gender = gender;
         this.resultAssets = resultAssets;
         this.currentAge = currentAge;
+        this.assetGrowthRate = assetGrowthRate;
     }
 
     public void addAgeAndSetThis(Ages age) {
@@ -99,8 +102,8 @@ public class Game extends BaseEntity {
         age.setGame(this);
     }
 
-    public void setCurrentAge(Integer age) {
-        this.currentAge = age;
+    public void increaseCurrentAge() {
+        this.currentAge += 1;
     }
 
     public void addEventAndSetThis(Event event) {
@@ -125,6 +128,59 @@ public class Game extends BaseEntity {
     public void addMyRealtyAndSetThis(MyRealty myRealty) {
         this.myRealties.add(myRealty);
         myRealty.setGame(this);
+    }
+
+    public void setOldAgeMonthlyAssets(OldAgeMonthlyAssets oldAgeMonthlyAssets) {
+        this.oldAgeMonthlyAssets = oldAgeMonthlyAssets;
+    }
+
+    public void setAnalysisComment(AnalysisComment analysisComment) {
+        this.analysisComment = analysisComment;
+    }
+
+    public void setResultAssets() {
+        this.resultAssets = this.myAssets.getTotalAsset();
+    }
+
+    public void setAssetGrowthRate() {
+        int startAge = FixedValues.START_AGE.getValue().intValue();
+        int endAge = FixedValues.END_AGE.getValue().intValue();
+        Long defaultAsset = 0L;
+        Long nextSalary = 0L;
+
+        for (int i = startAge; i < endAge; i++) {
+            nextSalary = this.startSalary.longValue();
+            for (int j = startAge; j < i; j++) {
+                nextSalary = (long) (nextSalary * FixedValues.SALARY_INCREASE_RATE.getValue());
+            }
+            defaultAsset += nextSalary;
+        }
+
+        Long minFixedCost = FixedValues.LIVING_COST_MIN.getValue().longValue()
+            + FixedValues.MONTHLY_RENT_COST.getValue().longValue();
+        defaultAsset -= minFixedCost * (endAge - startAge);
+
+        this.assetGrowthRate = (double) this.resultAssets / (double) defaultAsset;
+    }
+
+    public Long calStockInvestAmount() {
+        Long investAmount = 0L;
+
+        for (MyStocks ms : this.myStocks) {
+            investAmount += ms.getInvestAmount();
+        }
+
+        return investAmount == 0 ? 1 : investAmount;
+    }
+
+    public Long calRealtyInvestAmount() {
+        Long investAmount = 0L;
+
+        for (MyRealty mr : this.myRealties) {
+            investAmount += mr.getInvestAmount();
+        }
+
+        return investAmount == 0 ? 1 : investAmount;
     }
 
     private void addChildCost() {

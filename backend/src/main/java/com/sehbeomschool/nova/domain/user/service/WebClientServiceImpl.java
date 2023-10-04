@@ -2,7 +2,6 @@ package com.sehbeomschool.nova.domain.user.service;
 
 import com.sehbeomschool.nova.domain.user.dto.KakaoUserInfoDto;
 import java.util.Map;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -66,7 +65,7 @@ public class WebClientServiceImpl implements WebClientService {
                     .host(infoHost)
                     .path(infoUrl)
                     .build())
-            .header(HttpHeaders.AUTHORIZATION, "Bearer "+accessToken)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
             .retrieve()
             .bodyToMono(Map.class)

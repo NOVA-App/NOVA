@@ -8,5 +8,7 @@ public interface RealtyManagerService {
 
     public void updateRealtyInfoByNextYear(Long gameId);
 
-    public void updateMyRealtyByNextYear(Long gameId);
+    public void updateMyRealtyByNextYear(Game game);
+
+    public void deleteRealtyInfo(Long gameId);
 }

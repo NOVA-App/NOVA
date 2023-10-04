@@ -21,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +56,7 @@ public class UserApiController {
             jwtUtil.reCreateJwtToken(refreshToken)));
     }
 
-    @PatchMapping("/profileimg")
+    @PutMapping("/profileimg")
     public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyProfileImg
         (@AuthenticationPrincipal Long userId, @RequestParam MultipartFile profile) {
 
@@ -64,9 +65,9 @@ public class UserApiController {
                 userService.updateUserProfileImg(userId, profile)));
     }
 
-    @PatchMapping("/name")
-    public ResponseEntity<ResponseDto<FileUploadResponseDto>> modifyName(
-        @AuthenticationPrincipal Long userId, @RequestBody String name) {
+    @PatchMapping("")
+    public ResponseEntity<ResponseDto<?>> modifyName(
+        @AuthenticationPrincipal Long userId, @RequestParam String name) {
 
         userService.updateUserName(userId, name);
 
@@ -75,7 +76,7 @@ public class UserApiController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity<ResponseDto<FileUploadResponseDto>> deleteUser(
+    public ResponseEntity<ResponseDto<?>> deleteUser(
         @AuthenticationPrincipal Long userId) {
 
         userService.deleteUser(userId);

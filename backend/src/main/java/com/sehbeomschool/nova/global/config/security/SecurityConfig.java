@@ -1,8 +1,12 @@
 package com.sehbeomschool.nova.global.config.security;
 
+import com.sehbeomschool.nova.global.error.WebAuthenticationEntryPoint;
+import com.sehbeomschool.nova.global.filter.FileSizeExceptionFilter;
+import com.sehbeomschool.nova.global.filter.JwtExceptionFilter;
 import com.sehbeomschool.nova.global.filter.JwtFilter;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +21,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
+    private final JwtExceptionFilter jwtExceptionFilter;
+    private final WebAuthenticationEntryPoint webAuthenticationEntryPoint;
+
+    @Bean
+    public FilterRegistrationBean<FileSizeExceptionFilter> customFilter() {
+        FilterRegistrationBean<FileSizeExceptionFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new FileSizeExceptionFilter());
+        registrationBean.addUrlPatterns("/api/user/profileimg");
+        return registrationBean;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -28,12 +42,20 @@ public class SecurityConfig {
             .csrf().disable()
             .cors().and()
             .authorizeRequests()
-            .anyRequest().permitAll()
-//            .antMatchers("/api/user/oauth/kakao").permitAll()
-//            .antMatchers("/api/user").authenticated()
+            .antMatchers("/api/user/oauth/kakao/**").permitAll()
+            .requestMatchers(request -> {
+                String code = request.getParameter("code");
+                return code != null;
+            }).permitAll()
+            .antMatchers("/api/user/refreshtoken").permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .exceptionHandling()
+            .authenticationEntryPoint(webAuthenticationEntryPoint)
             .and()
             .addFilterBefore(new JwtFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
             .build();
     }
 

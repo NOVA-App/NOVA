@@ -57,14 +57,20 @@ public class RealtyManagerServiceImpl implements RealtyManagerService {
 
     @Override
     @Transactional
-    public void updateMyRealtyByNextYear(Long gameId) {
-        List<MyRealty> list = myRealtyRepository.findMyRealtiesByGameId(gameId);
+    public void updateMyRealtyByNextYear(Game game) {
+        List<MyRealty> list = game.getMyRealties();
 
         for (MyRealty mr : list) {
-            RealtyInfo ri = realtyInfoRepository.findRealtyInfoByGameIdAndRealtyId(gameId,
+            RealtyInfo ri = realtyInfoRepository.findRealtyInfoByGameIdAndRealtyId(game.getId(),
                 mr.getRealty().getId());
 
             mr.setRentIncome(ri.getCurrentPrice());
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteRealtyInfo(Long gameId) {
+        realtyInfoRepository.deleteRealtyInfoByGameIdInQuery(gameId);
     }
 }

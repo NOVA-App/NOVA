@@ -1,6 +1,8 @@
 package com.sehbeomschool.nova.global.filter;
 
-import com.sehbeomschool.nova.global.error.constant.ExceptionMessage;
+import static com.sehbeomschool.nova.global.error.constant.ExceptionMessage.NOT_VALID_TOKEN;
+
+import com.sehbeomschool.nova.global.error.exception.NotFoundException;
 import com.sehbeomschool.nova.global.util.JwtUtil;
 import java.io.IOException;
 import java.util.List;
@@ -25,19 +27,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain filterChain) throws ServletException, IOException {
+        FilterChain filterChain) throws ServletException, IOException, NotFoundException {
 
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("authorization : {}", authorization);
 
         if (authorization == null) {
-            log.error("authorization == null");
             filterChain.doFilter(request, response);
             return;
         }
 
         if (!authorization.startsWith("Bearer ")) {
-            log.error("authorization 형식이 올바르지 않습니다.");
             filterChain.doFilter(request, response);
             return;
         }
@@ -45,8 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = authorization.substring(7);
 
         if (!jwtUtil.isValidToken(token)) {
-            log.error(ExceptionMessage.NOT_VALID_TOKEN.getMessage());
-            filterChain.doFilter(request, response);
+            throw new NotFoundException(NOT_VALID_TOKEN.getMessage());
         }
 
         Long userId = jwtUtil.getUserId(token);
