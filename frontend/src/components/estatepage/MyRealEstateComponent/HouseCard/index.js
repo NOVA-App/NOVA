@@ -13,8 +13,9 @@ const HouseCard = (props) => {
   const gameID = useRecoilValue(gameIdState)
 
   const handleHouseDetailPress = () => {
-    navigation.navigate("MyRealEstateDetail", { screen: "MyRealEstateDetail" });
+    navigation.navigate("MyRealEstateDetail", { screen: "MyRealEstateDetail", realtyId: props.realtyId });
   };
+
 
   useEffect(() => {
     console.log('props들 확인')
