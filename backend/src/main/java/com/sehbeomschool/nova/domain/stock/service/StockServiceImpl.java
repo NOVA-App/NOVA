@@ -42,13 +42,12 @@ public class StockServiceImpl implements StockService {
             readStocksListResponseDto dto = readStocksListResponseDto.builder()
                 .stockId(si.getStock().getId())
                 .stockName(si.getStock().getName())
-                .evaluationAmount(si.getPrevPrice())
-                .fluctuations(si.calFluctuaions())
+                .evaluationAmount(si.getCurrentPrice())
+                .fluctuations(si.calFluctuationsPercent())
                 .build();
 
             readStocksListResponseDtoList.add(dto);
         }
-
         return readStocksListResponseDtoList;
     }
 
