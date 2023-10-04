@@ -17,6 +17,8 @@ export default function MarriagePage() {
       });
       if (response.status === 201) {
         console.log("결혼 성공");
+        alert("🎉🎉 결혼을 축하드립니다 🎉🎉");
+        navigation.navigate("MainComponents")
       } else {
         console.error("결혼 요청 실패");
       }
@@ -24,6 +26,9 @@ export default function MarriagePage() {
       console.error("POST 요청 중 오류 발생", error);
     }
   };
+  const handleNotMarry = () => {
+    navigation.navigate("MainComponents")
+  }
   // 나중에 recoil에 저장하기
   const handleNext = () => {
     //
@@ -46,7 +51,7 @@ export default function MarriagePage() {
             <Button title="예" bgColor="#0046FF" onPress={handleMarry}></Button>
           </View>
           <View style={{ marginLeft: 15 }}>
-            <Button title="아니오" bgColor="#D90452"></Button>
+            <Button title="아니오" bgColor="#D90452" onPress={handleNotMarry}></Button>
           </View>
         </View>
       </View>
