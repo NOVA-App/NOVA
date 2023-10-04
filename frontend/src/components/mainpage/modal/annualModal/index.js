@@ -66,19 +66,19 @@ const AnnualModal = (props) => {
           }}
         >
           <S.Text>여유 자금 :</S.Text>
-          <S.Text>{props.asset.usableAsset}</S.Text>
+          <S.Text>{[props.asset.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.Text>
           <S.Text>생활비 :</S.Text>
           <S.Text>
-            {props.asset.livingCost}(연) {props.asset.livingCost / 12}(월)
+            {[props.asset.livingCost].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}(연) {[props.asset.livingCost / 12].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}(월)
           </S.Text>
           <S.Text>고정지출 :</S.Text>
           <S.Text>
-            월세 -{props.asset.fixedCost.monthlyRentCost}(연) -
-            {props.asset.fixedCost.monthlyRentCost / 12}(월)
+            월세 -{[props.asset.fixedCost.monthlyRentCost].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}(연) -
+            {[props.asset.fixedCost.monthlyRentCost / 12].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}(월)
           </S.Text>
           <S.Text>
-            적금 고정 -{props.asset.fixedCost.installmentSavingCost}(연) -
-            {props.asset.fixedCost.installmentSavingCost / 12}(월)
+            적금 고정 -{[props.asset.fixedCost.installmentSavingCost].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}(연) -
+            {[Math.floor(props.asset.fixedCost.installmentSavingCost / 12)].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}(월)
           </S.Text>
           <View
             style={{
@@ -86,7 +86,7 @@ const AnnualModal = (props) => {
               marginTop: "10%",
             }}
           >
-            <S.Text>생활비 조정 (연): {sliderValue}</S.Text>
+            <S.Text>생활비 조정 (연): {[sliderValue].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.Text>
           </View>
           <Slider
             value={sliderValue}
