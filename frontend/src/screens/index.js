@@ -1,5 +1,5 @@
 import Login from "./Login";
 import Main from "./Main";
 import Game from "./Game"
-
-export {Login, Main, Game}
+import GameResult from "./GameResult";
+export {Login, Main, Game, GameResult}

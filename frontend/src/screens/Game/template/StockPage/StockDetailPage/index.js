@@ -11,17 +11,22 @@ const StockDetailPage = (props) => {
   const [adjustAmount, setAdjustAmount] = useState(0);
   const [stockInfo, setStockInfo] = useState({});
   const [gameId] = useRecoilState(gameIdState);
+  const rate = props.route.params.rate;
+  const stockId = props.route.params.stockId;
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     axios
       .get(`${API_URL}/api/stock/${gameId}/${props.route.params.stockId}`)
       .then((response) => {
+        console.log(response.data.data)
         setStockInfo(response.data.data);
+        setRefresh(!refresh);
       })
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
-  });
+  }, [refresh]);
 
   const handleBuyAmountChange = (text) => {
     setBuyAmount(text);
@@ -37,15 +42,40 @@ const StockDetailPage = (props) => {
   };
 
   const handleBuy = () => {
-    console.log("Buy:", buyAmount);
-    // Add your logic for buying here
-    // You may want to make an API call to execute the buy action on the server
+    axios
+      .post(API_URL + "/api/stock/buy", {
+        gameId: gameId,
+        stockId: stockId,
+        purchaseAmount: buyAmount,
+      })
+      .then((response) => {
+        console.log("POST 요청 성공:", response.data);
+        setRefresh(!refresh);
+      })
+      .catch((error) => {
+        console.error("POST 요청 오류:", error);
+      });
   };
 
   const handleSell = () => {
-    console.log("Sell:", buyAmount);
-    // Add your logic for selling here
-    // You may want to make an API call to execute the sell action on the server
+    if (buyAmount > stockInfo.myQuantity) {
+      alert("보유 수량보다 많이 판매할 수 없습니다.");
+      return;
+    }
+
+    axios
+      .patch(API_URL + "/api/stock/sell", {
+        gameId: gameId,
+        stockId: stockId,
+        purchaseAmount: buyAmount,
+      })
+      .then((response) => {
+        console.log("POST 요청 성공:", response.data);
+        setRefresh(!refresh);
+      })
+      .catch((error) => {
+        console.error("POST 요청 오류:", error);
+      });
   };
 
   if (!stockInfo) {
@@ -71,7 +101,7 @@ const StockDetailPage = (props) => {
             }}
           ></View>
           <Text>{`현재가: ${stockInfo.evaluation}`}</Text>
-          <Text>{`상승률: ${stockInfo.fluctuations}%`}</Text>
+          <Text>{`상승률: ${rate}%`}</Text>
           <Text>{`내 보유량: ${stockInfo.myQuantity}`}</Text>
           <Text>{`여유자산: 150,000,000원`}</Text>
           <View
@@ -93,14 +123,16 @@ const StockDetailPage = (props) => {
                 onChangeText={handleAdjustAmountChange}
                 value={adjustAmount}
                 keyboardType="numeric"
-                placeholder="수량 조정"
+                editable={false}
+                placeholder={(buyAmount * stockInfo.evaluation).toString()}
               />
             </View>
+
+            <Text style={{ fontSize: 20 }}>원</Text>
+
             <TouchableOpacity
               onPress={() => handleAdjustQuantity(parseInt(adjustAmount))}
-            >
-              <Text style={{ fontSize: 20 }}>수량</Text>
-            </TouchableOpacity>
+            ></TouchableOpacity>
           </View>
           <View
             style={{
