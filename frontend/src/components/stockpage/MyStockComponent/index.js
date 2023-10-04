@@ -53,13 +53,13 @@ const MyStock = () => {
                 <S.CenterView>
                   <S.MiddleText>{`매입금액`}</S.MiddleText>
                   <S.MiddleText>
-                    {myData ? myData.investAmounts : 0}
+                    {myData ? [myData.investAmounts].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0}
                   </S.MiddleText>
                 </S.CenterView>
                 <S.CenterView>
                   <S.MiddleText>{`평가 손익`}</S.MiddleText>
                   <S.MiddleText>
-                    {myData ? myData.depreciation : 0}
+                    {myData ? [myData.depreciation].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0}
                   </S.MiddleText>
                 </S.CenterView>
               </S.rowContainer>
@@ -67,7 +67,7 @@ const MyStock = () => {
                 <S.CenterView>
                   <S.MiddleText>{`평가금액`}</S.MiddleText>
                   <S.MiddleText>
-                    {myData ? myData.evaluationAmounts : 0}
+                    {myData ? [myData.evaluationAmounts].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0}
                   </S.MiddleText>
                 </S.CenterView>
                 <S.CenterView>

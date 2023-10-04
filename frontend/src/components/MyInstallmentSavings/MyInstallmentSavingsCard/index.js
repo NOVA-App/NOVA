@@ -38,12 +38,12 @@ const InstallmentSavingsCard = (props) => {
 
       <S.SmallContainer>
         <S.MiddleText>현재금액</S.MiddleText>
-        <S.PropsMiddleText>{props.totalAmount}</S.PropsMiddleText>
+        <S.PropsMiddleText>{[props.totalAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.PropsMiddleText>
       </S.SmallContainer>
 
       <S.SmallContainer>
         <S.MiddleText>연 납입 금액</S.MiddleText>
-        <S.PropsMiddleText>{props.amount}</S.PropsMiddleText>
+        <S.PropsMiddleText>{[props.amount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.PropsMiddleText>
       </S.SmallContainer>
 
       <S.SmallContainer>
