@@ -68,6 +68,13 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
+  positiveText: {
+    color: 'blue',
+  },
+
+  negativeText: {
+    color: 'red',
+  },
 });
 
 export default styles;
