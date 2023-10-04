@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../../../config";
-import { gameIdState } from "../../../../../recoil/recoil";
+import { gameIdState, refreshState } from "../../../../../recoil/recoil";
 import { useRecoilState } from "recoil";
 
 const StockDetailPage = (props) => {
@@ -13,7 +13,7 @@ const StockDetailPage = (props) => {
   const [gameId] = useRecoilState(gameIdState);
   const rate = props.route.params.rate;
   const stockId = props.route.params.stockId;
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useRecoilState(refreshState);
 
   useEffect(() => {
     axios
