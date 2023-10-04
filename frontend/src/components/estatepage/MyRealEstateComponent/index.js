@@ -65,9 +65,10 @@ const MyRealEstate = () => {
                   key={index}
                   realtyId={realtyItem.realtyId}
                   realtyName={realtyItem.realtyName}
+                  realtyImg={realtyItem.realtyImg}
                   investAmount={realtyItem.investAmount}
                   evaluationAmount={realtyItem.evaluationAmount}
-                  rentalIncome={realtyItem.rentalIncome}
+                  rentalIncome={realtyItem.reantalIncome}
                   height={height}
                 />
               ))}

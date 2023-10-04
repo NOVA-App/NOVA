@@ -8,11 +8,13 @@ import { gameIdState } from "../../../recoil/recoil";
 import { useRecoilValue } from "recoil";
 import axios from "axios";
 import API_URL from "../../../../config";
+import { useNavigation } from '@react-navigation/native';
 
-const LoneLargeModal = (props) => {
+const LoanLargeModal = (props) => {
   const gameID = useRecoilValue(gameIdState);
   const [loanCost, setLoanCost] = useState(0);
   const maxAmount = props.maxAmount;
+  const navigation = useNavigation();
 
   const styles = StyleSheet.create({
     Text: {
@@ -38,6 +40,8 @@ const LoneLargeModal = (props) => {
         })
         .then((response) => {
           console.log("POST 요청 성공:", response.data);
+          alert("구매가 완료 되었습니다");
+          navigation.navigate("RealEstateMainPage");
         })
         .catch((error) => {
           console.error("POST 요청 오류:", error);
@@ -73,7 +77,10 @@ const LoneLargeModal = (props) => {
         />
         <Text style={{ fontSize: 18 }}>연간 이자: {loanCost * 0.07}</Text>
         <S.ButtonContainer>
-          <Button title={props.btnTitle} onPress={handleLoan} />
+          <Button title={props.btnTitle} onPress={() => {
+            handleLoan();
+            props.onClose()
+          }} />
         </S.ButtonContainer>
       </S.ModalContent>
     </Modal>
@@ -85,4 +92,4 @@ const LoneLargeModal = (props) => {
 //   font-size: 30;
 // `
 
-export default LoneLargeModal;
+export default LoanLargeModal;
