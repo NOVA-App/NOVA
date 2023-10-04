@@ -75,7 +75,7 @@ const MyPage = () => {
   const handleNameChange = async () => {
     try {
       // 이름 변경을 위한 API 요청 보내기
-      await axios.patch(`${API_URL}/api/user/name`, { name: newName });
+      await axios.patch(`${API_URL}/api/user?name=${newName}`);
       setRefresh(!refresh);
     } catch (error) {
       console.error("이름 변경 중 에러 발생:", error);
@@ -130,6 +130,7 @@ const MyPage = () => {
             value={newName}
             onChangeText={(text) => {
               setNewName(text);
+              console.log(newName);
             }}
           />
           <View
@@ -145,7 +146,7 @@ const MyPage = () => {
               bgColor="#038C7F"
               onPress={handleNameChange}
             />
-            <MediumButton title="탈퇴" bgColor="#D90452" />
+            <MediumButton title="탈퇴" bgColor="#D90452" onPress={deleteUser} />
           </View>
         </View>
       </View>
