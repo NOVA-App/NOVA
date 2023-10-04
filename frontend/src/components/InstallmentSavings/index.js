@@ -9,6 +9,7 @@ import axios from "axios";
 import API_URL from "../../../config";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { gameIdState, refreshState } from "../../recoil/recoil";
+import { useNavigation } from "@react-navigation/native";
 
 const { height, width } = Dimensions.get("window");
 
@@ -18,6 +19,7 @@ const InstallmentSavingsCard = (props) => {
   const [savingsAmount, setSavingsAmount] = useState("");
   const [refresh, setRefresh] = useRecoilState(refreshState);
   const gameID = useRecoilValue(gameIdState);
+  const navigation = useNavigation();
 
   const ChangePeriod = (tmp) => {
     setSavingsPeriod(tmp);
@@ -37,6 +39,8 @@ const InstallmentSavingsCard = (props) => {
       })
       .then((response) => {
         console.log("POST 요청 성공:", response.data);
+        alert("가입이 완료 되었습니다");
+        navigation.navigate("BankingMainPage");
         setRefresh(!refresh);
       })
       .catch((error) => {
@@ -62,21 +66,9 @@ const InstallmentSavingsCard = (props) => {
 
       <S.SmallContainer>
         <S.MiddleText>적금 기간 (년)</S.MiddleText>
-        <ToggleButtonSaving
-          label="1"
-          isSelected={savingsPeriod === 1}
-          onPress={() => ChangePeriod(1)}
-        />
-        <ToggleButtonSaving
-          label="2"
-          isSelected={savingsPeriod === 2}
-          onPress={() => ChangePeriod(2)}
-        />
-        <ToggleButtonSaving
-          label="3"
-          isSelected={savingsPeriod === 3}
-          onPress={() => ChangePeriod(3)}
-        />
+        <ToggleButtonSaving label="1" isSelected={savingsPeriod === 1} onPress={() => ChangePeriod(1)} />
+        <ToggleButtonSaving label="2" isSelected={savingsPeriod === 2} onPress={() => ChangePeriod(2)} />
+        <ToggleButtonSaving label="3" isSelected={savingsPeriod === 3} onPress={() => ChangePeriod(3)} />
       </S.SmallContainer>
       <S.SmallContainer>
         <S.MiddleText>연 납입 금액</S.MiddleText>
@@ -95,11 +87,7 @@ const InstallmentSavingsCard = (props) => {
           justifyContent: "flex-end",
         }}
       >
-        <SmallButton
-          title="가입하기"
-          bgColor="#0046FF"
-          onPress={handleSavings}
-        />
+        <SmallButton title="가입하기" bgColor="#0046FF" onPress={handleSavings} />
       </View>
     </S.Container>
   );
