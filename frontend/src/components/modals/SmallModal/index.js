@@ -6,7 +6,7 @@ const SmallModal = (props) => {
   const styles = StyleSheet.create({
     Text: {
       fontSize: 40,
-      color: "black",
+      Colors: "black",
     },
   });
   return (
