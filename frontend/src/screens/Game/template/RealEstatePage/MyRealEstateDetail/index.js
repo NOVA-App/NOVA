@@ -66,11 +66,11 @@ const MyRealEstateDetail = (props) => {
           </S.NameText>
           <S.InfoText>
             {`투자 금액:    `}
-            {realtyData.investAmount}
+            {[realtyData.investAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </S.InfoText>
           <S.InfoText>
             {`현재가:         `}
-            {realtyData.evaluationAmount}
+            {[realtyData.evaluationAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </S.InfoText>
           <S.InfoText>
             {`투자 수익률:          `}
@@ -85,11 +85,11 @@ const MyRealEstateDetail = (props) => {
           </S.InfoText>
           <S.InfoText>
             {`월세 수익:        `}
-            {realtyData.rentIncome}
+            {[realtyData.rentIncome].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </S.InfoText>
           <S.InfoText>
             {`남은 대출금:     `}
-            {realtyData.principal}
+            {[realtyData.principal].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </S.InfoText>
         </View>
         <View
