@@ -49,3 +49,7 @@ export const InfoText = styled.Text`
   font-size: 20px;
   font-weight: bold;
 `;
+export const NameText = styled.Text`
+  font-size: 25px;
+  font-weight: bold;
+`;
