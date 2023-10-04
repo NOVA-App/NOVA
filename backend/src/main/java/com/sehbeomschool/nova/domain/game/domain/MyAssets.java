@@ -148,4 +148,9 @@ public class MyAssets extends BaseEntity {
     public Long getTotalAssetsExceptRealty() {
         return this.totalAsset - this.realtyAsset;
     }
+
+    public void setRealtyAndStockAssetForNextYear(Long realtyAsset, Long stockAsset) {
+        this.realtyAsset = realtyAsset;
+        this.stockAsset = stockAsset;
+    }
 }
