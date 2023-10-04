@@ -17,7 +17,7 @@ import API_URL from "../../../../../config";
 
 
 const SecondResultPage = (props) => {
-  const gameId = useRecoilValue(gameIdState);
+  const gameId = props.route.params?.gameId || useRecoilValue(gameIdState);
   const [apiData2, setApiData2] = useState(null);
   useEffect(() => {
     console.log("요청시작");
@@ -70,6 +70,7 @@ const SecondResultPage = (props) => {
   }
   const analysisComment = apiData2.data.analysisComment;
   const userInfo = apiData2.data.userInfo
+  const oldAgeAssetsInfo = apiData2.data.oldAgeAssetsInfo;
   return (
     <ScrollView style={style.container}>
       {/* Share 버튼 */}
@@ -87,7 +88,7 @@ const SecondResultPage = (props) => {
         {/* 사용자 정보 */}
         <View style={[style.section, style.userInfo, style.marginBottom]}>
           <View>
-            <Text style={[style.userName, { fontSize: 25 }]}>월 230만원</Text>
+            <Text style={[style.userName, { fontSize: 25 }]}>{`월 ${oldAgeAssetsInfo.monthlyAmount } 원`}</Text>
           </View>
         </View>
 
