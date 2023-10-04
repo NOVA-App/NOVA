@@ -9,7 +9,7 @@ import { useRecoilValue } from "recoil";
 import axios from "axios";
 import API_URL from "../../../../config";
 
-const LoneLargeModal = (props) => {
+const LoanLargeModal = (props) => {
   const gameID = useRecoilValue(gameIdState);
   const [loanCost, setLoanCost] = useState(0);
   const maxAmount = props.maxAmount;
@@ -73,7 +73,10 @@ const LoneLargeModal = (props) => {
         />
         <Text style={{ fontSize: 18 }}>연간 이자: {loanCost * 0.07}</Text>
         <S.ButtonContainer>
-          <Button title={props.btnTitle} onPress={handleLoan} />
+          <Button title={props.btnTitle} onPress={() => {
+            handleLoan();
+            props.onClose()
+          }} />
         </S.ButtonContainer>
       </S.ModalContent>
     </Modal>
@@ -85,4 +88,4 @@ const LoneLargeModal = (props) => {
 //   font-size: 30;
 // `
 
-export default LoneLargeModal;
+export default LoanLargeModal;
