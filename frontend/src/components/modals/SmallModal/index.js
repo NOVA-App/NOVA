@@ -5,8 +5,9 @@ import * as S from "./style";
 const SmallModal = (props) => {
   const styles = StyleSheet.create({
     Text: {
-      fontSize: 40,
+      fontSize: 32,
       color: "black",
+      marginRight: 10,
     },
   });
   return (

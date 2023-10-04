@@ -32,11 +32,11 @@ const HouseCard = (props) => {
         </S.TextContainer>
         <S.TextContainer>
           <S.MiddleText>{`금액`}</S.MiddleText>
-          <S.MiddleText>{props.realtyPrice}</S.MiddleText>
+          <S.MiddleText>{[props.realtyPrice].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <S.TextContainer>
           <S.MiddleText>{`남은 상환금`}</S.MiddleText>
-          <S.MiddleText>{props.principal}</S.MiddleText>
+          <S.MiddleText>{[props.principal].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <View
           style={{
@@ -57,8 +57,10 @@ const HouseCard = (props) => {
             animationType="slide"
             transparent={true}
             visible={isModalVisible}
-            title={`남은 대출금:  ${props.principal}\n
-내 여유자금:  ${usableAsset}\n
+            title={`남은 대출금:  ${[props.principal].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          }\n
+내 여유자금:  ${[usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}\n
 대출 상환 신청 금액: `}
             onClose={onModalClose}
             maxAmount={usableAsset}

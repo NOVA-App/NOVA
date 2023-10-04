@@ -32,20 +32,24 @@ const HouseCard = (props) => {
       <S.ImgBox source={{ uri: props.realtyImg }} />
       <S.ContentContainer>
         <S.TextContainer>
+          <S.MiddleText>{props.realtyName}</S.MiddleText>
+        </S.TextContainer>
+        <S.TextContainer>
           <S.MiddleText>{`총 투자금`}</S.MiddleText>
-          <S.MiddleText>{props.investAmount}</S.MiddleText>
+          <S.MiddleText>{[props.investAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}</S.MiddleText>
         </S.TextContainer>
         <S.TextContainer>
           <S.MiddleText>{`총 평가금`}</S.MiddleText>
-          <S.MiddleText>{props.evaluationAmount}</S.MiddleText>
+          <S.MiddleText>{[props.evaluationAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <S.TextContainer>
           <S.MiddleText>{`월세 수익`}</S.MiddleText>
-          <S.MiddleText>{props.rentalIncome}</S.MiddleText>
+          <S.MiddleText>{[props.rentalIncome].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <View
           style={{
-            marginTop: "5%",
+            // marginTop: "5%",
             flexDirection: "row",
             justifyContent: "flex-end",
           }}
