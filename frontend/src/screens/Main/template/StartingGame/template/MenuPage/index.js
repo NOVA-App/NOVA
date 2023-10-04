@@ -23,7 +23,6 @@ const MenuPage = () => {
         setGameId(response.data.data.gameId);
       })
       .catch((error) => {
-        console.error("게임 진행 중 데이터를 가져오는 동안 오류 발생: ", error);
         setGameId(0);
       });
   }, []);
