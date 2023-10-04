@@ -28,7 +28,6 @@ const AnnualModal = (props) => {
         livingCost: sliderValue,
       })
       .then((response) => {
-        console.log("API 요청 성공:", response.data);
         closeModal();
         props.setRefresh(true);
       })
