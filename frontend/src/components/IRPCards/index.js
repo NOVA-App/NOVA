@@ -5,31 +5,34 @@ import SmallButton from "../buttons/SmallButton/index";
 import InputSmall from "../input/SmallInput";
 import axios from "axios"; // axios 라이브러리 추가
 import API_URL from "../../../config";
-import { useRecoilValue } from "recoil";
-import { gameIdState } from "../../recoil/recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
+import { gameIdState, refreshState } from "../../recoil/recoil";
 
 const { height, width } = Dimensions.get("window");
 
 const IRPCard = (props) => {
   const [irpCost, setIrpCost] = useState("");
-  const gameID = useRecoilValue(gameIdState)
+  const gameID = useRecoilValue(gameIdState);
+  const [refresh, setRefresh] = useRecoilState(refreshState);
 
   const handleIrpPayment = () => {
-    if (irpCost.trim() === "") {  //입력값이 비었을 떄
+    if (irpCost.trim() === "") {
+      //입력값이 비었을 떄
       return;
     }
-      axios
-        .put(API_URL + "/api/saving", {
-          'gameId': gameID, 
-          'irpCost': irpCost, 
-        })
-        .then((response) => {
-          console.log("PUT 요청 성공11:", response.data);
-          console.log("PUT 요청 성공22:", irpCost);
-        })
-        .catch((error) => {
-          console.error("PUT 요청 오류:", error);
-        });
+    axios
+      .put(API_URL + "/api/saving", {
+        gameId: gameID,
+        irpCost: irpCost,
+      })
+      .then((response) => {
+        console.log("PUT 요청 성공11:", response.data);
+        console.log("PUT 요청 성공22:", irpCost);
+        setRefresh(!refresh);
+      })
+      .catch((error) => {
+        console.error("PUT 요청 오류:", error);
+      });
   };
 
   return (

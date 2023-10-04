@@ -3,27 +3,28 @@ import { Dimensions, View, Text, ScrollView } from "react-native";
 import * as S from "./style";
 import HouseImg from "../../../../assets/House.png";
 import SmallButton from "../../../buttons/SmallButton";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { gameIdState } from "../../../../recoil/recoil";
 import { useRecoilValue } from "recoil";
 
-
 const HouseCard = (props) => {
   const navigation = useNavigation();
-  const gameID = useRecoilValue(gameIdState)
+  const gameID = useRecoilValue(gameIdState);
 
   const handleHouseDetailPress = () => {
-    navigation.navigate("MyRealEstateDetail", { screen: "MyRealEstateDetail", realtyId: props.realtyId });
+    navigation.navigate("MyRealEstateDetail", {
+      screen: "MyRealEstateDetail",
+      realtyId: props.realtyId,
+    });
   };
 
-
   useEffect(() => {
-    console.log('props들 확인')
-    console.log(props.realtyId)
-    console.log(props.realtyName)
-    console.log(props.investAmount)
-    console.log(props.evaluationAmount)
-    console.log(props.rentalIncome)
+    console.log("props들 확인");
+    console.log(props.realtyId);
+    console.log(props.realtyName);
+    console.log(props.investAmount);
+    console.log(props.evaluationAmount);
+    console.log(props.rentalIncome);
   }, []);
 
   return (
@@ -49,7 +50,12 @@ const HouseCard = (props) => {
             justifyContent: "flex-end",
           }}
         >
-          <SmallButton title="상세보기" bgColor="#0046FF" realtyId={props.realtyId} onPress={handleHouseDetailPress}/>
+          <SmallButton
+            title="상세보기"
+            bgColor="#0046FF"
+            realtyId={props.realtyId}
+            onPress={handleHouseDetailPress}
+          />
         </View>
       </S.ContentContainer>
     </S.Container>

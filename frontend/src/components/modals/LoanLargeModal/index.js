@@ -4,14 +4,15 @@ import styled from "styled-components/native";
 import * as S from "./style";
 import Button from "../../buttons/MediumButton/index";
 import InputSmall from "../../input/SmallInput";
-import { gameIdState } from "../../../recoil/recoil";
-import { useRecoilValue } from "recoil";
+import { gameIdState, refreshState } from "../../../recoil/recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import axios from "axios";
 import API_URL from "../../../../config";
 
 const LoanLargeModal = (props) => {
   const gameID = useRecoilValue(gameIdState);
   const [loanCost, setLoanCost] = useState(0);
+  const [refresh, setRefresh] = useRecoilState(refreshState);
   const maxAmount = props.maxAmount;
 
   const styles = StyleSheet.create({
@@ -38,6 +39,7 @@ const LoanLargeModal = (props) => {
         })
         .then((response) => {
           console.log("POST 요청 성공:", response.data);
+          setRefresh(!refresh);
         })
         .catch((error) => {
           console.error("POST 요청 오류:", error);
@@ -73,10 +75,13 @@ const LoanLargeModal = (props) => {
         />
         <Text style={{ fontSize: 18 }}>연간 이자: {loanCost * 0.07}</Text>
         <S.ButtonContainer>
-          <Button title={props.btnTitle} onPress={() => {
-            handleLoan();
-            props.onClose()
-          }} />
+          <Button
+            title={props.btnTitle}
+            onPress={() => {
+              handleLoan();
+              props.onClose();
+            }}
+          />
         </S.ButtonContainer>
       </S.ModalContent>
     </Modal>
