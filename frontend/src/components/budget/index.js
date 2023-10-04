@@ -16,39 +16,59 @@ const Budget = () => {
 
   return (
     <StyledUpper>
-      <TouchableOpacity onPress={toggleModal}>
-        <View style={{ flex: 1, alignItems: "flex-start" }}>
+      <View style={styles.logoSection}>
+        <TouchableOpacity onPress={toggleModal}>
           <Image
-            style={{ resizeMode: "contain", width: "70%", marginLeft: 5, marginTop:3 }}
-            source={Logo}
+            style={{ resizeMode: "contain", width: 80, height: 80, marginLeft: 5 }}
+            source={require("../../assets/nova_logo.png")}
           />
-        </View>
-      </TouchableOpacity>
-      <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
-        <Text style={{ fontSize: 24, fontWeight: "bold" }}>여유자금</Text>
-        <Text style={{ fontSize: 20, color: "#F5B700" }}>
-          {data.annualAssets.usableAsset}원
-        </Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={toggleModal}>
-        <View
-          style={{ flex: 1, alignItems: "flex-end", justifyContent: "center" }}
-        >
+      <View style={styles.centerContent}>
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>여유자금</Text>
+        <Text style={{ fontSize: 20, color: "#F5B700" }}>{data.annualAssets.usableAsset}원</Text>
+      </View>
+      <View style={styles.menuSection}>
+        <TouchableOpacity onPress={toggleModal}>
           <Text style={{ fontSize: 17 }}>메뉴</Text>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
       <ModalComponent isVisible={isModalVisible} onClose={toggleModal} />
     </StyledUpper>
   );
 };
 
-export default Budget;
+const styles = {
+  logoSection: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "flex-start",
+  },
+  logo: {
+    resizeMode: "contain",
+    width: "100%",
+    marginLeft: 5,
+  },
+  centerContent: {
+    alignItems: "center",
+    flex: 3,
+    justifyContent: "center",
+  },
+  menuSection: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "flex-end",
+  },
+};
+
 
 const StyledUpper = styled.View`
-  flex-direction: row;
   background-color: white;
   padding: 10px;
-  align-items: center;
+  flex-direction: row;
   justify-content: space-between;
-  height: 100px; /* 원하는 높이로 조절 */
+  align-items: center;
+  /* height: 100px; */ /* 원하는 높이로 조절 */
 `;
+
+export default Budget;
