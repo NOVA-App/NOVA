@@ -7,6 +7,8 @@ import TextInputSmall from "../input/TextInputSmall";
 import ToggleButtonSaving from "./ToggleButtonSaving";
 import axios from "axios";
 import API_URL from "../../../config";
+import { useRecoilValue } from "recoil";
+import { gameIdState } from "../../recoil/recoil";
 
 const { height, width } = Dimensions.get("window");
 
@@ -15,6 +17,7 @@ const InstallmentSavingsCard = (props) => {
   const [savingsName, setSavingsName] = useState("");
   const [savingsPeriod, setSavingsPeriod] = useState('');
   const [savingsAmount, setSavingsAmount] = useState("");
+  const gameID = useRecoilValue(gameIdState)
 
   const ChangePeriod = (tmp) => {
     setSavingsPeriod(tmp);
@@ -27,7 +30,7 @@ const InstallmentSavingsCard = (props) => {
 
     axios
     .post(API_URL + "/api/saving", {
-      gameId: 1,
+      gameId: gameID,
       name: savingsName,
       period: savingsPeriod,
       amount: savingsAmount,
