@@ -23,8 +23,8 @@ const MyRealEstateDetail = (props) => {
   const [refresh, setRefresh] = useRecoilState(refreshState);
 
   const SellHandle = () => {
-    if (usableAsset < realtyData.principal) {
-      alert("여유자금이 부족합니다.");
+    if (parseFloat(realtyData.evaluationAmount) + usableAsset < realtyData.principal) {
+      alert("대출 상환 자금이 부족합니다.");
     } else {
       // 여유자금 바꿔주기
       axios
@@ -59,7 +59,7 @@ const MyRealEstateDetail = (props) => {
           }}
         ></View>
         <View style={{ flex: 8, alignItems: "center" }}>
-          <S.ImgContainer source={HouseImg}></S.ImgContainer>
+          <S.ImgContainer source={{ uri: realtyData.realtyImg }}></S.ImgContainer>
           <View style={{ marginTop: "5%" }}></View>
           <S.NameText>
             {realtyData.realtyName} {"  \n"}
