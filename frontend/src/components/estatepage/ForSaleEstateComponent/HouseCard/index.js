@@ -27,11 +27,11 @@ const HouseCard = (props) => {
         </S.TextContainer>
         <S.TextContainer>
           <S.MiddleText>{`금액`}</S.MiddleText>
-          <S.MiddleText>{props.realtyAmount}</S.MiddleText>
+          <S.MiddleText>{[props.realtyAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <S.TextContainer>
           <S.MiddleText>{`예상 월세 수익`}</S.MiddleText>
-          <S.MiddleText>{props.predictIncome}</S.MiddleText>
+          <S.MiddleText>{[props.predictIncome].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <View
           style={{
