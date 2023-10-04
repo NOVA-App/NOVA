@@ -1,8 +1,10 @@
 package com.sehbeomschool.nova.domain.stock.service;
 
 import com.sehbeomschool.nova.domain.game.domain.Ages;
+import com.sehbeomschool.nova.domain.game.domain.Game;
 import com.sehbeomschool.nova.domain.stock.dao.StockRepository;
 import com.sehbeomschool.nova.domain.stock.dao.StocksInfoRepository;
+import com.sehbeomschool.nova.domain.stock.domain.MyStocks;
 import com.sehbeomschool.nova.domain.stock.domain.Stock;
 import com.sehbeomschool.nova.domain.stock.domain.StocksInfo;
 import com.sehbeomschool.nova.global.util.RandomCalculator;
@@ -62,5 +64,19 @@ public class StockManagerServiceImpl implements StockManagerService {
     @Transactional
     public void deleteStocksInfo(List<Ages> ages) {
         stocksInfoRepository.deleteStocksInfosByGameIdInQuery(ages);
+    }
+
+    @Override
+    public Long calStockAssetForNextYear(Game game) {
+        Long stockAsset = 0L;
+
+        for (MyStocks ms : game.getMyStocks()) {
+            StocksInfo si = stocksInfoRepository.findStocksInfoByAgeIdAndStockId(
+                game.getAges().get(game.getAges().size() - 1).getId(), ms.getStock().getId());
+
+            stockAsset += si.getCurrentPrice() * ms.getQuantity();
+        }
+        
+        return stockAsset;
     }
 }

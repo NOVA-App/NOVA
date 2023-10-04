@@ -1,48 +1,48 @@
-import React from "react";
-import { Text, View, Image } from "react-native";
+import React, { useState } from "react";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import Logo from "../../assets/nova_logo.png";
 import styled from "styled-components/native";
 import { gameDataState } from "../../recoil/recoil";
 import { useRecoilState } from "recoil";
+import ModalComponent from "./ModalComponent";
 
 const Budget = () => {
   const [data] = useRecoilState(gameDataState);
-  console.log(data);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
     <StyledUpper>
-      <View style={{ flex: 1, alignItems: "flex-start" }}>
-        <Image
-          style={{ resizeMode: "contain", width: "100%", marginLeft: 5 }}
-          source={Logo}
-        />
-      </View>
+      <TouchableOpacity onPress={toggleModal}>
+        <View style={{ flex: 1, alignItems: "flex-start" }}>
+          <Image
+            style={{ resizeMode: "contain", width: "70%", marginLeft: 5, marginTop:3 }}
+            source={Logo}
+          />
+        </View>
+      </TouchableOpacity>
       <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>여유자금</Text>
         <Text style={{ fontSize: 20, color: "#F5B700" }}>
           {data.annualAssets.usableAsset}원
         </Text>
       </View>
-      <View
-        style={{ flex: 1, alignItems: "flex-end", justifyContent: "center" }}
-      >
-        <Text style={{ fontSize: 17 }}>메뉴</Text>
-      </View>
+      <TouchableOpacity onPress={toggleModal}>
+        <View
+          style={{ flex: 1, alignItems: "flex-end", justifyContent: "center" }}
+        >
+          <Text style={{ fontSize: 17 }}>메뉴</Text>
+        </View>
+      </TouchableOpacity>
+      <ModalComponent isVisible={isModalVisible} onClose={toggleModal} />
     </StyledUpper>
   );
 };
 
 export default Budget;
-
-// const styles = StyleSheet.create({
-//   upper:{
-//     flex: 1,
-//     flexDirection: "row",
-//     // justifyContent: 'center',
-//     backgroundColor: 'white',
-//     padding: 10,
-//     // width: windowWidth,
-//   },
-// });
 
 const StyledUpper = styled.View`
   flex-direction: row;
