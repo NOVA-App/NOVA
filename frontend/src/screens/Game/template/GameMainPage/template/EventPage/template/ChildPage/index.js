@@ -14,7 +14,12 @@ export default function ChildPage() {
   const handleChildButtonTrue = () => {
     setIsChildBirth(true);
     console.log(isChildBirth);
+    alert("✨✨ 출산을 축하드립니다 ✨✨");
+    navigation.navigate("MainComponents")
   };
+  const handleNotChildButtonTrue = () => {
+    navigation.navigate("MainComponents")
+  }
   return (
     <View style={styles.container}>
       <View style={styles.content1}>
@@ -35,7 +40,8 @@ export default function ChildPage() {
             ></Button>
           </View>
           <View style={{ marginLeft: 15 }}>
-            <Button title="아니오" bgColor="#D90452"></Button>
+            <Button title="아니오" bgColor="#D90452" onPress={handleNotChildButtonTrue}
+></Button>
           </View>
         </View>
       </View>
