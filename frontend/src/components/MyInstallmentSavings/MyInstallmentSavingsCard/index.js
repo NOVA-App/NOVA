@@ -2,11 +2,28 @@ import React from "react";
 import { View, Text, ScrollView, Image, Dimensions } from "react-native";
 import * as S from "./style";
 import SmallButton from "../../buttons/SmallButton/index"
+import axios from "axios";
+import API_URL from "../../../../config";
+
 
 
 const { height, width } = Dimensions.get("window");
 
 const InstallmentSavingsCard = (props) => {
+
+  const TerminateHandle = () => {
+    console.log(props.id)
+    axios
+    .delete(`${API_URL}/api/saving/${props.id}`)
+    .then((response) => {
+      console.log("delete 요청 성공:", response.data);
+      
+    })
+    .catch((error) => {
+      console.error("delete 요청 오류:", error);
+    });
+  }
+ 
   return (
     <S.Container height={height} >
 
@@ -39,7 +56,7 @@ const InstallmentSavingsCard = (props) => {
             justifyContent: "flex-end",
           }}
         >
-          <SmallButton title="해지하기" bgColor="#D90452" />
+          <SmallButton title="해지하기" bgColor="#D90452" onPress={TerminateHandle}/>
           {/* <Text>fdfd</Text> */}
         </View>
     </S.Container>
