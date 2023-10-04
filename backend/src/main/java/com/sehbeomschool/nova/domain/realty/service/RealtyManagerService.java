@@ -11,4 +11,6 @@ public interface RealtyManagerService {
     public void updateMyRealtyByNextYear(Game game);
 
     public void deleteRealtyInfo(Long gameId);
+
+    public Long calRealtyAssetForNextYear(Game game);
 }
