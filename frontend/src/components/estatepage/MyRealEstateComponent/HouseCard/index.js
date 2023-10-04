@@ -28,7 +28,7 @@ const HouseCard = (props) => {
 
   return (
     <S.Container height={props.height}>
-      <S.ImgBox source={HouseImg} />
+      <S.ImgBox source={{ uri: props.realtyImg }} />
       <S.ContentContainer>
         <S.TextContainer>
           <S.MiddleText>{`총 투자금`}</S.MiddleText>

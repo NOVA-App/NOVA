@@ -17,7 +17,6 @@ const InstallmentSavingsCard = (props) => {
     .delete(`${API_URL}/api/saving/${props.id}`)
     .then((response) => {
       console.log("delete 요청 성공:", response.data);
-      
     })
     .catch((error) => {
       console.error("delete 요청 오류:", error);
