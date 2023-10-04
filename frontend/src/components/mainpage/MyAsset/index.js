@@ -13,24 +13,24 @@ const MyAsset = (props) => {
       <View>
         <UpSemiCircle
           title="주식"
-          amount={props.asset.stocksAsset}
+          amount={[props.asset.stocksAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           bgColor="#4E5EEA"
         />
         <DownSemiCircle
           title="부동산"
-          amount={props.asset.realtyAsset}
+          amount={[props.asset.realtyAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           bgColor="#34B658"
         />
       </View>
       <View>
         <UpSemiCircle
           title="금융자산"
-          amount={props.asset.savingAsset}
+          amount={[props.asset.savingAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           bgColor="#E32A56"
         />
         <DownSemiCircle
           title="대출"
-          amount={props.asset.loanAsset}
+          amount={[props.asset.loanAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           bgColor="#F4EB1D"
         />
       </View>

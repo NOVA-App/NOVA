@@ -32,7 +32,8 @@ const Budget = () => {
       <View style={styles.centerContent}>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>여유자금</Text>
         <Text style={{ fontSize: 20, color: "#F5B700" }}>
-          {data.annualAssets.usableAsset}원
+          {[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}원
         </Text>
       </View>
       <View style={styles.menuSection}>
