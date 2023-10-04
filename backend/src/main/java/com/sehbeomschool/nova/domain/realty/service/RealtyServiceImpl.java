@@ -102,7 +102,7 @@ public class RealtyServiceImpl implements RealtyService {
             .evaluationAmount(realtyInfo.getCurrentPrice())
             .depreciationPercent(myRealty.calDepreciationPercent(realtyInfo.getCurrentPrice()))
             .rentIncome(myRealty.getRentIncome())
-            .principal(myRealty.getLoan().getPrincipal())
+            .principal(myRealty.getLoan() == null ? 0 : myRealty.getLoan().getPrincipal())
             .build();
 
         return dto;
