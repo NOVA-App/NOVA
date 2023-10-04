@@ -6,15 +6,19 @@ import InputSmall from "../../input/SmallInput";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import API_URL from "../../../../config";
+import { refreshState } from "../../../recoil/recoil";
+import { useRecoilState } from "recoil";
 
 const LoanSmallModal = (props) => {
   const maxAmount = props.maxAmount;
   const minAmount = props.minAmount;
   const [loanPayment, setLoanPayment] = useState(0);
+  const [refresh, setRefresh] = useRecoilState(refreshState);
+
   const styles = StyleSheet.create({
     Text: {
       fontSize: 40,
-      Colors: "black",
+      color: "black",
     },
   });
 
@@ -27,6 +31,7 @@ const LoanSmallModal = (props) => {
       })
       .then((response) => {
         console.log("PATCH 요청 성공!!:", response.data);
+        setRefresh(!refresh);
       })
       .catch((error) => {
         console.error("PATCH 요청 오류 ㅠㅅㅠ:", error);
