@@ -13,6 +13,7 @@ import {
   gameDataState,
   annualModalState,
   refreshState,
+  isMarriedState,
 } from "../../../../../../../../recoil/recoil";
 import { useRecoilState } from "recoil";
 import API_URL from "../../../../../../../../../config";
@@ -30,7 +31,7 @@ const MainComponents = () => {
   const [modalVisible] = useRecoilState(annualModalState);
   const usableAsset = gameData.annualAssets.usableAsset;
   const livingCost = gameData.annualAssets.livingCost;
-
+  const [isMarried, setIsMarried] = useRecoilState(isMarriedState);
   // 현재 해 정보 업데이트
   useEffect(() => {
     axios
@@ -43,6 +44,7 @@ const MainComponents = () => {
           navigation.navigate("FirstResultPage"); // 적절한 페이지로 변경
         } else {
           setGameData(responseData.data);
+          setIsMarried(gameData.isMarried);
         }
       })
       .catch((error) => {
