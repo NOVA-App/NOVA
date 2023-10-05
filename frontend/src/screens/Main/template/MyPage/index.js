@@ -158,15 +158,18 @@ const MyPage = () => {
           </View>
         </View>
       </View>
-
+      <Text style={{ fontSize: 25, fontWeight: "bold", marginLeft: "3%", marginBottom: "2%" }}>전적</Text>
       <View style={{ flex: 10, alignItems: "center" }}>
         {myGame.length > 0 &&
           myGame.map((game, index) => (
             <View style={{ marginBottom: "1%" }} key={index}>
               <Button
-                title={`${index + 1}.    ${game.startSalary} -> ${game.resultAssets} ${game.assetGrowthRate}%`}
-                onPress={() => handleGameDetailNavigation(game.gameId)}
-              />
+              title={`${index + 1}번 게임
+              ${game.startSalary}원 ➜ ${game.resultAssets}원
+              변동치 : ${game.assetGrowthRate}%`}
+              onPress={() => handleGameDetailNavigation(game.gameId)}
+              style={{ textAlign: 'left', marginLeft: 10 }}
+            />
             </View>
           ))}
         <View style={{ marginBottom: "1%" }}></View>
