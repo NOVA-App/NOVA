@@ -53,7 +53,7 @@ const StockDetailPage = (props) => {
         console.log("POST 요청 성공:", response.data);
         setRefresh(!refresh);
         alert("구매가 완료 되었습니다");
-        navigation.navigate("StockMainPage");
+        navigation.replace("StockMainPage");
       })
       .catch((error) => {
         console.error("POST 요청 오류:", error);
@@ -75,8 +75,7 @@ const StockDetailPage = (props) => {
           console.log("POST 요청 성공:", response.data);
           setRefresh(!refresh);
           alert("판매가 완료 되었습니다");
-
-          navigation.navigate("StockMainPage");
+          navigation.replace("StockMainPage");
         })
         .catch((error) => {
           console.error("POST 요청 오류:", error);
@@ -113,9 +112,9 @@ const StockDetailPage = (props) => {
             height={200}
             yAxisLabel="₩"
             chartConfig={{
-              backgroundColor: '#9cebaa',
-              backgroundGradientFrom: '#a8daab',
-              backgroundGradientTo: '#6aed58',
+              backgroundColor: '#7d7be5',
+              backgroundGradientFrom: 'rgb(71, 71, 116)',
+              backgroundGradientTo: 'rgb(104, 130, 223)',
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               style: {
