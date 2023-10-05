@@ -21,17 +21,21 @@ const StockCard = (props) => {
         <Text style={{ fontSize: 25 }}>{props.stock.stockName}</Text>
         {/* <Text style={{ fontSize: 25, color: "#D90452" }}>550,000</Text> */}
         <Text style={{ fontSize: 25, color: "#D90452" }}>
-          {props.stock.fluctuationsPercent}%
+          {Math.floor((props.stock.evaluationAmount/props.stock.investAmount) * 100)-100}%
         </Text>
       </S.StockContainer>
       <S.ContentContainer>
         <S.TextContainer>
-          <S.MiddleText>{`현재가`}</S.MiddleText>
+          <S.MiddleText>{`   현재가`}</S.MiddleText>
           <S.MiddleText>{[props.stock.evaluationAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <S.TextContainer>
           <S.MiddleText>{`보유 수량`}</S.MiddleText>
           <S.MiddleText>{props.stock.quantity}</S.MiddleText>
+        </S.TextContainer>
+        <S.TextContainer>
+          <S.MiddleText>{`   매입가`}</S.MiddleText>
+          <S.MiddleText>{[props.stock.investAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
         </S.TextContainer>
         <View
           style={{
