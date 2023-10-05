@@ -79,3 +79,8 @@ export const menuModalState = atom({
   key: "menuModalState",
   default: false,
 });
+
+export const isMarriedState = atom({
+  key: "isMarriedState",
+  default: false,
+});
