@@ -6,6 +6,12 @@ spring:
         - jwt-release
         - oauth-release
         - file-release
+
+      release2:
+        - redis-release
+        - jwt-release
+        - oauth-release
+        - file-release
       develop:
         - redis-dev
         - jwt-dev
