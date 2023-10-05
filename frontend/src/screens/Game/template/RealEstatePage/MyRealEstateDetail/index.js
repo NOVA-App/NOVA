@@ -27,6 +27,9 @@ const MyRealEstateDetail = (props) => {
       alert("대출 상환 자금이 부족합니다.");
     } else {
       // 여유자금 바꿔주기
+      console.log(ID)
+      console.log(gameID)
+
       axios
         .delete(`${API_URL}/api/realty/sell/${gameID}/${ID}`)
         .then((response) => {
