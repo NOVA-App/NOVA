@@ -47,7 +47,7 @@ import com.sehbeomschool.nova.domain.user.constant.UserExceptionMessage;
 import com.sehbeomschool.nova.domain.user.dao.UserRepository;
 import com.sehbeomschool.nova.domain.user.exception.UserNotFoundException;
 import com.sehbeomschool.nova.global.constant.FixedValues;
-import com.sehbeomschool.nova.global.util.VarifyUser;
+import com.sehbeomschool.nova.global.util.VerifyUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -116,7 +116,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(nextYearRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        VarifyUser.varifyUser(game.getUser().getId());
+        VerifyUser.verifyUser(game.getUser().getId());
 
         if (game.getCurrentAge() == FixedValues.END_AGE.getValue().intValue()) {
             throw new GameFinishedException(GAME_FINISHED.getMessage());
@@ -181,7 +181,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        VarifyUser.varifyUser(game.getUser().getId());
+        VerifyUser.verifyUser(game.getUser().getId());
 
         return CurrentYearResponseDto.builder()
             .game(game)
@@ -199,7 +199,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(updateLivingCostRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        VarifyUser.varifyUser(game.getUser().getId());
+        VerifyUser.verifyUser(game.getUser().getId());
 
         game.getAnnualAsset().updateLivingCost(updateLivingCostRequestDto.getLivingCost());
         game.getMyAssets().recalculateTotalAsset();
@@ -214,7 +214,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        VarifyUser.varifyUser(game.getUser().getId());
+        VerifyUser.verifyUser(game.getUser().getId());
 
         return FixedCostResponseDto.builder().annualAsset(game.getAnnualAsset()).build();
     }
@@ -225,7 +225,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        VarifyUser.varifyUser(game.getUser().getId());
+        VerifyUser.verifyUser(game.getUser().getId());
 
         stockManagerService.deleteStocksInfo(game.getAges());
         realtyManagerService.deleteRealtyInfo(game.getId());
@@ -240,7 +240,7 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(gameId)
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        VarifyUser.varifyUser(game.getUser().getId());
+        VerifyUser.verifyUser(game.getUser().getId());
 
         if (game.getCurrentAge() != FixedValues.END_AGE.getValue().intValue()) {
             throw new GameNotFinishedException(GAME_NOT_FINISHED.getMessage());
@@ -270,9 +270,10 @@ public class GameServiceImpl implements GameService {
         Game game = gameRepository.findById(marryRequestDto.getGameId())
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
-        VarifyUser.varifyUser(game.getUser().getId());
+        VerifyUser.verifyUser(game.getUser().getId());
 
-        if (eventRepository.findByGameId(marryRequestDto.getGameId()).isPresent()) {
+        if (eventRepository.findByGameIdAndEventType(marryRequestDto.getGameId(),
+            EventType.MARRIAGE).isPresent()) {
             throw new AlreadyMarryException(ALREADY_MARRIED.getMessage());
         }
 
@@ -293,7 +294,7 @@ public class GameServiceImpl implements GameService {
     }
 
     private void addChildBirthEvent(Game game, Ages nextAge) {
-        VarifyUser.varifyUser(game.getUser().getId());
+        VerifyUser.verifyUser(game.getUser().getId());
 
         game.addEventAndSetThis(Event.builder()
             .eventType(EventType.CHILD_BIRTH)
