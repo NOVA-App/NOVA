@@ -6,16 +6,18 @@ import Marriage from "../../../../../../../../assets/Marriage.png";
 import axios from "axios";
 import API_URL from "../../../../../../../../../config";
 import { refreshState } from "../../../../../../../../recoil/recoil";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { gameIdState } from "../../../../../../../../recoil/recoil";
 
 export default function MarriagePage() {
   const navigation = useNavigation();
   const [refresh, setRefresh] = useRecoilState(refreshState);
+  const gameId = useRecoilValue(gameIdState);
   const handleMarry = async () => {
     try {
       // POST 요청 보내기
       const response = await axios.post(API_URL + "/api/game/marry", {
-        gameId: 2,
+        gameId: gameId,
       });
       if (response.status === 201) {
         console.log("결혼 성공");
