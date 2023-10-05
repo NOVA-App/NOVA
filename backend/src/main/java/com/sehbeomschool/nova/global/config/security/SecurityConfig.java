@@ -49,6 +49,7 @@ public class SecurityConfig {
             }).permitAll()
             .antMatchers("/api/user/refreshtoken").permitAll()
             .antMatchers("/profile").permitAll()
+            .antMatchers("/health").permitAll()
             .anyRequest().authenticated()
             .and()
             .exceptionHandling()
