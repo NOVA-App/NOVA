@@ -7,9 +7,11 @@ import {
   DescriptionText,
 } from "./style";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { gameIdState } from "../../../../recoil/recoil";
 import API_URL from "../../../../../config";
+import { refreshState } from "../../../../recoil/recoil";
+
 function Toggle({ description, isExpanded, toggleSwitch }) {
   return (
     <ToggleButton onPress={toggleSwitch}>
@@ -36,7 +38,7 @@ function NewsPage() {
     false,
     false,
   ]);
-
+  const [refresh, setRefresh] = useRecoilState(refreshState);
   const toggleSwitch = (index) => {
     setIsExpanded((prevStates) => {
       const newState = [...prevStates];
@@ -52,11 +54,12 @@ function NewsPage() {
       .get(`${API_URL}/api/news/${gameID}`) // 게임아이디 받아와서 주기
       .then((response) => {
         setData(response.data.data.news);
+        setRefresh(!refresh);
       })
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <PageContainer>
