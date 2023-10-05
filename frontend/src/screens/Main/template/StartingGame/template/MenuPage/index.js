@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import ImgBox from "../../../../../../components/ImgBox";
 import XXLargeButton from "../../../../../../components/buttons/XXLargeButton";
@@ -8,12 +8,19 @@ import axios from "axios";
 import { useRecoilValue, useRecoilState } from "recoil";
 import API_URL from "../../../../../../../config";
 // import { accessTokenState, refreshTokenState } from "../../../../../../recoil/recoil";
-import { tokenState, gameIdState } from "../../../../../../recoil/recoil";
+import {
+  tokenState,
+  gameIdState,
+  refreshState,
+} from "../../../../../../recoil/recoil";
 
 const MenuPage = () => {
   // const [accessToken] = useRecoilState(accessTokenState);
   const accessToken = useRecoilValue(tokenState);
   const [gameId, setGameId] = useRecoilState(gameIdState);
+  const [userInfo, setUserInfo] = useState({});
+  const [refresh] = useRecoilState(refreshState);
+
   useEffect(() => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     axios
@@ -26,6 +33,17 @@ const MenuPage = () => {
         setGameId(0);
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get(API_URL + "/api/user")
+      .then((response) => {
+        setUserInfo(response.data.data);
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 동안 오류 발생: ", error);
+      });
+  }, [refresh]);
 
   const navigation = useNavigation();
   const handleGameStartPage = () => {
@@ -51,10 +69,12 @@ const MenuPage = () => {
             alignItems: "center",
           }}
         >
-          <ImgBox />
+          <ImgBox ProfileUrl={userInfo.profileImg} />
         </View>
         <View style={{ width: "50%", justifyContent: "center" }}>
-          <Text style={{ fontSize: 20 }}>A310님 환영합니다!</Text>
+          <Text style={{ fontSize: 20 }}>
+            {userInfo ? userInfo.name : ""}님 환영합니다!
+          </Text>
         </View>
       </S.Container>
       <XXLargeButton
