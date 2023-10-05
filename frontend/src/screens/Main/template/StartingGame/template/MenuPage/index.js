@@ -69,7 +69,7 @@ const MenuPage = () => {
             alignItems: "center",
           }}
         >
-          <ImgBox ProfileUrl={userInfo.profileImg} />
+        <S.ProfileImage source={{ uri: userInfo.profileImg }} />          
         </View>
         <View style={{ width: "50%", justifyContent: "center" }}>
           <Text style={{ fontSize: 20 }}>
