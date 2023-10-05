@@ -12,11 +12,16 @@ public class ApiController {
 
     private final Environment env;
 
-    @GetMapping(value="/profile")
-    public String getProfile(){
+    @GetMapping("/profile")
+    public String getProfile() {
         return Arrays.stream(env.getActiveProfiles())
             .findFirst()
             .orElse("");
+    }
+
+    @GetMapping("/health")
+    public String healthCheck() {
+        return "good";
     }
 
 }
