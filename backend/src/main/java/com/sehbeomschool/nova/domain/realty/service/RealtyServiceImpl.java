@@ -221,19 +221,21 @@ public class RealtyServiceImpl implements RealtyService {
                     Long.valueOf(game.getMyRealties().size()));
                 Long totalPrice = ri.getCurrentPrice() - aquisitionTax;
 
-                if (mr.getLoan() != null
-                    && ri.getCurrentPrice() >= mr.getLoan().getPrincipal() + aquisitionTax) {
-                    totalPrice -= mr.getLoan().getPrincipal();
-                } else if (game.getAnnualAsset().getUsableAsset() + ri.getCurrentPrice()
-                    >= mr.getLoan().getPrincipal() + aquisitionTax) {
-                    totalPrice = -(totalPrice - mr.getLoan().getPrincipal());
-                } else {
-                    throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
+                if (mr.getLoan() != null) {
+                    if (ri.getCurrentPrice() >= mr.getLoan().getPrincipal() + aquisitionTax) {
+                        totalPrice -= mr.getLoan().getPrincipal();
+                    } else if (game.getAnnualAsset().getUsableAsset() + ri.getCurrentPrice()
+                        >= mr.getLoan().getPrincipal() + aquisitionTax) {
+                        totalPrice = -(totalPrice - mr.getLoan().getPrincipal());
+                    } else {
+                        throw new UsableAssetNotEnoughException(
+                            USABLE_ASSET_NOT_ENOUGH.getMessage());
+                    }
+                    game.getMyAssets().decreaseAsset(LOAN, mr.getLoan().getPrincipal());
                 }
 
                 game.getAnnualAsset().useUsableAsset(-totalPrice);
                 game.getMyAssets().decreaseAsset(REALTY, ri.getCurrentPrice());
-                game.getMyAssets().decreaseAsset(LOAN, mr.getLoan().getPrincipal());
                 game.getMyAssets().increaseAsset(TAX, aquisitionTax);
                 game.getMyRealties().remove(i);
                 return;
