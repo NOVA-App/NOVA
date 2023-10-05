@@ -3,13 +3,10 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../../../config";
-import {
-  gameDataState,
-  gameIdState,
-  refreshState,
-} from "../../../../../recoil/recoil";
+import { gameIdState, refreshState, gameDataState } from "../../../../../recoil/recoil";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigation } from "@react-navigation/native";
+import { LineChart } from 'react-native-chart-kit';
 
 const StockDetailPage = (props) => {
   const [buyAmount, setBuyAmount] = useState(0);
@@ -20,7 +17,7 @@ const StockDetailPage = (props) => {
   const stockId = props.route.params.stockId;
   const [refresh, setRefresh] = useRecoilState(refreshState);
   const navigation = useNavigation();
-  const data = useRecoilValue(gameDataState);
+  const data = useRecoilValue(gameDataState)
 
   useEffect(() => {
     axios
@@ -57,7 +54,7 @@ const StockDetailPage = (props) => {
         console.log("POST 요청 성공:", response.data);
         setRefresh(!refresh);
         alert("구매가 완료 되었습니다");
-        navigation.navigate("StockMainPage");
+        navigation.replace("StockMainPage");
       })
       .catch((error) => {
         console.error("POST 요청 오류:", error);
@@ -79,8 +76,7 @@ const StockDetailPage = (props) => {
           console.log("POST 요청 성공:", response.data);
           setRefresh(!refresh);
           alert("판매가 완료 되었습니다");
-
-          navigation.navigate("StockMainPage");
+          navigation.replace("StockMainPage");
         })
         .catch((error) => {
           console.error("POST 요청 오류:", error);
@@ -88,9 +84,19 @@ const StockDetailPage = (props) => {
     }
   };
 
-  if (!stockInfo) {
+
+  if (!stockInfo || !stockInfo.graphValue) {
     return <Text>Loading...</Text>;
   }
+  
+  const chartData = {
+    labels: ['1', '2', '3', '4', '5'], // X 축 레이블
+    datasets: [
+      {
+        data: stockInfo.graphValue || [], // 주가 데이터
+      },
+    ],
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -101,21 +107,27 @@ const StockDetailPage = (props) => {
             {stockInfo.stockName}
           </Text>
           {/* Line Chart Component */}
-          {/* Replace with your line chart component */}
-          <View
-            style={{
-              width: "80%",
-              height: 100,
-              backgroundColor: "lightgray",
-              marginBottom: 20,
+          <LineChart
+            data={chartData}
+            width={300}
+            height={200}
+            yAxisLabel="₩"
+            chartConfig={{
+              backgroundColor: '#7d7be5',
+              backgroundGradientFrom: 'rgb(71, 71, 116)',
+              backgroundGradientTo: 'rgb(104, 130, 223)',
+              decimalPlaces: 0,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
             }}
-          ></View>
-          <Text>{`현재가: ${[stockInfo.evaluation].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}`}</Text>
+            bezier
+          />
+           <Text>{`현재가: ${[stockInfo.evaluation].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
           <Text>{`상승률: ${rate}%`}</Text>
           <Text>{`내 보유량: ${stockInfo.myQuantity}`}</Text>
-          <Text>{`여유자산: ${[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-}`}</Text>
+          <Text>{`여유자산: ${[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
           <View
             style={{
               flexDirection: "row",
