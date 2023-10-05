@@ -3,9 +3,10 @@ import { View, StyleSheet } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { WebView } from "react-native-webview";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useRecoilState } from "recoil";
-import { accessTokenState, refreshTokenState } from "../../../../recoil/recoil"
+import { accessTokenState, refreshTokenState } from "../../../../recoil/recoil";
 
 const REST_API_KEY = "9338dac6db9d9162c95333adbcb97200";
 const REDIRECT_URI = "https://nohoo.site/api/oauth/kakao/callback";
@@ -50,6 +51,7 @@ const KaKaoLogin = () => {
       // requestUserInfo(AccessToken);
       setAccessToken(AccessToken);
       setRefreshToken(RefreshToken);
+      storeData(AccessToken);
 
       // 토큰 발급에 성공한 경우 "Main"으로 이동
       navigation.navigate("Main", { screen: "StartingGame" });
@@ -58,11 +60,16 @@ const KaKaoLogin = () => {
       console.log("토큰 발급 오류:", error);
       // 오류 처리 또는 사용자에게 오류 메시지 표시
       // 토큰 발급에 실패한 경우 "Signin"으로 이동해야 하는데 일단은 Main으로 이동
-      // navigation.navigate("Main", { screen: "StartingGame" });
-      navigation.navigate("Signin", { screen: "Signin" });
+      //navigation.navigate("Main", { screen: "StartingGame" });
+      // navigation.navigate("Signin", { screen: "Signin" });
     }
   };
 
+  const storeData = async (returnValue) => {
+    try {
+      await AsyncStorage.setItem("userAccessToken", returnValue);
+    } catch (error) {}
+  };
 
   var source = {
     uri: `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`,
