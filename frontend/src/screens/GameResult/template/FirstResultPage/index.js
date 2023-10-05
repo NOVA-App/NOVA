@@ -6,15 +6,26 @@ import ViewShot from "react-native-view-shot";
 import { useNavigation } from "@react-navigation/native";
 import * as Sharing from "expo-sharing";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue,useRecoilState } from "recoil";
 import { gameIdState } from "../../../../recoil/recoil";
 import style from "./style";
 import API_URL from "../../../../../config";
 
 const FirstResultPage = (props) => {
-  const gameId = props.route.params?.gameId || useRecoilValue(gameIdState);
+  const gameIdFromProps = props.route.params?.gameId;
+  const [gameIdFromRecoil, setGameIdFromRecoil] = useRecoilState(gameIdState);
+  const gameId = gameIdFromProps || gameIdFromRecoil;
   const [apiData, setApiData] = useState(null);
+  
+  const CheckingResultState = (() => {
+    if (gameIdFromProps) {
+      return 1;
+    } else {
+      return 2;
+    }
+  })();
 
+  console.log(CheckingResultState)
   useEffect(() => {
     axios
       .get(`${API_URL}/api/game/result/${gameId}`)
@@ -52,7 +63,7 @@ const FirstResultPage = (props) => {
   const handleFirstResultPage = () => {
     navigation.navigate("GameResult", {
       screen: "SecondResultPage",
-      params: { gameId }
+      params: { gameId, CheckingResultState }
     });
   };
   
