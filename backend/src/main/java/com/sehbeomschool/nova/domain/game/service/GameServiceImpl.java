@@ -1,5 +1,6 @@
 package com.sehbeomschool.nova.domain.game.service;
 
+import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.ALREADY_MARRIED;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_FINISHED;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FINISHED;
 import static com.sehbeomschool.nova.domain.game.constant.GameExceptionMessage.GAME_NOT_FOUND;
@@ -11,6 +12,7 @@ import com.sehbeomschool.nova.domain.game.constant.EventType;
 import com.sehbeomschool.nova.domain.game.constant.GameStatus;
 import com.sehbeomschool.nova.domain.game.dao.AgesRepository;
 import com.sehbeomschool.nova.domain.game.dao.AnalysisCommentRepository;
+import com.sehbeomschool.nova.domain.game.dao.EventRepository;
 import com.sehbeomschool.nova.domain.game.dao.GameRepository;
 import com.sehbeomschool.nova.domain.game.domain.Ages;
 import com.sehbeomschool.nova.domain.game.domain.AnnualAsset;
@@ -30,6 +32,7 @@ import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.InProgressGameResp
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.MyResultsListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.RankingListResponseDto;
 import com.sehbeomschool.nova.domain.game.dto.GameResponseDto.UpdateLivingCostResponseDto;
+import com.sehbeomschool.nova.domain.game.exception.AlreadyMarryException;
 import com.sehbeomschool.nova.domain.game.exception.GameFinishedException;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFinishedException;
 import com.sehbeomschool.nova.domain.game.exception.GameNotFoundException;
@@ -67,6 +70,7 @@ public class GameServiceImpl implements GameService {
     private final StockManagerService stockManagerService;
     private final NewsService newsService;
     private final SavingService savingService;
+    private final EventRepository eventRepository;
 
     @Override
     @Transactional
@@ -267,6 +271,10 @@ public class GameServiceImpl implements GameService {
             .orElseThrow(() -> new GameNotFoundException(GAME_NOT_FOUND.getMessage()));
 
         VarifyUser.varifyUser(game.getUser().getId());
+
+        if (eventRepository.findByGameId(marryRequestDto.getGameId()).isPresent()) {
+            throw new AlreadyMarryException(ALREADY_MARRIED.getMessage());
+        }
 
         game.addEventAndSetThis(Event.builder()
             .age(agesRepository.findCurrentAge(game))
