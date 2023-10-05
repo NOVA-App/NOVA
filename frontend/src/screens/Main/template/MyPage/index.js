@@ -9,6 +9,7 @@ import API_URL from "../../../../../config";
 import * as ImagePicker from "expo-image-picker";
 import { accessTokenState } from "../../../../recoil/recoil";
 import { useRecoilState } from "recoil";
+import { useNavigation } from "@react-navigation/native";
 
 const MyPage = () => {
   const [userInfo, setUserInfo] = useState({});
@@ -16,6 +17,13 @@ const MyPage = () => {
   const [refresh, setRefresh] = useState(false);
   const [newName, setNewName] = useState(""); // 이름 변경을 위한 state 추가
   const [myGame, setMyGame] = useState([]);
+  const navigation = useNavigation();
+
+  const handleGameDetailNavigation = (gameId) => {
+    navigation.navigate("GameResult", {
+      screen: "FirstResultPage",
+      params: { gameId }
+    });  };
 
   useEffect(() => {
     axios
@@ -75,7 +83,7 @@ const MyPage = () => {
   const handleNameChange = async () => {
     try {
       // 이름 변경을 위한 API 요청 보내기
-      await axios.patch(`${API_URL}/api/user/name`, { name: newName });
+      await axios.patch(`${API_URL}/api/user?name=${newName}`);
       setRefresh(!refresh);
     } catch (error) {
       console.error("이름 변경 중 에러 발생:", error);
@@ -130,6 +138,7 @@ const MyPage = () => {
             value={newName}
             onChangeText={(text) => {
               setNewName(text);
+              console.log(newName);
             }}
           />
           <View
@@ -145,19 +154,18 @@ const MyPage = () => {
               bgColor="#038C7F"
               onPress={handleNameChange}
             />
-            <MediumButton title="탈퇴" bgColor="#D90452" />
+            <MediumButton title="탈퇴" bgColor="#D90452" onPress={deleteUser} />
           </View>
         </View>
       </View>
+
       <View style={{ flex: 10, alignItems: "center" }}>
         {myGame.length > 0 &&
           myGame.map((game, index) => (
-            <View style={{ marginBottom: "1%" }}>
+            <View style={{ marginBottom: "1%" }} key={index}>
               <Button
-                key={index}
-                title={`${index + 1}.    ${game.startSalary} -> ${
-                  game.resultAssets
-                }           ${game.assetGrowthRate}%`}
+                title={`${index + 1}.    ${game.startSalary} -> ${game.resultAssets} ${game.assetGrowthRate}%`}
+                onPress={() => handleGameDetailNavigation(game.gameId)}
               />
             </View>
           ))}

@@ -3,9 +3,13 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../../../config";
-import { gameIdState } from "../../../../../recoil/recoil";
-import { useRecoilState } from "recoil";
-import { useNavigation } from '@react-navigation/native';
+import {
+  gameDataState,
+  gameIdState,
+  refreshState,
+} from "../../../../../recoil/recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useNavigation } from "@react-navigation/native";
 
 const StockDetailPage = (props) => {
   const [buyAmount, setBuyAmount] = useState(0);
@@ -14,14 +18,14 @@ const StockDetailPage = (props) => {
   const [gameId] = useRecoilState(gameIdState);
   const rate = props.route.params.rate;
   const stockId = props.route.params.stockId;
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useRecoilState(refreshState);
   const navigation = useNavigation();
+  const data = useRecoilValue(gameDataState);
 
   useEffect(() => {
     axios
       .get(`${API_URL}/api/stock/${gameId}/${props.route.params.stockId}`)
       .then((response) => {
-        console.log(response.data.data);
         setStockInfo(response.data.data);
       })
       .catch((error) => {
@@ -65,23 +69,23 @@ const StockDetailPage = (props) => {
       alert("보유 수량보다 많이 판매할 수 없습니다.");
       return;
     } else {
-      alert("판매가 완료 되었습니다");
-    }
+      axios
+        .patch(API_URL + "/api/stock/sell", {
+          gameId: gameId,
+          stockId: stockId,
+          purchaseAmount: buyAmount,
+        })
+        .then((response) => {
+          console.log("POST 요청 성공:", response.data);
+          setRefresh(!refresh);
+          alert("판매가 완료 되었습니다");
 
-    axios
-      .patch(API_URL + "/api/stock/sell", {
-        gameId: gameId,
-        stockId: stockId,
-        purchaseAmount: buyAmount,
-      })
-      .then((response) => {
-        console.log("POST 요청 성공:", response.data);
-        setRefresh(!refresh);
-        navigation.navigate("StockMainPage");
-      })
-      .catch((error) => {
-        console.error("POST 요청 오류:", error);
-      });
+          navigation.navigate("StockMainPage");
+        })
+        .catch((error) => {
+          console.error("POST 요청 오류:", error);
+        });
+    }
   };
 
   if (!stockInfo) {
@@ -106,10 +110,12 @@ const StockDetailPage = (props) => {
               marginBottom: 20,
             }}
           ></View>
-          <Text>{`현재가: ${stockInfo.evaluation}`}</Text>
+          <Text>{`현재가: ${[stockInfo.evaluation].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}`}</Text>
           <Text>{`상승률: ${rate}%`}</Text>
           <Text>{`내 보유량: ${stockInfo.myQuantity}`}</Text>
-          <Text>{`여유자산: 150,000,000원`}</Text>
+          <Text>{`여유자산: ${[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}`}</Text>
           <View
             style={{
               flexDirection: "row",

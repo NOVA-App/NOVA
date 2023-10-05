@@ -4,7 +4,7 @@ import HouseCard from "./HouseCard";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../config";
-import { gameIdState } from "../../../recoil/recoil";
+import { gameIdState, refreshState } from "../../../recoil/recoil";
 import { useRecoilValue } from "recoil";
 
 const { height } = Dimensions.get("window");
@@ -12,7 +12,8 @@ const { height } = Dimensions.get("window");
 const MyRealEstate = () => {
   const [myRealtyData, setMyRealtyData] = useState([]);
   const [myHouseData, setMyHouseData] = useState([]);
-  const gameID = useRecoilValue(gameIdState)
+  const gameID = useRecoilValue(gameIdState);
+  const refresh = useRecoilValue(refreshState);
 
   useEffect(() => {
     axios
@@ -25,7 +26,7 @@ const MyRealEstate = () => {
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <View style={{ flex: 1, minWidth: "90%" }}>
@@ -46,15 +47,15 @@ const MyRealEstate = () => {
             <S.TotalAssetContainer>
               <S.TextContainer>
                 <S.MiddleText>{`총 투자금`}</S.MiddleText>
-                <S.MiddleText>{myRealtyData.investAmounts}</S.MiddleText>
+                <S.MiddleText>{[myRealtyData.investAmounts].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
               </S.TextContainer>
               <S.TextContainer>
                 <S.MiddleText>{`총 평가금`}</S.MiddleText>
-                <S.MiddleText>{myRealtyData.evaluationAmounts}</S.MiddleText>
+                <S.MiddleText>{[myRealtyData.evaluationAmounts].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
               </S.TextContainer>
               <S.TextContainer>
                 <S.MiddleText>{`월세 수익`}</S.MiddleText>
-                <S.MiddleText>{myRealtyData.totalRentalIncome}</S.MiddleText>
+                <S.MiddleText>{[myRealtyData.totalRentalIncome].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</S.MiddleText>
               </S.TextContainer>
             </S.TotalAssetContainer>
           </View>

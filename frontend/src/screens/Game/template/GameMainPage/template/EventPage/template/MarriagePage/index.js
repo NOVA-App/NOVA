@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View, Image } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { useNavigation } from "@react-navigation/native"; // useNavigation 추가
 import Button from "../../../../../../../../components/buttons/SmallButton";
 import Marriage from "../../../../../../../../assets/Marriage.png";
 import axios from "axios";
 import API_URL from "../../../../../../../../../config";
+import { refreshState } from "../../../../../../../../recoil/recoil";
+import { useRecoilState } from "recoil";
 
 export default function MarriagePage() {
-  const navigation = useNavigation(); // 네비게이션 객체 생성
-  const [isMarried, setIsMarried] = useState(false);
+  const navigation = useNavigation();
+  const [refresh, setRefresh] = useRecoilState(refreshState);
   const handleMarry = async () => {
     try {
       // POST 요청 보내기
@@ -17,6 +19,9 @@ export default function MarriagePage() {
       });
       if (response.status === 201) {
         console.log("결혼 성공");
+        setRefresh(!refresh);
+        alert("🎉🎉 결혼을 축하드립니다 🎉🎉");
+        navigation.navigate("MainComponents");
       } else {
         console.error("결혼 요청 실패");
       }
@@ -24,13 +29,10 @@ export default function MarriagePage() {
       console.error("POST 요청 중 오류 발생", error);
     }
   };
-  // 나중에 recoil에 저장하기
-  const handleNext = () => {
-    //
-    navigation.navigate("LoginPage"); // 'LoginPage'로 변경
+  const handleNotMarry = () => {
+    navigation.navigate("MainComponents");
   };
 
-  // const { width, height } = Dimensions.get('window');
   return (
     <View style={styles.container}>
       <View style={styles.content1}>
@@ -46,7 +48,11 @@ export default function MarriagePage() {
             <Button title="예" bgColor="#0046FF" onPress={handleMarry}></Button>
           </View>
           <View style={{ marginLeft: 15 }}>
-            <Button title="아니오" bgColor="#D90452"></Button>
+            <Button
+              title="아니오"
+              bgColor="#D90452"
+              onPress={handleNotMarry}
+            ></Button>
           </View>
         </View>
       </View>
@@ -62,7 +68,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: 'blue',
     padding: 10,
     flexDirection: "column",
   },
@@ -75,13 +80,11 @@ const styles = StyleSheet.create({
   content2: {
     flexDirection: "column",
     flex: 2,
-    // top: 20,
     alignItems: "center",
   },
   content3: {
     flexDirection: "column",
     flex: 3,
-    // top: 20,
     alignItems: "center",
   },
   img: {

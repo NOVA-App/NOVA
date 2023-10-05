@@ -19,14 +19,22 @@ const Budget = () => {
       <View style={styles.logoSection}>
         <TouchableOpacity onPress={toggleModal}>
           <Image
-            style={{ resizeMode: "contain", width: 80, height: 80, marginLeft: 5 }}
+            style={{
+              resizeMode: "contain",
+              width: 80,
+              height: 80,
+              marginLeft: 5,
+            }}
             source={require("../../assets/nova_logo.png")}
           />
         </TouchableOpacity>
       </View>
       <View style={styles.centerContent}>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>여유자금</Text>
-        <Text style={{ fontSize: 20, color: "#F5B700" }}>{data.annualAssets.usableAsset}원</Text>
+        <Text style={{ fontSize: 20, color: "#F5B700" }}>
+          {[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}원
+        </Text>
       </View>
       <View style={styles.menuSection}>
         <TouchableOpacity onPress={toggleModal}>
@@ -60,7 +68,6 @@ const styles = {
     alignItems: "flex-end",
   },
 };
-
 
 const StyledUpper = styled.View`
   background-color: white;

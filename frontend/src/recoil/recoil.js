@@ -15,7 +15,8 @@ export const isChildBirthState = atom({
 
 export const accessTokenState = atom({
   key: "accessTokenState",
-  default: "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImV4cCI6MTY5NjYzMDM5MX0.zWtHdQr_XzF735p0nls2_zMOWTRVZU_qq1R0afPYHTQ",
+  default:
+    "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEsImV4cCI6MTY5NjYzMDM5MX0.zWtHdQr_XzF735p0nls2_zMOWTRVZU_qq1R0afPYHTQ",
 });
 
 export const tokenState = atom({
@@ -31,7 +32,7 @@ export const refreshTokenState = atom({
 
 export const gameIdState = atom({
   key: "gameIdState",
-  default: 1,
+  default: 0,
 });
 
 export const gameDataState = atom({
@@ -66,5 +67,20 @@ export const gameDataState = atom({
 
 export const annualModalState = atom({
   key: "annualModalState",
+  default: false,
+});
+
+export const refreshState = atom({
+  key: "refreshState",
+  default: false,
+});
+
+export const menuModalState = atom({
+  key: "menuModalState",
+  default: false,
+});
+
+export const isMarriedState = atom({
+  key: "isMarriedState",
   default: false,
 });

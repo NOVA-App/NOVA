@@ -139,16 +139,18 @@ public class RealtyResponseDto {
         private String realtyName;
         private Long realtyPrice;
         private Long principal;
+        private String realtyImg;
 
         @Builder
         public ReadLoanListResponseDto(Long realtyId, Long loanId, String realtyName,
             Long realtyPrice,
-            Long principal) {
+            Long principal, String realtyImg) {
             this.realtyId = realtyId;
             this.loanId = loanId;
             this.realtyName = realtyName;
             this.realtyPrice = realtyPrice;
             this.principal = principal;
+            this.realtyImg = realtyImg;
         }
     }
 }

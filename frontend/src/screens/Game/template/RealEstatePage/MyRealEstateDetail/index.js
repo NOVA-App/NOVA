@@ -5,8 +5,12 @@ import HouseImg from "../../../../../assets/House.png";
 import Button from "../../../../../components/buttons/SmallButton";
 import axios from "axios";
 import API_URL from "../../../../../../config";
-import { useRecoilValue } from "recoil";
-import { gameIdState, gameDataState } from "../../../../../recoil/recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
+import {
+  gameIdState,
+  gameDataState,
+  refreshState,
+} from "../../../../../recoil/recoil";
 
 const { height } = Dimensions.get("window");
 
@@ -16,6 +20,7 @@ const MyRealEstateDetail = (props) => {
   const gameID = useRecoilValue(gameIdState);
   const gameData = useRecoilValue(gameDataState);
   const usableAsset = gameData.annualAssets.usableAsset;
+  const [refresh, setRefresh] = useRecoilState(refreshState);
 
   const SellHandle = () => {
     if (parseFloat(realtyData.evaluationAmount) + usableAsset < realtyData.principal) {
@@ -26,6 +31,7 @@ const MyRealEstateDetail = (props) => {
         .delete(`${API_URL}/api/realty/sell/${gameID}/${ID}`)
         .then((response) => {
           console.log("delete 요청 성공:", response.data);
+          setRefresh(!refresh);
         })
         .catch((error) => {
           console.error("delete 요청 오류:", error);
@@ -42,7 +48,7 @@ const MyRealEstateDetail = (props) => {
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -60,11 +66,11 @@ const MyRealEstateDetail = (props) => {
           </S.NameText>
           <S.InfoText>
             {`투자 금액:    `}
-            {realtyData.investAmount}
+            {[realtyData.investAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </S.InfoText>
           <S.InfoText>
             {`현재가:         `}
-            {realtyData.evaluationAmount}
+            {[realtyData.evaluationAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </S.InfoText>
           <S.InfoText>
             {`투자 수익률:          `}
@@ -79,11 +85,11 @@ const MyRealEstateDetail = (props) => {
           </S.InfoText>
           <S.InfoText>
             {`월세 수익:        `}
-            {realtyData.rentIncome}
+            {[realtyData.rentIncome].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </S.InfoText>
           <S.InfoText>
             {`남은 대출금:     `}
-            {realtyData.principal}
+            {[realtyData.principal].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </S.InfoText>
         </View>
         <View
