@@ -10,7 +10,7 @@ public class VerifyUser {
         Long curUserId = (Long) SecurityContextHolder.getContext().getAuthentication()
             .getPrincipal();
         if (!curUserId.equals(userId)) {
-            throw new NotVerifiedUserException(ExceptionMessage.NOT_VARIFIED_USER.getMessage());
+            throw new NotVerifiedUserException(ExceptionMessage.NOT_VERIFIED_USER.getMessage());
         }
     }
 }
