@@ -22,8 +22,8 @@ const RankBox = (props) => {
         <View style={{ flex: 2 }}>
           <Text style={{ color: "#D90452" }}>
             {props.rankItem.resultInfo.assetGrowthRate > 0
-              ? `+${props.rankItem.resultInfo.assetGrowthRate}`
-              : props.rankItem.resultInfo.assetGrowthRate}
+              ? `+${(props.rankItem.resultInfo.assetGrowthRate).toFixed(2)}`
+              : (props.rankItem.resultInfo.assetGrowthRate).toFixed(2)}
             %
           </Text>
         </View>
