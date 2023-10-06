@@ -94,7 +94,7 @@ const SecondResultPage = (props) => {
 
         <View style={[style.section, style.userInfo, style.marginBottom]}>
           <View>
-            <Text style={[style.userName, { fontSize: 25 }]}>{`월 ${oldAgeAssetsInfo.monthlyAmount } 원`}</Text>
+            <Text style={[style.userName, { fontSize: 25 }]}>{`월 ${[oldAgeAssetsInfo.monthlyAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') } 원`}</Text>
           </View>
         </View>
 
