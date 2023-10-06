@@ -53,14 +53,14 @@ const ForSaleDetail = (props) => {
         isVisible={isModalVisible}
         onClose={onModalClose}
         btnTitle="매수"
-        title={`총 금액: ${realtyData.totalPrice}\n 
-가능 대출 금액:  ${realtyData.enableLoanAmount}\n
+        title={`총 금액: ${[realtyData.totalPrice].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\n 
+가능 대출 금액:  ${[realtyData.enableLoanAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\n
 모자란 금액:  ${
           usableAsset - realtyData.totalPrice < 0
-            ? usableAsset - realtyData.totalPrice
+            ? [usableAsset - realtyData.totalPrice].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             : 0
         }\n
-여유 자금:  ${usableAsset}\n
+여유 자금:  ${[usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}\n
 대출 신청금액: `}
         maxAmount={realtyData.enableLoanAmount}
       ></LoanLargeModal>
