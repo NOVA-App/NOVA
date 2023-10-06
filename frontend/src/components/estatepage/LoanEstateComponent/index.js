@@ -57,6 +57,7 @@ const LoanEstate = () => {
                   realtyName={loanItem.realtyName}
                   realtyPrice={loanItem.realtyPrice}
                   principal={loanItem.principal}
+                  realtyImg={loanItem.realtyImg}
                 />
               ))}
 

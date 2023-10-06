@@ -77,7 +77,7 @@ const LoanLargeModal = (props) => {
             }
           }}
         />
-        <Text style={{ fontSize: 18 }}>연간 이자: {loanCost * 0.07}</Text>
+        <Text style={{ fontSize: 18 }}>연간 이자: {[Math.floor(loanCost * 0.07)].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
         <S.ButtonContainer>
           <Button
             title={props.btnTitle}
