@@ -6,7 +6,7 @@ import API_URL from "../../../../../../config";
 import { gameIdState, refreshState, gameDataState } from "../../../../../recoil/recoil";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { useNavigation } from "@react-navigation/native";
-import { LineChart } from 'react-native-chart-kit';
+import { LineChart } from "react-native-chart-kit";
 
 const StockDetailPage = (props) => {
   const [buyAmount, setBuyAmount] = useState(0);
@@ -17,7 +17,7 @@ const StockDetailPage = (props) => {
   const stockId = props.route.params.stockId;
   const [refresh, setRefresh] = useRecoilState(refreshState);
   const navigation = useNavigation();
-  const data = useRecoilValue(gameDataState)
+  const data = useRecoilValue(gameDataState);
 
   useEffect(() => {
     axios
@@ -84,13 +84,12 @@ const StockDetailPage = (props) => {
     }
   };
 
-
   if (!stockInfo || !stockInfo.graphValue) {
     return <Text>Loading...</Text>;
   }
-  
+
   const chartData = {
-    labels: ['1', '2', '3', '4', '5'], // X 축 레이블
+    labels: ["1", "2", "3", "4", "5"], // X 축 레이블
     datasets: [
       {
         data: stockInfo.graphValue || [], // 주가 데이터
@@ -103,9 +102,7 @@ const StockDetailPage = (props) => {
       <S.Container style={{ flex: 8.5, minWidth: "80%" }}>
         <View style={{ flex: 8, alignItems: "center" }}>
           <View style={{ marginTop: "5%" }}></View>
-          <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>
-            {stockInfo.stockName}
-          </Text>
+          <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>{stockInfo.stockName}</Text>
           {/* Line Chart Component */}
           <LineChart
             data={chartData}
@@ -113,21 +110,21 @@ const StockDetailPage = (props) => {
             height={200}
             yAxisLabel="₩"
             chartConfig={{
-              backgroundColor: '#7d7be5',
-              backgroundGradientFrom: 'rgb(71, 71, 116)',
-              backgroundGradientTo: 'rgb(104, 130, 223)',
+              backgroundColor: "#7d7be5",
+              backgroundGradientFrom: "rgb(71, 71, 116)",
+              backgroundGradientTo: "rgb(104, 130, 223)",
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
               style: {
-                borderRadius: 16,
+                borderRadius: 16
               },
             }}
             bezier
           />
-           <Text>{`현재가: ${[stockInfo.evaluation].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
+          <Text>{`현재가: ${[stockInfo.evaluation].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</Text>
           <Text>{`상승률: ${rate}%`}</Text>
           <Text>{`내 보유량: ${stockInfo.myQuantity}`}</Text>
-          <Text>{`여유자산: ${[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
+          <Text>{`여유자산: ${[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</Text>
           <View
             style={{
               flexDirection: "row",
@@ -154,9 +151,7 @@ const StockDetailPage = (props) => {
 
             <Text style={{ fontSize: 20 }}>원</Text>
 
-            <TouchableOpacity
-              onPress={() => handleAdjustQuantity(parseInt(adjustAmount))}
-            ></TouchableOpacity>
+            <TouchableOpacity onPress={() => handleAdjustQuantity(parseInt(adjustAmount))}></TouchableOpacity>
           </View>
           <View
             style={{
@@ -202,7 +197,10 @@ const StockDetailPage = (props) => {
                 backgroundColor: "#0046FF",
                 padding: 10,
                 borderRadius: 5,
-                width: "40%",
+                width: "20%",
+                marginRight: 15,
+                justifyContent: "center", // 세로 가운데 정렬
+                alignItems: "center", // 가로 가운데 정렬
               }}
             >
               <Text style={{ color: "white" }}>매수하기</Text>
@@ -213,7 +211,9 @@ const StockDetailPage = (props) => {
                 backgroundColor: "#D90452",
                 padding: 10,
                 borderRadius: 5,
-                width: "40%",
+                width: "20%",
+                justifyContent: "center", // 세로 가운데 정렬
+                alignItems: "center", // 가로 가운데 정렬
               }}
             >
               <Text style={{ color: "white" }}>매도하기</Text>

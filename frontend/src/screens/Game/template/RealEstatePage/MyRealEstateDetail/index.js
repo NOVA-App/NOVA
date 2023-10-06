@@ -13,7 +13,6 @@ import {
 } from "../../../../../recoil/recoil";
 
 const { height } = Dimensions.get("window");
-
 const MyRealEstateDetail = (props) => {
   const ID = props.route.params.realtyId;
   const [realtyData, setRealtyData] = useState([]);
