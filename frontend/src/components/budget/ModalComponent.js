@@ -2,7 +2,7 @@
 
 import React from "react";
 import { View, Text, Modal, TouchableOpacity } from "react-native";
-import { gameIdState } from "../../recoil/recoil";
+import { gameIdState, isMarriedState } from "../../recoil/recoil";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import API_URL from "../../../config";
@@ -10,12 +10,14 @@ import { useNavigation } from "@react-navigation/native";
 
 const ModalComponent = ({ isVisible, onClose }) => {
   const [gameId, setGameId] = useRecoilState(gameIdState);
+  const [isMarried, setIsMarried] = useRecoilState(isMarriedState);
   const navigation = useNavigation();
 
   const handleGiveUp = async () => {
     try {
       await axios.delete(API_URL + `/api/game/${gameId}`);
       setGameId(0);
+      setIsMarried(false);
       onClose();
       navigation.replace("Main");
     } catch (error) {

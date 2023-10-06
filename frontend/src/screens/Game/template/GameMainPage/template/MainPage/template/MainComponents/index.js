@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import AgeBar from "../../../../../../../../components/mainpage/AgeBar";
 import AnnualAsset from "../../../../../../../../components/mainpage/AnnualAsset";
@@ -52,6 +52,7 @@ const MainComponents = () => {
         console.error("에러 상세 내용: ", error.response);
       });
   }, [refresh]);
+
   useEffect(() => {
     axios
       .get(`${API_URL}/api/game/${gameId}`)
@@ -69,6 +70,7 @@ const MainComponents = () => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
   }, [usableAsset]);
+
   useEffect(() => {
     axios
       .get(`${API_URL}/api/game/${gameId}`)

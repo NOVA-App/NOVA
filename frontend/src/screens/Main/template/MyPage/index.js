@@ -111,13 +111,7 @@ const MyPage = () => {
           }}
         >
           <S.ImgContainer
-            source={
-              userInfo && userInfo.profileImg
-                ? {
-                    uri: `${API_URL}/profiles/${userInfo.profileImg}`,
-                  }
-                : ProfileImg
-            }
+            source={{ uri: userInfo.profileImg }}
           />
           <Pressable
             style={{
