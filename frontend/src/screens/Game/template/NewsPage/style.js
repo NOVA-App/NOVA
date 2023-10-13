@@ -2,8 +2,8 @@ import styled from 'styled-components/native';
 
 export const PageContainer = styled.View`
   flex: 1;
-  align-items: flex-start;
-  background-color: #CDE8E5;
+  align-items: center;
+  justify-content: flex-start;
   margin-top: 20px;
 `;
 
@@ -21,6 +21,8 @@ export const TextContainer = styled.View`
 `;
 
 export const DescriptionText = styled.Text`
+  font-size: 23px;
+  font-weight: bold;
   color: black;
   text-align: left;
 `;

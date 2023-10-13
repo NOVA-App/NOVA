@@ -25,10 +25,14 @@ export default function MarriagePage() {
         alert("🎉🎉 결혼을 축하드립니다 🎉🎉");
         navigation.navigate("MainComponents");
       } else {
+        alert("결혼은 한 번만 할 수 있습니다");
         console.error("결혼 요청 실패");
+        navigation.navigate("MainComponents");
       }
     } catch (error) {
+      alert("결혼은 한 번만 할 수 있습니다");
       console.error("POST 요청 중 오류 발생", error);
+      navigation.navigate("MainComponents");
     }
   };
   const handleNotMarry = () => {

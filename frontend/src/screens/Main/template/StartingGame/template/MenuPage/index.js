@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { useRecoilValue, useRecoilState } from "recoil";
 import API_URL from "../../../../../../../config";
-// import { accessTokenState, refreshTokenState } from "../../../../../../recoil/recoil";
+import { accessTokenState, refreshTokenState } from "../../../../../../recoil/recoil";
 import {
   tokenState,
   gameIdState,
@@ -15,8 +15,8 @@ import {
 } from "../../../../../../recoil/recoil";
 
 const MenuPage = () => {
-  // const [accessToken] = useRecoilState(accessTokenState);
-  const accessToken = useRecoilValue(tokenState);
+  const [accessToken] = useRecoilState(accessTokenState);
+  // const accessToken = useRecoilValue(tokenState);
   const [gameId, setGameId] = useRecoilState(gameIdState);
   const [userInfo, setUserInfo] = useState({});
   const [refresh] = useRecoilState(refreshState);
@@ -69,7 +69,7 @@ const MenuPage = () => {
             alignItems: "center",
           }}
         >
-          <ImgBox ProfileUrl={userInfo.profileImg} />
+        <S.ProfileImage source={{ uri: userInfo.profileImg }} />          
         </View>
         <View style={{ width: "50%", justifyContent: "center" }}>
           <Text style={{ fontSize: 20 }}>
