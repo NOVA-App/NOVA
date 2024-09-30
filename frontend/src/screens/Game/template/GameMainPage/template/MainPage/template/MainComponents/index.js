@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
 import AgeBar from "../../../../../../../../components/mainpage/AgeBar";
 import AnnualAsset from "../../../../../../../../components/mainpage/AnnualAsset";
@@ -20,6 +20,26 @@ import API_URL from "../../../../../../../../../config";
 import axios from "axios";
 import AnnualModal from "../../../../../../../../components/mainpage/modal/annualModal";
 
+const getImageUrl = (gender, isMarried, numOfChild) => {
+  console.log(gender)
+  console.log(isMarried)
+  console.log(numOfChild)
+  if (gender === "MALE" && !isMarried && numOfChild === 0) {
+    return "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Raising%20Hand.png";
+  } else if (gender === "MALE" && !isMarried && numOfChild > 0) {
+    return "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Family%20Man%2C%20Boy.png";
+  } else if (gender === "FEMALE" && !isMarried && numOfChild === 0) {
+    return "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Woman%20Raising%20Hand.png";
+  } else if (gender === "FEMALE" && !isMarried && numOfChild > 0) {
+    return "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Family%20Woman%2C%20Girl.png";
+  } else if (isMarried && numOfChild === 0) {
+    return "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Couple%20with%20Heart%20Woman%2C%20Man.png";
+  } else if (isMarried && numOfChild > 0) {
+    return "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Family%20Man%2C%20Woman%2C%20Girl%2C%20Boy.png";
+  }
+  // 기본값
+  return "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/Warning.png";
+};
 // 메인 페이지
 
 const MainComponents = () => {
@@ -52,6 +72,7 @@ const MainComponents = () => {
         console.error("에러 상세 내용: ", error.response);
       });
   }, [refresh]);
+
   useEffect(() => {
     axios
       .get(`${API_URL}/api/game/${gameId}`)
@@ -69,6 +90,7 @@ const MainComponents = () => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
   }, [usableAsset]);
+
   useEffect(() => {
     axios
       .get(`${API_URL}/api/game/${gameId}`)
@@ -129,7 +151,7 @@ const MainComponents = () => {
         <View style={style.imageAndButtonContainer}>
           <Image
             source={{
-              uri: "https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Raising%20Hand.png",
+              uri: getImageUrl(gameData.gender, isMarried, gameData.numOfChild),
             }}
             style={style.image}
           />

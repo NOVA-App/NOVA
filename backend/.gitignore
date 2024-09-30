@@ -202,3 +202,13 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,intellij+all,gradle
+
+application-develop.yml
+application-jwt-dev.yml
+application-jwt-release.yml
+application-oauth-dev.yml
+application-oauth-release.yml
+application-redis-dev.yml
+application-redis-release.yml
+application-release.yml
+application-release2.yml

@@ -61,7 +61,7 @@ const KaKaoLogin = () => {
       // 오류 처리 또는 사용자에게 오류 메시지 표시
       // 토큰 발급에 실패한 경우 "Signin"으로 이동해야 하는데 일단은 Main으로 이동
       //navigation.navigate("Main", { screen: "StartingGame" });
-      // navigation.navigate("Signin", { screen: "Signin" });
+      navigation.navigate("Signin", { screen: "Signin" });
     }
   };
 
