@@ -11,7 +11,7 @@ import {
   gameIdState,
   gameDataState,
 } from "../../../../../recoil/recoil";
-import LoneLargeModal from "../../../../../components/modals/LoneLargeModal";
+import LoanLargeModal from "../../../../../components/modals/LoanLargeModal";
 
 // 매물목록 상세 페이지
 const ForSaleDetail = (props) => {
@@ -45,7 +45,7 @@ const ForSaleDetail = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <LoneLargeModal
+      <LoanLargeModal
         realtyId={ID}
         enableLoanAmount={realtyData.enableLoanAmount}
         usableAsset={usableAsset}
@@ -63,7 +63,7 @@ const ForSaleDetail = (props) => {
 여유 자금:  ${usableAsset}\n
 대출 신청금액: `}
         maxAmount={realtyData.enableLoanAmount}
-      ></LoneLargeModal>
+      ></LoanLargeModal>
       <S.Container style={{ flex: 8.5, minWidth: "80%" }}>
         <View
           style={{
@@ -86,25 +86,25 @@ const ForSaleDetail = (props) => {
             </S.InfoText>
             <S.InfoText>
               {`예상 월세 수익    `}
-              {realtyData.predictedRentIncome}
+              {[realtyData.predictedRentIncome].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </S.InfoText>
             <S.InfoText>
               {`총금액          `}
-              {realtyData.totalPrice}
+              {[realtyData.totalPrice].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </S.InfoText>
             <S.InfoText>
               {`매물가격          `}
-              {realtyData.evaluationAmount}
+              {[realtyData.evaluationAmount].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </S.InfoText>
             <S.InfoText>
               {`취득세        `}
-              {realtyData.acquistionTax}
+              {[realtyData.acquistionTax].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             </S.InfoText>
             <S.InfoText>
               {`모자란 금액     `}
               <S.InfoText style={{ color: "#D90452" }}>
                 {usableAsset - realtyData.totalPrice < 0
-                  ? usableAsset - realtyData.totalPrice
+                  ? [usableAsset - realtyData.totalPrice].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   : 0}
               </S.InfoText>
             </S.InfoText>

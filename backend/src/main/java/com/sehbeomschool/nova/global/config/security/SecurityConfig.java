@@ -48,6 +48,8 @@ public class SecurityConfig {
                 return code != null;
             }).permitAll()
             .antMatchers("/api/user/refreshtoken").permitAll()
+            .antMatchers("/profile").permitAll()
+            .antMatchers("/health").permitAll()
             .anyRequest().authenticated()
             .and()
             .exceptionHandling()

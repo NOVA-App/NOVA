@@ -102,7 +102,7 @@ public class RealtyServiceImpl implements RealtyService {
             .evaluationAmount(realtyInfo.getCurrentPrice())
             .depreciationPercent(myRealty.calDepreciationPercent(realtyInfo.getCurrentPrice()))
             .rentIncome(myRealty.getRentIncome())
-            .principal(myRealty.getLoan().getPrincipal())
+            .principal(myRealty.getLoan() == null ? 0 : myRealty.getLoan().getPrincipal())
             .build();
 
         return dto;
@@ -221,19 +221,21 @@ public class RealtyServiceImpl implements RealtyService {
                     Long.valueOf(game.getMyRealties().size()));
                 Long totalPrice = ri.getCurrentPrice() - aquisitionTax;
 
-                if (mr.getLoan() != null
-                    && ri.getCurrentPrice() >= mr.getLoan().getPrincipal() + aquisitionTax) {
-                    totalPrice -= mr.getLoan().getPrincipal();
-                } else if (game.getAnnualAsset().getUsableAsset() + ri.getCurrentPrice()
-                    >= mr.getLoan().getPrincipal() + aquisitionTax) {
-                    totalPrice = -(totalPrice - mr.getLoan().getPrincipal());
-                } else {
-                    throw new UsableAssetNotEnoughException(USABLE_ASSET_NOT_ENOUGH.getMessage());
+                if (mr.getLoan() != null) {
+                    if (ri.getCurrentPrice() >= mr.getLoan().getPrincipal() + aquisitionTax) {
+                        totalPrice -= mr.getLoan().getPrincipal();
+                    } else if (game.getAnnualAsset().getUsableAsset() + ri.getCurrentPrice()
+                        >= mr.getLoan().getPrincipal() + aquisitionTax) {
+                        totalPrice = -(totalPrice - mr.getLoan().getPrincipal());
+                    } else {
+                        throw new UsableAssetNotEnoughException(
+                            USABLE_ASSET_NOT_ENOUGH.getMessage());
+                    }
+                    game.getMyAssets().decreaseAsset(LOAN, mr.getLoan().getPrincipal());
                 }
 
                 game.getAnnualAsset().useUsableAsset(-totalPrice);
                 game.getMyAssets().decreaseAsset(REALTY, ri.getCurrentPrice());
-                game.getMyAssets().decreaseAsset(LOAN, mr.getLoan().getPrincipal());
                 game.getMyAssets().increaseAsset(TAX, aquisitionTax);
                 game.getMyRealties().remove(i);
                 return;
@@ -260,6 +262,7 @@ public class RealtyServiceImpl implements RealtyService {
                     .realtyName(mr.getRealty().getName())
                     .realtyPrice(ri.getCurrentPrice())
                     .principal(mr.getLoan().getPrincipal())
+                    .realtyImg(mr.getRealty().getRealtyImg())
                     .build();
 
                 list.add(dto);

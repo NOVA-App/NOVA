@@ -6,7 +6,8 @@ public enum GameExceptionMessage {
     IN_PROGRESS_GAME_ALREADY_EXIST("진행 중 게임 존재"),
     GAME_FINISHED("종료된 게임"),
     GAME_NOT_FINISHED("종료되지 않은 게임"),
-    USABLE_ASSET_NOT_ENOUGH("여유 자금 부족");
+    USABLE_ASSET_NOT_ENOUGH("여유 자금 부족"),
+    ALREADY_MARRIED("이미 결혼한 상태입니다");
 
     private final String message;
 

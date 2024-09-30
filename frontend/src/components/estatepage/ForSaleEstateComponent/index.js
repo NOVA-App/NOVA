@@ -5,25 +5,23 @@ import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../config";
 import { useRecoilValue } from "recoil";
-import { accessTokenState, gameIdState } from "../../../recoil/recoil";
-
+import { gameIdState, refreshState } from "../../../recoil/recoil";
 
 const ForSaleEstate = () => {
   const [realtyData, setRealtyData] = useState([]);
-  const token = useRecoilValue(accessTokenState);
-  const gameID = useRecoilValue(gameIdState)
+  const gameID = useRecoilValue(gameIdState);
+  const refresh = useRecoilValue(refreshState);
 
   useEffect(() => {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     axios
-      .get(`${API_URL}/api/realty/list/${gameID}`) // 게임아이디 받아와서 주기
+      .get(`${API_URL}/api/realty/list/${gameID}`)
       .then((response) => {
         setRealtyData(response.data.data);
       })
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <View style={{ flex: 1, minWidth: "90%" }}>

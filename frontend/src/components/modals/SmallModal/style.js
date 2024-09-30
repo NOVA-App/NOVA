@@ -11,7 +11,7 @@ const ModalContent = styled.View`
     left: 10%;
 `;
 const TitleContainer = styled.View`
-    height: 15%;
+    height: 10%;
     flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;

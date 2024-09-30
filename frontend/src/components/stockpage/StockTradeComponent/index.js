@@ -7,10 +7,9 @@ import API_URL from "../../../../config";
 import { gameIdState } from "../../../recoil/recoil";
 import { useRecoilValue } from "recoil";
 
-
 const StockTrade = () => {
   const [stockData, setStockData] = useState([]);
-  const gameID = useRecoilValue(gameIdState)
+  const gameID = useRecoilValue(gameIdState);
 
   useEffect(() => {
     axios
@@ -46,6 +45,7 @@ const StockTrade = () => {
                   stockName={stockItem.stockName}
                   stockAmount={stockItem.evaluationAmount}
                   fluctuations={stockItem.fluctuations}
+                  stockItem={stockItem}
                 />
               ))}
             </ScrollView>

@@ -3,26 +3,32 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import * as S from "./style";
 import axios from "axios";
 import API_URL from "../../../../../../config";
-import { gameIdState } from "../../../../../recoil/recoil";
-import { useRecoilState } from "recoil";
+import { gameIdState, refreshState, gameDataState } from "../../../../../recoil/recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useNavigation } from "@react-navigation/native";
+import { LineChart } from 'react-native-chart-kit';
 
 const StockDetailPage = (props) => {
   const [buyAmount, setBuyAmount] = useState(0);
   const [adjustAmount, setAdjustAmount] = useState(0);
   const [stockInfo, setStockInfo] = useState({});
   const [gameId] = useRecoilState(gameIdState);
+  const rate = props.route.params.rate;
+  const stockId = props.route.params.stockId;
+  const [refresh, setRefresh] = useRecoilState(refreshState);
+  const navigation = useNavigation();
+  const data = useRecoilValue(gameDataState)
 
   useEffect(() => {
     axios
       .get(`${API_URL}/api/stock/${gameId}/${props.route.params.stockId}`)
       .then((response) => {
-        console.log(response.data.data)
         setStockInfo(response.data.data);
       })
       .catch((error) => {
         console.error("데이터를 가져오는 동안 오류 발생: ", error);
       });
-  });
+  }, [refresh]);
 
   const handleBuyAmountChange = (text) => {
     setBuyAmount(text);
@@ -38,20 +44,59 @@ const StockDetailPage = (props) => {
   };
 
   const handleBuy = () => {
-    console.log("Buy:", buyAmount);
-    // Add your logic for buying here
-    // You may want to make an API call to execute the buy action on the server
+    axios
+      .post(API_URL + "/api/stock/buy", {
+        gameId: gameId,
+        stockId: stockId,
+        purchaseAmount: buyAmount,
+      })
+      .then((response) => {
+        console.log("POST 요청 성공:", response.data);
+        setRefresh(!refresh);
+        alert("구매가 완료 되었습니다");
+        navigation.replace("StockMainPage");
+      })
+      .catch((error) => {
+        console.error("POST 요청 오류:", error);
+      });
   };
 
   const handleSell = () => {
-    console.log("Sell:", buyAmount);
-    // Add your logic for selling here
-    // You may want to make an API call to execute the sell action on the server
+    if (buyAmount > stockInfo.myQuantity) {
+      alert("보유 수량보다 많이 판매할 수 없습니다.");
+      return;
+    } else {
+      axios
+        .patch(API_URL + "/api/stock/sell", {
+          gameId: gameId,
+          stockId: stockId,
+          purchaseAmount: buyAmount,
+        })
+        .then((response) => {
+          console.log("POST 요청 성공:", response.data);
+          setRefresh(!refresh);
+          alert("판매가 완료 되었습니다");
+          navigation.replace("StockMainPage");
+        })
+        .catch((error) => {
+          console.error("POST 요청 오류:", error);
+        });
+    }
   };
 
-  if (!stockInfo) {
+
+  if (!stockInfo || !stockInfo.graphValue) {
     return <Text>Loading...</Text>;
   }
+  
+  const chartData = {
+    labels: ['1', '2', '3', '4', '5'], // X 축 레이블
+    datasets: [
+      {
+        data: stockInfo.graphValue || [], // 주가 데이터
+      },
+    ],
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -62,19 +107,27 @@ const StockDetailPage = (props) => {
             {stockInfo.stockName}
           </Text>
           {/* Line Chart Component */}
-          {/* Replace with your line chart component */}
-          <View
-            style={{
-              width: "80%",
-              height: 100,
-              backgroundColor: "lightgray",
-              marginBottom: 20,
+          <LineChart
+            data={chartData}
+            width={300}
+            height={200}
+            yAxisLabel="₩"
+            chartConfig={{
+              backgroundColor: '#7d7be5',
+              backgroundGradientFrom: 'rgb(71, 71, 116)',
+              backgroundGradientTo: 'rgb(104, 130, 223)',
+              decimalPlaces: 0,
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
             }}
-          ></View>
-          <Text>{`현재가: ${stockInfo.evaluation}`}</Text>
-          <Text>{`상승률: ${stockInfo.fluctuations}%`}</Text>
+            bezier
+          />
+           <Text>{`현재가: ${[stockInfo.evaluation].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
+          <Text>{`상승률: ${rate}%`}</Text>
           <Text>{`내 보유량: ${stockInfo.myQuantity}`}</Text>
-          <Text>{`여유자산: 150,000,000원`}</Text>
+          <Text>{`여유자산: ${[data.annualAssets.usableAsset].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</Text>
           <View
             style={{
               flexDirection: "row",
@@ -94,14 +147,16 @@ const StockDetailPage = (props) => {
                 onChangeText={handleAdjustAmountChange}
                 value={adjustAmount}
                 keyboardType="numeric"
-                placeholder="수량 조정"
+                editable={false}
+                placeholder={(buyAmount * stockInfo.evaluation).toString()}
               />
             </View>
+
+            <Text style={{ fontSize: 20 }}>원</Text>
+
             <TouchableOpacity
               onPress={() => handleAdjustQuantity(parseInt(adjustAmount))}
-            >
-              <Text style={{ fontSize: 20 }}>수량</Text>
-            </TouchableOpacity>
+            ></TouchableOpacity>
           </View>
           <View
             style={{

@@ -1,26 +1,56 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import ImgBox from "../../../../../../components/ImgBox";
 import XXLargeButton from "../../../../../../components/buttons/XXLargeButton";
 import * as S from "./style";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { useRecoilValue } from "recoil";
-// import { accessTokenState, refreshTokenState } from "../../../../../../recoil/recoil";
-import { tokenState } from "../../../../../../recoil/recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
+import API_URL from "../../../../../../../config";
+import { accessTokenState, refreshTokenState } from "../../../../../../recoil/recoil";
+import {
+  tokenState,
+  gameIdState,
+  refreshState,
+} from "../../../../../../recoil/recoil";
 
 const MenuPage = () => {
-  // const [accessToken] = useRecoilState(accessTokenState);
-  const accessToken = useRecoilValue(tokenState);
+  const [accessToken] = useRecoilState(accessTokenState);
+  // const accessToken = useRecoilValue(tokenState);
+  const [gameId, setGameId] = useRecoilState(gameIdState);
+  const [userInfo, setUserInfo] = useState({});
+  const [refresh] = useRecoilState(refreshState);
 
-  console.log("여기에 찍혀야댐")
-  console.log(accessToken)
+  useEffect(() => {
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    axios
+      .get(API_URL + "/api/game/inprogress")
+      .then((response) => {
+        // 요청이 성공했을 때 처리할 로직을 여기에 작성합니다.
+        setGameId(response.data.data.gameId);
+      })
+      .catch((error) => {
+        setGameId(0);
+      });
+  }, []);
 
-  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  useEffect(() => {
+    axios
+      .get(API_URL + "/api/user")
+      .then((response) => {
+        setUserInfo(response.data.data);
+      })
+      .catch((error) => {
+        console.error("데이터를 가져오는 동안 오류 발생: ", error);
+      });
+  }, [refresh]);
 
   const navigation = useNavigation();
   const handleGameStartPage = () => {
     navigation.navigate("GameStartPage");
+  };
+  const handleGameMainPage = () => {
+    navigation.navigate("Game", { screen: "GameMainPage" });
   };
   const handleMyPage = () => {
     navigation.navigate("MyPage");
@@ -39,17 +69,25 @@ const MenuPage = () => {
             alignItems: "center",
           }}
         >
-          <ImgBox />
+          <ImgBox ProfileUrl={userInfo.profileImg} />
         </View>
         <View style={{ width: "50%", justifyContent: "center" }}>
-          <Text style={{ fontSize: 20 }}>A310님 환영합니다!</Text>
+          <Text style={{ fontSize: 20 }}>
+            {userInfo ? userInfo.name : ""}님 환영합니다!
+          </Text>
         </View>
       </S.Container>
       <XXLargeButton
         style={{ margin: 10 }}
         bgColor="#038C7F"
         title="새로운 게임 시작하기"
-        onPress={handleGameStartPage}
+        onPress={() => {
+          if (gameId === 0) {
+            handleGameStartPage();
+          } else {
+            handleGameMainPage();
+          }
+        }}
       />
       <XXLargeButton
         style={{ margin: 10 }}
